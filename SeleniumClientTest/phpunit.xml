@@ -1,0 +1,13 @@
+<phpunit bootstrap="bootstrap.php" colors="true">
+	<testsuites>
+		<testsuite name="Test Suite">
+			<file>Tests/AlertTest.php</file>
+			<file>Tests/DesiredCapabilitiesTest.php</file>
+			<file>Tests/SelectElementTest.php</file>
+			<file>Tests/TargetLocatorTest.php</file>
+			<file>Tests/WebDriverTest.php</file>
+			<file>Tests/WebDriverWaitTest.php</file>
+			<file>Tests/WebElementTest.php</file>
+		</testsuite>
+	</testsuites>
+</phpunit>
