@@ -58,70 +58,80 @@ class SeleniumAdapter extends HttpClient
 		// Selenium response status exceptions
 		if ($this->_responseBody != null)
 		{
+			if (isset($this->_responseBody["value"]["localizedMessage"]))
+			{
+				$message = $this->_responseBody["value"]["localizedMessage"];
+			}
+			else
+			{
+				$message = "";
+			}
 			switch (intval($this->_responseBody["status"]))
 			{
 				case 7:
-					if (!$this->_polling) { throw new SeleniumNoSuchElementException(); }
+					if (!$this->_polling) {
+						throw new SeleniumNoSuchElementException($message);
+					}
 					break;
 				case 8:
-					throw new SeleniumNoSuchFrameException();
+					throw new SeleniumNoSuchFrameException($message);
 					break;
 				case 9:
-					throw new SeleniumUnknownCommandException();
+					throw new SeleniumUnknownCommandException($message);
 					break;
 				case 10:
-					throw new SeleniumStaleElementReferenceException();
+					throw new SeleniumStaleElementReferenceException($message);
 					break;
 				case 11:
-					throw new SeleniumElementNotVisibleException();
+					throw new SeleniumElementNotVisibleException($message);
 					break;
 				case 12:
-					throw new SeleniumInvalidElementStateException();
+					throw new SeleniumInvalidElementStateException($message);
 					break;
 				case 13:
-					throw new SeleniumUnknownErrorException();
+					throw new SeleniumUnknownErrorException($message);
 					break;
 				case 15:
-					throw new SeleniumElementIsNotSelectableException();
+					throw new SeleniumElementIsNotSelectableException($message);
 					break;
 				case 17:
-					throw new SeleniumJavaScriptErrorException();
+					throw new SeleniumJavaScriptErrorException($message);
 					break;
 				case 19:
-					throw new SeleniumXPathLookupErrorException();
+					throw new SeleniumXPathLookupErrorException($message);
 					break;
 				case 21:
-					throw new SeleniumTimeoutException();
+					throw new SeleniumTimeoutException($message);
 					break;
 				case 23:
-					throw new SeleniumNoSuchWindowException();
+					throw new SeleniumNoSuchWindowException($message);
 					break;
 				case 24:
-					throw new SeleniumInvalidCookieDomainException();
+					throw new SeleniumInvalidCookieDomainException($message);
 					break;
 				case 25:
-					throw new SeleniumUnableToSetCookieException();
+					throw new SeleniumUnableToSetCookieException($message);
 					break;
 				case 26:
-					throw new SeleniumUnexpectedAlertOpenException();
+					throw new SeleniumUnexpectedAlertOpenException($message);
 					break;
 				case 27:
-					throw new SeleniumNoAlertOpenErrorException();
+					throw new SeleniumNoAlertOpenErrorException($message);
 					break;
 				case 28:
-					throw new SeleniumScriptTimeoutException();
+					throw new SeleniumScriptTimeoutException($message);
 					break;
 				case 29:
-					throw new SeleniumInvalidElementCoordinatesException();
+					throw new SeleniumInvalidElementCoordinatesException($message);
 					break;
 				case 30:
-					throw new SeleniumIMENotAvailableException();
+					throw new SeleniumIMENotAvailableException($message);
 					break;
 				case 31:
-					throw new SeleniumIMEEngineActivationFailedException();
+					throw new SeleniumIMEEngineActivationFailedException($message);
 					break;
 				case 32:
-					throw new SeleniumInvalidSelectorException();
+					throw new SeleniumInvalidSelectorException($message);
 					break;
 			}
 		}

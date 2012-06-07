@@ -44,108 +44,108 @@ class SeleniumFailedCommandException extends \Exception {
 
 // Selenium Response Status Exceptions
 class SeleniumNoSuchElementException extends \Exception {
-	public function __construct() {
-		parent::__construct ( " An element could not be located on the page using the given search parameters. " );
+	public function __construct($message = "") {
+		parent::__construct ( " An element could not be located on the page using the given search parameters. "  . $message);
 	}
 }
 class SeleniumNoSuchFrameException extends \Exception {
-	public function __construct() {
-		parent::__construct ( " A request to switch to a frame could not be satisfied because the frame could not be found. " );
+	public function __construct($message = "") {
+		parent::__construct ( " A request to switch to a frame could not be satisfied because the frame could not be found. "  . $message);
 	}
 }
 class SeleniumUnknownCommandException extends \Exception {
-	public function __construct() {
-		parent::__construct ( " The requested resource could not be found, or a request was received using an HTTP method that is not supported by the mapped resource. " );
+	public function __construct($message = "") {
+		parent::__construct ( " The requested resource could not be found, or a request was received using an HTTP method that is not supported by the mapped resource. "  . $message);
 	}
 }
 class SeleniumStaleElementReferenceException extends \Exception {
-	public function __construct() {
-		parent::__construct ( " An element command failed because the referenced element is no longer attached to the DOM. " );
+	public function __construct($message = "") {
+		parent::__construct ( " An element command failed because the referenced element is no longer attached to the DOM. "  . $message);
 	}
 }
 class SeleniumElementNotVisibleException extends \Exception {
-	public function __construct() {
-		parent::__construct ( " An element command could not be completed because the element is not visible on the page. " );
+	public function __construct($message = "") {
+		parent::__construct ( " An element command could not be completed because the element is not visible on the page. "  . $message);
 	}
 }
 class SeleniumInvalidElementStateException extends \Exception {
-	public function __construct() {
-		parent::__construct ( " An element command could not be completed because the element is in an invalid state (e.g. attempting to click a disabled element). " );
+	public function __construct($message = "") {
+		parent::__construct ( " An element command could not be completed because the element is in an invalid state (e.g. attempting to click a disabled element). "  . $message);
 	}
 }
 class SeleniumUnknownErrorException extends \Exception {
-	public function __construct() {
-		parent::__construct ( " An unknown server-side error occurred while processing the command. " );
+	public function __construct($message = "") {
+		parent::__construct ( " An unknown server-side error occurred while processing the command. "  . $message);
 	}
 }
 class SeleniumElementIsNotSelectableException extends \Exception {
-	public function __construct() {
-		parent::__construct ( " An attempt was made to select an element that cannot be selected. " );
+	public function __construct($message = "") {
+		parent::__construct ( " An attempt was made to select an element that cannot be selected. "  . $message);
 	}
 }
 class SeleniumJavaScriptErrorException extends \Exception {
-	public function __construct() {
-		parent::__construct ( " An error occurred while executing user supplied JavaScript. " );
+	public function __construct($message = "") {
+		parent::__construct ( " An error occurred while executing user supplied JavaScript. "  . $message);
 	}
 }
 class SeleniumXPathLookupErrorException extends \Exception {
-	public function __construct() {
-		parent::__construct ( " An error occurred while searching for an element by XPath. " );
+	public function __construct($message = "") {
+		parent::__construct ( " An error occurred while searching for an element by XPath. "  . $message);
 	}
 }
 class SeleniumTimeoutException extends \Exception {
-	public function __construct() {
-		parent::__construct ( " An operation did not complete before its timeout expired. " );
+	public function __construct($message = "") {
+		parent::__construct ( " An operation did not complete before its timeout expired. "  . $message);
 	}
 }
 class SeleniumNoSuchWindowException extends \Exception {
-	public function __construct() {
-		parent::__construct ( " A request to switch to a different window could not be satisfied because the window could not be found. " );
+	public function __construct($message = "") {
+		parent::__construct ( " A request to switch to a different window could not be satisfied because the window could not be found. "  . $message);
 	}
 }
 class SeleniumInvalidCookieDomainException extends \Exception {
-	public function __construct() {
-		parent::__construct ( " An illegal attempt was made to set a cookie under a different domain than the current page. " );
+	public function __construct($message = "") {
+		parent::__construct ( " An illegal attempt was made to set a cookie under a different domain than the current page. "  . $message);
 	}
 }
 class SeleniumUnableToSetCookieException extends \Exception {
-	public function __construct() {
-		parent::__construct ( " A request to set a cookie's value could not be satisfied. " );
+	public function __construct($message = "") {
+		parent::__construct ( " A request to set a cookie's value could not be satisfied. "  . $message);
 	}
 }
 class SeleniumUnexpectedAlertOpenException extends \Exception {
-	public function __construct() {
-		parent::__construct ( " A modal dialog was open, blocking this operation " );
+	public function __construct($message = "") {
+		parent::__construct ( " A modal dialog was open, blocking this operation. "  . $message);
 	}
 }
 class SeleniumNoAlertOpenErrorException extends \Exception {
-	public function __construct() {
-		parent::__construct ( " An attempt was made to operate on a modal dialog when one was not open. " );
+	public function __construct($message = "") {
+		parent::__construct ( " An attempt was made to operate on a modal dialog when one was not open. "  . $message);
 	}
 }
 class SeleniumScriptTimeoutException extends \Exception {
-	public function __construct() {
-		parent::__construct ( " A script did not complete before its timeout expired. " );
+	public function __construct($message = "") {
+		parent::__construct ( " A script did not complete before its timeout expired. "  . $message);
 	}
 }
 class SeleniumInvalidElementCoordinatesException extends \Exception {
-	public function __construct() {
-		parent::__construct ( " The coordinates provided to an interactions operation are invalid. " );
+	public function __construct($message = "") {
+		parent::__construct ( " The coordinates provided to an interactions operation are invalid. "  . $message);
 	}
 }
 class SeleniumIMENotAvailableException extends \Exception {
-	public function __construct() {
-		parent::__construct ( " IME was not available. " );
+	public function __construct($message = "") {
+		parent::__construct ( " IME was not available. "  . $message);
 	}
 }
 class SeleniumIMEEngineActivationFailedException extends \Exception {
-	public function __construct() {
-		parent::__construct ( " An IME engine could not be started. " );
+	public function __construct($message = "") {
+		parent::__construct ( " An IME engine could not be started. "  . $message);
 	}
 }
 
 class SeleniumInvalidSelectorException extends \Exception {
-	public function __construct() {
-		parent::__construct ( " Argument was an invalid selector (e.g. XPath/CSS). " );
+	public function __construct($message = "") {
+		parent::__construct ( " Argument was an invalid selector (e.g. XPath/CSS). "  . $message);
 	}
 }

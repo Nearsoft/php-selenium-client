@@ -10,3 +10,7 @@ v1.0.0
    to create. Useful to enable grid testing approach within multiple environments.
  * By class enables finding a element by a number of specific strategies such as by id, css selector,
    xpath, class name as specified in Selenium JsonWireProtocol documentation.
+   
+v1.0.1
+=======
+ * Added localizeMessage to Selenium Response Status Exceptions
