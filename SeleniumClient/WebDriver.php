@@ -409,6 +409,27 @@ class WebDriver
 
 		return $dynamicElement;
 	}
+
+	/**
+	 * Stops the process until an element is not found
+	 * @param By $locator
+	 * @param Integer $timeOutSeconds
+	 * @return boolean true when element is gone, false if element is still there
+	 */
+	public function waitForElementUntilIsNotPresent(By $locator, $timeOutSeconds = 5)
+	{
+		for ($second = 0; ; $second++)
+		{
+			if ($second >= $timeOutSeconds) return false;
+			$result = ($this->findElement($locator, true) === null);
+			if ($result)
+			{
+				return true;
+			}
+			sleep(1);
+		}
+	}
+
 	#endregion
 
 	#region WebElement Related
