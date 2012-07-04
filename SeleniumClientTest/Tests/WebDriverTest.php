@@ -707,5 +707,29 @@ class WebDriverTest extends PHPUnit_Framework_TestCase
 		$this->assertEquals($expectedTitle, $this->_driver->title());
 	}
 	
+	public function testWaitForElementUntilIsPresent()
+	{
+		$this->_driver->get($this->_url);
+		
+		$this->_driver->findElement(By::id("btnAppendDiv"))->click();
+		
+		$this->_driver->waitForElementUntilIsPresent(By::id("dDiv1-0"),10);
+		
+		$this->assertEquals("Some content", $this->_driver->findElement(By::id("dDiv1-0"))->getText());
+	}
+	
+	public function testWaitForElementUntilIsNotPresent()
+	{
+		$this->_driver->get($this->_url);	
+		
+		$webElement = $this->_driver->findElement(By::id("btnHideThis"));
+		
+		$webElement->click();
+		
+		$this->_driver->waitForElementUntilIsNotPresent(By::id("btnHideThis"),10);
+		
+		$this->assertFalse($webElement->isDisplayed());		
+	}
+	
 	//TODO TEST WITH INVALID URL, INVALID PORT INVALID BROWSERNAME
 }

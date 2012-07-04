@@ -84,6 +84,9 @@
 							<input id="btnAppendDiv" type="button" value="Create div element" onclick="javascript: addElement('div','dDiv1','divDynamicElementsContainer',5000);" />
 							<div id="divDynamicElementsContainer"></div>
 						</p>
+						<p>
+							<input id="btnHideThis" type="button" value="Hide this button after 5 seconds" onclick="javascript:setTimeout('document.getElementById(\'btnHideThis\').style.display =\'none\';', 5000);" />
+						</p>
 						<p><input id="btnConfirm" type="button" value="Bring up confirm" onclick="javascript:alert(confirm('Clik ok to get TRUE'));" /></p>
 						<p><input id="btnPopUp1" type="button" value="Open popup 1" onclick="javascript:popitup('popUpContent.php','popup1','100','200');" /></p>
 						<p><input id="btnPopUp2" type="button" value="Open popup 2" onclick="javascript:popitup('popUpContent.php','popup2','300','400');" /></p>
