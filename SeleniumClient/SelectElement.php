@@ -42,7 +42,7 @@ class SelectElement
 	 */
 	public function selectByValue($value)
 	{
-		$options = $this->_element->findElements(By::xPath(".//option[@value = " . $value . "]"));
+		$options = $this->_element->findElements(By::xPath(".//option[@value = '" . $value . "']"));
 		
 		$matched = false;
 		foreach($options as $option)

@@ -29,6 +29,12 @@ class SelectTest extends PHPUnit_Framework_TestCase
 		$select->selectByValue("2");
 
 		$this->assertTrue($select->getElement()->findElement(By::xPath("option[@value = 2]"))->isSelected());
+
+		$select = new SelectElement($this->_driver->findElement(By::id("sel2")));
+
+		$select->selectByValue("onions");
+
+		$this->assertTrue($select->getElement()->findElement(By::xPath("option[@value = 'onions']"))->isSelected());
 	}
 }
 	
