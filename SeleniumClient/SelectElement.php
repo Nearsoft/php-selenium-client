@@ -61,4 +61,31 @@ class SelectElement
 			throw new \Exception("Cannot locate option in select element with value: " . $value);
 		}
 	}
+
+	/**
+	 * Sets an option selected by a partial text match
+	 * @param String $text
+	 * @throws \Exception
+	 */
+	public function selectByPartialText($text)
+	{
+		$options = $this->_element->findElements(By::xPath(".//option[contains(text(), '" . $text . "')]"));
+
+		$matched = false;
+		foreach($options as $option)
+		{
+
+			if(!$option->isSelected())
+			{
+				$option->click();
+			}
+
+			$matched = true;
+		}
+
+		if (!$matched)
+		{
+			throw new \Exception("Cannot locate option in select element with text: " . $text);
+		}
+	}
 }

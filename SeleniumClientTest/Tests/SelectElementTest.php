@@ -20,7 +20,7 @@ class SelectTest extends PHPUnit_Framework_TestCase
 		if($this->_driver != null) { $this->_driver->quit(); }
 	}
 	
-	public function testSelectByValudShouldSelect()
+	public function testSelectByValueShouldSelect()
 	{
 		$this->_driver->get($this->_url);
 		
@@ -35,6 +35,23 @@ class SelectTest extends PHPUnit_Framework_TestCase
 		$select->selectByValue("onions");
 
 		$this->assertTrue($select->getElement()->findElement(By::xPath("option[@value = 'onions']"))->isSelected());
+	}
+	
+	public function testSelectByPartialTextShouldSelect()
+	{
+		$this->_driver->get($this->_url);
+	
+		$select = new SelectElement($this->_driver->findElement(By::id("sel1")));
+	
+		$select->selectByPartialText("Red");
+	
+		$this->assertTrue($select->getElement()->findElement(By::xPath("option[@value = 2]"))->isSelected());
+	
+		$select = new SelectElement($this->_driver->findElement(By::id("sel2")));
+	
+		$select->selectByPartialText("peppers");
+	
+		$this->assertTrue($select->getElement()->findElement(By::xPath("option[@value = 'greenpeppers']"))->isSelected());
 	}
 }
 	
