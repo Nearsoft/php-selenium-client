@@ -55,6 +55,14 @@ class WebDriver
 	public function setEnvironment($value) { $this->_environment = $value; }
 	
 	/**
+	 * Get current Selenium environment
+	 * @return String
+	 */
+	public function getEnvironment() {
+		return $this->_environment;
+	}
+
+	/**
 	 * Get current Selenium Hub url
 	 * @return String
 	 */
