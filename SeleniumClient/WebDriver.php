@@ -449,11 +449,29 @@ class WebDriver
 	public function webElementSendKeys($elementId, $text)
 	{
 		$command = "value";
-		$params = array('value' => str_split($text));
+		$params = array('value' => $this->getCharArray($text));
 		$urlHubFormatted = $this->_hubUrl . "/session/{$this->_sessionId}/element/{$elementId}/{$command}";
 		
 		$httpClient = HttpFactory::getClient($this->_environment);
 		$httpClient->setUrl($urlHubFormatted)->setHttpMethod(HttpClient::POST)->setJsonParams($params)->execute();
+	}
+	
+	/**
+	 * Returns array of chars from String
+	 * @param String $text
+	 * @return array
+	 */
+	private function getCharArray($text)
+	{
+		$encoding = \mb_detect_encoding($text);
+		$len = \mb_strlen($text, $encoding);
+		$ret = array();
+		while($len) {
+			$ret[] = \mb_substr($text, 0, 1, $encoding);
+			$text = \mb_substr($text, 1, $len, $encoding);
+			$len = \mb_strlen($text, $encoding);
+		}
+		return $ret;
 	}
 	
 	/**
