@@ -53,7 +53,11 @@ class WebDriverWait
 		
 		while ($wait)
 		{
-			$resultObject = call_user_func_array(array ($seleniumObject, $method), $args);
+			try {
+				$resultObject = call_user_func_array(array ($seleniumObject, $method), $args);
+			} catch (\Exception $ex) {
+
+			}
 			
 			if ($resultObject != null && $resultObject != false) { $wait = false; }
 			else
