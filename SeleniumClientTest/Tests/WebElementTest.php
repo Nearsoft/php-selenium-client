@@ -180,5 +180,11 @@ class WebElementTest extends PHPUnit_Framework_TestCase {
 		$this->assertEquals("TEST", $textarea1->getAttribute("value"));
 	}
 
+	public function testSendKeysShouldRetrieveHebrewText()
+	{
+		$textarea1 = $this->_driver->findElement(By::id("txtArea1"));
+		$textarea1->sendKeys("יאיר 34557");
+		$this->assertEquals("יאיר 34557", $textarea1->getAttribute("value"));
+	}
 	//TODO TEST WITH INVALID URL, INVALID PORT INVALID BROWSERNAME	
 }
