@@ -180,9 +180,6 @@ class WebElementTest extends PHPUnit_Framework_TestCase {
 		$this->assertEquals("TEST", $textarea1->getAttribute("value"));
 	}
 
-        /**
-         * @group evento-additions
-         */
 	public function testSendKeysShouldRetrieveHebrewText()
 	{
 		$textarea1 = $this->_driver->findElement(By::id("txtArea1"));
