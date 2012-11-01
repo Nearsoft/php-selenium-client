@@ -78,6 +78,7 @@ class HttpClient
 			curl_setopt($curl, CURLOPT_POST, true);
 				
 			if ($this->_jsonParams && is_array($this->_jsonParams)) { curl_setopt($curl, CURLOPT_POSTFIELDS, json_encode($this->_jsonParams)); }
+                        else { curl_setopt($curl, CURLOPT_HTTPHEADER, array('Content-Length: 0')); }
 		}
 		else if ($this->_httpMethod == HttpClient::DELETE) { curl_setopt($curl, CURLOPT_CUSTOMREQUEST, 'DELETE'); }
 		else if ($this->_httpMethod == HttpClient::GET) { /*NO ACTION NECESSARY*/ }
