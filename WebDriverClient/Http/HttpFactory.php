@@ -28,7 +28,7 @@ abstract class HttpFactory{
 				return new SeleniumAdapter();
 				break;
 			case HttpFactory::TESTINGMODE:			
-				require_once("../../SeleniumClientTest/HttpClientMock.php");
+				require_once("../../WebDriverClientTest/HttpClientMock.php");
 				return new \HttpClientMock();			
 				break;
 		}

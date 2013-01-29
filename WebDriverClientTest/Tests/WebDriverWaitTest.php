@@ -34,7 +34,7 @@ class WebDriverWaitTest extends PHPUnit_Framework_TestCase
 	public function testUntilShouldWaitShouldThrowException()
 	{
 		
-		$this->setExpectedException('SeleniumClient\WebDriverWaitTimeoutException');		
+		$this->setExpectedException('WebDriverClient\WebDriverWaitTimeoutException');
 		$this->_driver->findElement(By::id("btnAppendDiv"))->click();	
 		$wait = new WebDriverWait(3);	
 		$label = $wait->until($this->_driver,"findElement",array(By::id("dDiv1-0"),true));
