@@ -1,5 +1,8 @@
-PHP-SeleniumClient
+PHP-WebDriver
 =========================
+
+This binding is just a fork of https://github.com/Nearsoft/PHP-SeleniumClient
+I will try to keep this binding actual.
 
 PHP interaction with Selenium Webdriver API 
 
