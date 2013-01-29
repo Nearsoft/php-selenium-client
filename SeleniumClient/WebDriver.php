@@ -1143,10 +1143,7 @@ class WebDriver
 		$httpClient = HttpFactory::getClient($this->_environment);
 		$httpClient->setUrl($urlHubFormatted)->setHttpMethod(HttpClient::DELETE)->execute();
 	}
-	#endregion
 
-	#region Alert Related
-	// Dismisses the alert.
 	/**
 	 * Sends false to current alert
 	 */
@@ -1159,7 +1156,6 @@ class WebDriver
 		$httpClient->setUrl($urlHubFormatted)->setHttpMethod(HttpClient::POST)->execute();
 	}
 
-	// Accepts the alert.
 	/**
 	 * Sends true to current alert
 	 */
@@ -1172,7 +1168,6 @@ class WebDriver
 		$httpClient->setUrl($urlHubFormatted)->setHttpMethod(HttpClient::POST)->execute();
 	}
 
-	// Gets the text of the alert.
 	/**
 	 * Gets current alert's text
 	 * @return String
@@ -1189,8 +1184,6 @@ class WebDriver
 		if (isset($results["value"])) { $result = $results["value"]; }
 		return $result;
 	}
-
-	// Sends keys to the alert.
 	
 	/**
 	 * Sends text to alert input
@@ -1198,14 +1191,28 @@ class WebDriver
 	 */
 	public function setAlertValue($value)
 	{
-		// validate that value is string
+		if(is_string($value)){
+			$command = "alert_text";
+			$params = array ('text' => $value);
+			$urlHubFormatted = $this->_hubUrl . "/session/{$this->_sessionId}/{$command}";
 
-		$command = "alert_text";
-		$params = array ('text' => $value);
-		$urlHubFormatted = $this->_hubUrl . "/session/{$this->_sessionId}/{$command}";
-		
+			$httpClient = HttpFactory::getClient($this->_environment);
+			$httpClient->setUrl($urlHubFormatted)->setHttpMethod(HttpClient::POST)->setJsonParams($params)->execute();
+		}
+		else{
+			throw new \Exception("Value must be a string");
+		}
+	}
+
+	/**
+	 * Sets page_load timeout
+	 * @param int $miliseconds
+	 */
+	public function setPageLoadTime($miliseconds)
+	{
+		$params = array ('type' => 'page load','ms' => $miliseconds );
+		$urlHubFormatted = $this->_hubUrl . "/session/{$this->_sessionId}/timeouts";
 		$httpClient = HttpFactory::getClient($this->_environment);
 		$httpClient->setUrl($urlHubFormatted)->setHttpMethod(HttpClient::POST)->setJsonParams($params)->execute();
 	}
-	#endregion
 }
