@@ -13,9 +13,8 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-namespace SeleniumClient;
 
-use SeleniumClient\Http\SeleniumStaleElementReferenceException;
+require_once "Http/Exceptions.php";
 
 class WebElement
 {
@@ -119,7 +118,7 @@ class WebElement
 	 * Find element within current element
 	 * @param By $locator
 	 * @param Boolean $polling
-	 * @return SeleniumClient\WebElement
+	 * @return WebElement
 	 */
 	public function findElement(By $locator, $polling = false) { return $this->_driver->webElementFindElement($this->_elementId, $locator, $polling); }
 	
@@ -152,7 +151,7 @@ class WebElement
 	/**
 	 * Wait for current element to be displayed
 	 * @param Integer $timeOutSeconds
-	 * @return \SeleniumClient\WebElement
+	 * @return WebElement
 	 */
 	public function waitForElementUntilIsDisplayed($timeOutSeconds = 5)
 	{
@@ -168,7 +167,7 @@ class WebElement
 	/**
 	 * Wait for current element to be enabled
 	 * @param Integer $timeOutSeconds
-	 * @return \SeleniumClient\WebElement
+	 * @return WebElement
 	 */
 	public function waitForElementUntilIsEnabled($timeOutSeconds = 5)
 	{
@@ -186,7 +185,7 @@ class WebElement
 	 * @param String $targetText
 	 * @param Integer $timeOutSeconds
 	 * @throws WebDriverWaitTimeoutException
-	 * @return \SeleniumClient\WebElement
+	 * @return WebElement
 	 */
 	public function waitForElementUntilTextIsChanged($targetText, $timeOutSeconds = 5)
 	{
@@ -216,7 +215,7 @@ class WebElement
 	 * @param String $targetText
 	 * @param Integer $timeOutSeconds
 	 * @throws WebDriverWaitTimeoutException
-	 * @return \SeleniumClient\WebElement
+	 * @return WebElement
 	 */
 	public function waitForElementUntilIsPresentWithSpecificText(By $locator, $targetText, $timeOutSeconds = 5)
 	{

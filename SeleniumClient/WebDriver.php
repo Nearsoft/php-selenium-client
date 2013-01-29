@@ -13,12 +13,6 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-namespace SeleniumClient;
-
-use SeleniumClient\DesiredCapabilities;
-use SeleniumClient\Http\HttpClient;
-use SeleniumClient\Http\HttpFactory;
-
 require_once 'By.php';
 require_once 'DesiredCapabilities.php';
 require_once 'Http/HttpFactory.php';
@@ -33,7 +27,7 @@ class WebDriver
 	private $_screenshotsDirectory = null;
 	private $_environment = HttpFactory::PRODUCTIONMODE;
 	private $_capabilities = null;
-	
+
 	/**
 	 * @param DesiredCapabilities $desiredCapabilities
 	 * @param String $host
@@ -88,7 +82,7 @@ class WebDriver
 	
 	/**
 	 * Creates new target locator to be handled
-	 * @return \SeleniumClient\TargetLocator
+	 * @return TargetLocator
 	 */
 	public function switchTo() { return new TargetLocator($this); }
 
@@ -212,7 +206,19 @@ class WebDriver
 		$httpClient = HttpFactory::getClient($this->_environment);
 		$httpClient->setUrl($urlHubFormatted)->setHttpMethod(HttpClient::POST)->setJsonParams($params)->execute();
 	}
-	
+
+	/**
+	 * Sets default time to load page
+	 * @param Integer $miliseconds
+	 */
+	public function setPageLoadTime($miliseconds)
+	{
+		$params = array ('type' => 'page load','ms' => $miliseconds );
+		$urlHubFormatted = $this->_hubUrl . "/session/{$this->_sessionId}/timeouts";
+		$httpClient = HttpFactory::getClient($this->_environment);
+		$httpClient->setUrl($urlHubFormatted)->setHttpMethod(HttpClient::POST)->setJsonParams($params)->execute();
+	}
+
 	/**
 	 * Get current server's status
 	 * @return Array
@@ -321,14 +327,14 @@ class WebDriver
 
 		$httpClient = HttpFactory::getClient($this->_environment);
 		$results = $httpClient->setUrl($urlHubFormatted)->setHttpMethod(HttpClient::GET)->execute();
-		
+
 		if (isset($results["value"]) && trim($results["value"]) != "")
 		{
-			if (!file_exists($screenshotsDirectory . "/" . $this->_sessionId)) { mkdir($screenshotsDirectory . "/" . $this->_sessionId, 0777, true); }
+			if (!file_exists($screenshotsDirectory )) { mkdir($screenshotsDirectory , 0777, true); }
 			
 			$fileName = date ("YmdHmsu") . "-" . (count(glob($screenshotsDirectory . "/" . $this->_sessionId . "/*.png")) + 1) .".png";
 			
-			file_put_contents($screenshotsDirectory . "/" . $this->_sessionId . "/" .$fileName, base64_decode($results["value"]));
+			file_put_contents($screenshotsDirectory . "/" .$fileName, base64_decode($results["value"]));
 			
 			return $fileName;
 		}
@@ -338,7 +344,7 @@ class WebDriver
 	 * Gets an element within current page
 	 * @param By $locator
 	 * @param Boolean $polling
-	 * @return \SeleniumClient\WebElement
+	 * @return WebElement
 	 */
 	public function findElement(By $locator, $polling = false)
 	{
@@ -358,7 +364,7 @@ class WebDriver
 	 * Gets elements within current page
 	 * @param By $locator
 	 * @param unknown_type $polling
-	 * @return Array \SeleniumClient\WebElement
+	 * @return Array WebElement
 	 */
 	public function findElements(By $locator, $polling = false)
 	{
@@ -383,7 +389,7 @@ class WebDriver
 	
 	/**
 	 * Gets element that is currenly focused
-	 * @return \SeleniumClient\WebElement
+	 * @return WebElement
 	 */
 	public function getActiveElement()
 	{
@@ -404,7 +410,7 @@ class WebDriver
 	 * Stops the process until an element is found
 	 * @param By $locator
 	 * @param Integer $timeOutSeconds
-	 * @return \SeleniumClient\WebElement
+	 * @return WebElement
 	 */
 	public function waitForElementUntilIsPresent(By $locator, $timeOutSeconds = 5)
 	{
@@ -648,7 +654,7 @@ class WebDriver
 	 * @param Integer $elementId
 	 * @param By $locator
 	 * @param Boolean $polling
-	 * @return \SeleniumClient\WebElement
+	 * @return WebElement
 	 */
 	public function webElementFindElement($elementId, By $locator, $polling = false)
 	{
@@ -669,7 +675,7 @@ class WebDriver
 	 * @param Integer $elementId
 	 * @param By $locator
 	 * @param Boolean $polling
-	 * @return \SeleniumClient\WebElement 
+	 * @return WebElement
 	 */
 	public function webElementFindElements($elementId, By $locator, $polling = false)
 	{
@@ -1044,7 +1050,10 @@ class WebDriver
 		$httpClient = HttpFactory::getClient($this->_environment);
 		$httpClient->setUrl($urlHubFormatted)->setHttpMethod(HttpClient::DELETE)->execute();
 	}
+	#endregion
 
+	#region Alert Related
+	// Dismisses the alert.
 	/**
 	 * Sends false to current alert
 	 */
@@ -1057,6 +1066,7 @@ class WebDriver
 		$httpClient->setUrl($urlHubFormatted)->setHttpMethod(HttpClient::POST)->execute();
 	}
 
+	// Accepts the alert.
 	/**
 	 * Sends true to current alert
 	 */
@@ -1069,6 +1079,7 @@ class WebDriver
 		$httpClient->setUrl($urlHubFormatted)->setHttpMethod(HttpClient::POST)->execute();
 	}
 
+	// Gets the text of the alert.
 	/**
 	 * Gets current alert's text
 	 * @return String
@@ -1085,6 +1096,8 @@ class WebDriver
 		if (isset($results["value"])) { $result = $results["value"]; }
 		return $result;
 	}
+
+	// Sends keys to the alert.
 	
 	/**
 	 * Sends text to alert input
@@ -1092,29 +1105,14 @@ class WebDriver
 	 */
 	public function setAlertValue($value)
 	{
-		if(is_string($value)){
-			$command = "alert_text";
-			$params = array ('text' => $value);
-			$urlHubFormatted = $this->_hubUrl . "/session/{$this->_sessionId}/{$command}";
+		// validate that value is string
 
-			$httpClient = HttpFactory::getClient($this->_environment);
-			$httpClient->setUrl($urlHubFormatted)->setHttpMethod(HttpClient::POST)->setJsonParams($params)->execute();
-		}
-		else{
-			throw new \Exception("value must be a string!");
-		}
-
-	}
-
-	/**
-	 * Sets page_load timeout
-	 * @param int $miliseconds
-	 */
-	public function setPageLoadTime($miliseconds)
-	{
-		$params = array ('type' => 'page load','ms' => $miliseconds );
-		$urlHubFormatted = $this->_hubUrl . "/session/{$this->_sessionId}/timeouts";
+		$command = "alert_text";
+		$params = array ('text' => $value);
+		$urlHubFormatted = $this->_hubUrl . "/session/{$this->_sessionId}/{$command}";
+		
 		$httpClient = HttpFactory::getClient($this->_environment);
 		$httpClient->setUrl($urlHubFormatted)->setHttpMethod(HttpClient::POST)->setJsonParams($params)->execute();
 	}
+	#endregion
 }
