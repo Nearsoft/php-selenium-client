@@ -34,23 +34,23 @@ require_once __DIR__ . '/WebElement.php';
  * @param string $selectorDefinition
  * @param bool $polling
  * 
- * @method WebElement findElementByCssSelector($selectorValue, $polling=false)
- * @method WebElement findElementById($selectorValue, $polling=false)
- * @method WebElement findElementByJsSelector($selectorValue, $selectorDefinition='$', $polling=false)
- * @method WebElement findElementByLinkText($selectorValue, $polling=false)
- * @method WebElement findElementByName($selectorValue, $polling=false)
- * @method WebElement findElementByPartialLinkText($selectorValue, $polling=false)
- * @method WebElement findElementByTagName($selectorValue, $polling=false)
- * @method WebElement findElementByXPath($selectorValue, $polling=false)
+ * @method \SeleniumClient\WebElement findElementByCssSelector($selectorValue, $polling=false)
+ * @method \SeleniumClient\WebElement findElementById($selectorValue, $polling=false)
+ * @method \SeleniumClient\WebElement findElementByJsSelector($selectorValue, $selectorDefinition='$', $polling=false)
+ * @method \SeleniumClient\WebElement findElementByLinkText($selectorValue, $polling=false)
+ * @method \SeleniumClient\WebElement findElementByName($selectorValue, $polling=false)
+ * @method \SeleniumClient\WebElement findElementByPartialLinkText($selectorValue, $polling=false)
+ * @method \SeleniumClient\WebElement findElementByTagName($selectorValue, $polling=false)
+ * @method \SeleniumClient\WebElement findElementByXPath($selectorValue, $polling=false)
  *
- * @method WebElement[] findElementsByCssSelector($selectorValue, $polling=false)
- * @method WebElement[] findElementsById($selectorValue, $polling=false)
- * @method WebElement[] findElementsByJsSelector($selectorValue, $selectorDefinition='$', $polling=false)
- * @method WebElement[] findElementsByLinkText($selectorValue, $polling=false)
- * @method WebElement[] findElementsByName($selectorValue, $polling=false)
- * @method WebElement[] findElementsByPartialLinkText($selectorValue, $polling=false)
- * @method WebElement[] findElementsByTagName($selectorValue, $polling=false)
- * @method WebElement[] findElementsByXPath($selectorValue, $polling=false)
+ * @method \SeleniumClient\WebElement[] findElementsByCssSelector($selectorValue, $polling=false)
+ * @method \SeleniumClient\WebElement[] findElementsById($selectorValue, $polling=false)
+ * @method \SeleniumClient\WebElement[] findElementsByJsSelector($selectorValue, $selectorDefinition='$', $polling=false)
+ * @method \SeleniumClient\WebElement[] findElementsByLinkText($selectorValue, $polling=false)
+ * @method \SeleniumClient\WebElement[] findElementsByName($selectorValue, $polling=false)
+ * @method \SeleniumClient\WebElement[] findElementsByPartialLinkText($selectorValue, $polling=false)
+ * @method \SeleniumClient\WebElement[] findElementsByTagName($selectorValue, $polling=false)
+ * @method \SeleniumClient\WebElement[] findElementsByXPath($selectorValue, $polling=false)
  */
 class WebDriver
 {
@@ -856,11 +856,16 @@ class WebDriver
 		
 		$command = "execute";
 		if($async === true) { $command = "execute_async"; }
-
-		if($args == null) { $args = array(); }
 		
-		$params = array ('script' => $script, 'args' => $args);
+		$params = array ('script' => $script, 'args' => array());
 		$urlHubFormatted = $this->_hubUrl . "/session/{$this->_sessionId}/{$command}";
+
+        foreach ((array)$args as $arg) {
+            if ($arg instanceof WebElement) {
+                $arg = array('ELEMENT' => $arg->getElementId());
+            }
+            $params['args'][] = $arg;
+        }
 		
 		$httpClient = HttpFactory::getClient($this->_environment);
 		$results = $httpClient->setUrl($urlHubFormatted)->setHttpMethod(HttpClient::POST)->setJsonParams($params)->execute();

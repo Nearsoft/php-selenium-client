@@ -63,7 +63,23 @@ class WebElementTest extends AbstractTest
 		
 		$this->assertEquals( true, $selectBoxOption->isSelected());
 	}
-	
+
+    public function testClassMethodsAffectElementClassName()
+    {
+        $element = $this->_driver->findElement(By::id("sel1"));
+        $this->assertEmpty($element->getClassName());
+        $element->setClassName("select x-small");
+        $this->assertEquals("select x-small", $element->getClassName());
+        $this->assertContains('class="select x-small"', $element->getOuterHTML());
+        // test method chaining
+        $element->addClass("foo")->addClass("bar");
+        $this->assertEquals("select x-small foo bar", $element->getClassName());
+        // we shouldn't be able to add a duplicate class
+        $element->addClass("foo");
+        $this->assertEquals("select x-small foo bar", $element->getClassName());
+        $element->removeClass("foo");
+        $this->assertEquals("select x-small bar", $element->getClassName());
+    }
 	
 	public function testClearShouldSetValueEmpty()
 	{
@@ -148,7 +164,7 @@ class WebElementTest extends AbstractTest
 			}		
 		}
 	}
-	
+
 	public function testClickShouldSubmitForm()
 	{	
 		$button = $this->_driver->findElement(By::id("btnSubmit"));
