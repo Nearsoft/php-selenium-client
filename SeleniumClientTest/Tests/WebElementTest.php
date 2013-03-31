@@ -124,6 +124,13 @@ class WebElementTest extends AbstractTest
 		
 		$this->assertEquals( $webElement->getElementId(), trim($webElementDescription["id"]));	
 	}
+
+    public function testFindElementByJsSelectorShouldGetChildElement()
+    {
+        $selectBox = $this->_driver->findElement(By::id("sel1"));
+        $option = $selectBox->findElement(By::jsSelector('option[selected="selected"]', 'document.querySelector'));
+        $this->assertEquals('Orange', $option->getText());
+    }
 	
 	public function testFindElementShouldGetFoundElementText()
 	{

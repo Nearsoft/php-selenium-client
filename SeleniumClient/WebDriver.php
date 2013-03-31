@@ -399,19 +399,23 @@ class WebDriver
      * Gets an element within current page
      * @param By   $locator
      * @param bool $polling
+     * @param int  $elementId
      * @throws Http\SeleniumNoSuchElementException
      * @return \SeleniumClient\WebElement
      */
-	public function findElement(By $locator, $polling = false)
+	public function findElement(By $locator, $polling = false, $elementId = -1)
 	{
         if (strpos($locator->getStrategy(), 'js selector ') === 0) {
-            $result = $this->findElements($locator, $polling);
+            $result = $this->findElements($locator, $polling, $elementId);
             if (!$result) {
                 throw new SeleniumNoSuchElementException();
             }
             return $result[0];
         } else {
             $command = "element";
+            if ($elementId >= 0) {
+                $command = "element/{$elementId}/{$command}";
+            }
             $params = array ('using' => $locator->getStrategy(), 'value' => $locator->getSelectorValue());
             $urlHubFormatted = $this->_hubUrl . "/session/{$this->_sessionId}/{$command}";
 
@@ -428,10 +432,11 @@ class WebDriver
      * Gets elements within current page
      * @param By   $locator
      * @param bool $polling
+     * @param int  $elementId
      * @throws SeleniumInvalidSelectorException
      * @return \SeleniumClient\WebElement[]
      */
-    public function findElements(By $locator, $polling = false)
+    public function findElements(By $locator, $polling = false, $elementId = -1)
     {
         $environment = $this->_environment;
         $hubUrl = $this->_hubUrl;
@@ -448,27 +453,44 @@ class WebDriver
         };
 
         if (strpos($locator->getStrategy(), 'js selector ') === 0) {
-            $selector = substr($locator->getStrategy(), 12);
-            $script = "return typeof window.{$selector};";
+            $function = substr($locator->getStrategy(), 12);
+            $script = "return typeof window.{$function};";
             $valid = $this->executeScript($script) == 'function';
+            $selector = addslashes($locator->getSelectorValue());
 
             if (!$valid) {
                 throw new SeleniumInvalidSelectorException('The selectorElement is not defined');
             }
 
-            $script = "return {$selector}(\"" . addslashes($locator->getSelectorValue()) . "\");";
-            $params = array('script' => $script, 'args' => array());
+            if ($elementId >= 0) {
+                // todo refactor child selection strategy to separate classes
+                if (strpos($function, 'document.') === 0) {
+                    // assume child.$function($selector)
+                    $function = substr($function, 9);
+                    $script = sprintf('return arguments[0].%s("%s")', $function, $selector);
+                } else {
+                    // assume $function($selector, child)
+                    $script = sprintf('return %s("%s", arguments[0])', $function, $selector);
+                }
+                $args = array(array('ELEMENT' => $elementId));
+            } else {
+                $script = sprintf('return %s("%s")', $function, $selector);
+                $args = array();
+            }
+
+            $params = array('script' => $script, 'args' => $args);
             $results = $execute('execute', $params);
         } else {
             $params = array('using' => $locator->getStrategy(), 'value' => $locator->getSelectorValue());
-            $results = $execute('elements', $params);
+            $command = $elementId >= 0 ? "element/{$elementId}/elements" : "elements";
+            $results = $execute($command, $params);
         }
 
         $webElements = array();
         
         if (isset($results['value']) && is_array($results['value'])) {
-            foreach ($results ['value'] as $element) {
-                $webElements[] = new WebElement($this, $element['ELEMENT']);
+            foreach ($results['value'] as $element) {
+                $webElements[] = new WebElement($this, is_array($element) ? $element['ELEMENT'] : $element);
             }
         }
         
@@ -740,6 +762,7 @@ class WebDriver
 	
 	/**
 	 * Find an element within another element
+     * @deprecated
 	 * @param Integer $elementId
 	 * @param By $locator
 	 * @param Boolean $polling
@@ -747,20 +770,12 @@ class WebDriver
 	 */
 	public function webElementFindElement($elementId, By $locator, $polling = false)
 	{
-		$command = "element";
-		$params = array('using' => $locator->getStrategy(), 'value' => $locator->getSelectorValue());
-		$urlHubFormatted = $this->_hubUrl . "/session/{$this->_sessionId}/element/{$elementId}/{$command}";
-		
-		$httpClient = HttpFactory::getClient($this->_environment);
-		$results = $httpClient->setUrl($urlHubFormatted)->setHttpMethod(HttpClient::POST)->setJsonParams($params)->setPolling($polling)->execute();
-
-		$result = null;
-		if (isset($results["value"]["ELEMENT"]) && trim($results["value"]["ELEMENT"]) != "") { $result = new WebElement($this, $results["value"]["ELEMENT"]); }
-		return $result;
+        return $this->findElement($locator, $polling, $elementId);
 	}
 	
 	/**
 	 * Find elements within another element
+     * @deprecated
 	 * @param Integer $elementId
 	 * @param By $locator
 	 * @param Boolean $polling
@@ -768,23 +783,7 @@ class WebDriver
 	 */
 	public function webElementFindElements($elementId, By $locator, $polling = false)
 	{
-		$command = "elements";
-		$params = array ('using' => $locator->getStrategy (), 'value' => $locator->getSelectorValue());
-		$urlHubFormatted = $this->_hubUrl . "/session/{$this->_sessionId}/element/{$elementId}/{$command}";
-		
-		$httpClient = HttpFactory::getClient($this->_environment);
-		$results = $httpClient->setUrl($urlHubFormatted)->setHttpMethod(HttpClient::POST)->setJsonParams($params)->setPolling($polling)->execute();
-		
-		$result = null;
-		if (isset($results["value"]) && is_array($results["value"]))
-		{
-			$webElements = array();
-			
-			foreach($results ["value"] as $element) { $webElements[] = new WebElement($this, $element["ELEMENT"]); }
-			
-			$result = $webElements;
-		}
-		return $result;
+        return $this->findElements($locator, $polling, $elementId);
 	}
 	
 	/**

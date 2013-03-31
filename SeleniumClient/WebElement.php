@@ -209,7 +209,7 @@ class WebElement
 	 * @param Boolean $polling
 	 * @return \SeleniumClient\WebElement
 	 */
-	public function findElement(By $locator, $polling = false) { return $this->_driver->webElementFindElement($this->_elementId, $locator, $polling); }
+	public function findElement(By $locator, $polling = false) { return $this->_driver->findElement($locator, $polling, $this->_elementId); }
 	
 	/**
 	 * Find elements within current element
@@ -217,7 +217,7 @@ class WebElement
 	 * @param Boolean $polling
 	 * @return \SeleniumClient\WebElement[]
 	 */
-	public function findElements(By $locator, $polling = false) { return $this->_driver->webElementFindElements($this->_elementId, $locator, $polling); }
+	public function findElements(By $locator, $polling = false) { return $this->_driver->findElements($locator, $polling, $this->_elementId); }
 	
 	/**
 	 * Wait for expected element to be present within current element
