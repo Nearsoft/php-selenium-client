@@ -116,7 +116,10 @@ class AbstractTest extends PHPUnit_Framework_TestCase {
             $this->_driver->setWindowPosition( self::$_handle, $this->_position['x'], $this->_position['y'] );
             $this->_driver->setWindowSize( self::$_handle, $this->_size['width'], $this->_size['height'] );
         } else {
-            $this->_driver->quit();
+            try{
+                $this->_driver->quit();
+            } catch ( Exception $e ) {
+            }
         }
     }
 }
