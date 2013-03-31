@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<phpunit xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:noNamespaceSchemaLocation="https://raw.github.com/sebastianbergmann/phpunit/master/phpunit.xsd"
+         bootstrap="bootstrap.php" colors="true">
+    <php>
+        <env name="SELENIUM_CLIENT_BROWSER" value="firefox" />
+        <env name="SELENIUM_CLIENT_URL" value="http://nsoft.hostei.com/" />
+        <env name="SELENIUM_CLIENT_SINGLE_INSTANCE" value="false" />
+    </php>
+    <testsuites>
+        <testsuite name="Test Suite">
+            <directory suffix=".php">Tests</directory>
+            <exclude>Tests/AbstractTest.php</exclude>
+        </testsuite>
+    </testsuites>
+    <filter>
+        <whitelist>
+            <directory suffix=".php">../SeleniumClient</directory>
+            <exclude>
+                <file>../SeleniumClient/Exceptions.php</file>
+                <file>../SeleniumClient/Http/Exceptions.php</file>
+            </exclude>
+        </whitelist>
+    </filter>
+    <logging>
+        <log title="PHP-SeleniumClient" highLowerBound="70" lowUpperBound="35" highlight="true" yui="true"
+             charset="UTF-8" target="../build/coverage" type="coverage-html" />
+        <log target="../build/logs/clover.xml" type="coverage-clover" />
+        <!-- https://github.com/sebastianbergmann/php-jenkins-template/issues/22 -->
+        <log target="../build/logs/junit.xml" type="junit" logIncompleteSkipped="false" />
+    </logging>
+</phpunit>

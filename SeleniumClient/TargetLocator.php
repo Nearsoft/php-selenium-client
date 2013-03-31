@@ -15,7 +15,9 @@
 
 namespace SeleniumClient;
 
-require_once 'WebDriver.php';
+use SeleniumClient\Http\SeleniumJavaScriptErrorException;
+
+require_once __DIR__ . '/WebDriver.php';
 
 class TargetLocator
 {
@@ -30,7 +32,7 @@ class TargetLocator
 	/**
 	 * Move to a different frame using its index
 	 * @param Integer $frameIndex
-	 * @return current WebDriver
+	 * @return \SeleniumClient\WebDriver The current webdriver
 	 */
 	public function getFrameByIndex($frameIndex)
 	{
@@ -43,7 +45,7 @@ class TargetLocator
 	/**
 	 * Move to different frame using its name
 	 * @param String $frameName
-	 * @return current WebDriver
+	 * @return \SeleniumClient\WebDriver The current webdriver
 	 */
 	public function getFrameByName($frameName)
 	{
@@ -63,7 +65,7 @@ class TargetLocator
 	/**
 	 * Move to a frame element.
 	 * @param WebElement $frameElement
-	 * @return current WebDriver
+	 * @return \SeleniumClient\WebDriver The current webdriver
 	 */
 	public function getFrameByWebElement(WebElement $frameElement)
 	{
@@ -91,7 +93,7 @@ class TargetLocator
 	/**
 	 * Change to the Window by passing in the name
 	 * @param String $windowName
-	 * @return current WebDriver
+	 * @return \SeleniumClient\WebDriver The current webdriver
 	 */
 	public function getWindow($windowName)
 	{
@@ -102,7 +104,7 @@ class TargetLocator
 
 	/**
 	 * Change the active frame to the default
-	 * @return current WebDriver
+	 * @return \SeleniumClient\WebDriver The current webdriver
 	 */
 	public function getDefaultFrame()
 	{
@@ -136,5 +138,35 @@ class TargetLocator
 		//$this->_driver->getAlertText();
 		return new Alert($this->_driver); //validate that the Alert object can be created, if not throw an exception, try to use a factory singleton o depency of injection to only use 1 instance
 	}
+
+    /**
+     * Opens a new tab for the given URL
+     * @param string $url The URL to open
+     * @return string The handle of the previously active window
+     * @see http://stackoverflow.com/a/9122450/650329
+     * @throws SeleniumJavaScriptErrorException If unable to open tab
+     */
+    public function newTab($url)
+    {
+        $script = "var d=document,a=d.createElement('a');a.target='_blank';a.href='%s';a.innerHTML='.';d.body.appendChild(a);return a";
+        $element = $this->_driver->executeScript( sprintf( $script, $url ) );
+
+        if ( empty( $element ) ) {
+            throw new SeleniumJavaScriptErrorException( 'Unable to open tab' );
+        }
+
+        $existingHandles = $this->_driver->getCurrentWindowHandles();
+        $anchor = new WebElement( $this->_driver, $element['ELEMENT'] );
+        $anchor->click();
+
+        $this->_driver->executeScript( 'var d=document,a=arguments[0];a.parentNode.removeChild(a);', array( $element ) );
+        $newHandles = array_values( array_diff( $this->_driver->getCurrentWindowHandles(), $existingHandles ) );
+        $newHandle = $newHandles[0];
+        $oldHandle = $this->_driver->getCurrentWindowHandle();
+
+        $this->getWindow( $newHandle );
+
+        return $oldHandle;
+    }
 	#endregion
 }

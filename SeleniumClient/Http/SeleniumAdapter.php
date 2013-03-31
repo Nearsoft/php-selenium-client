@@ -15,18 +15,18 @@
 
 namespace SeleniumClient\Http;
 
-require_once "Exceptions.php";
+require_once  __DIR__ . "/Exceptions.php";
 
 class SeleniumAdapter extends HttpClient
 {
 	public function execute()
 	{
-		parent::execute();
+		$responseBody = parent::execute();
 		
 		$this->validateSeleniumResponseCode();
-		$this->validateHttpCode ();
+		$this->validateHttpCode();
 		
-		return $this->_responseBody;
+		return $responseBody;
 	}
 	
 	protected function validateHttpCode()

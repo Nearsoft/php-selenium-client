@@ -1,33 +1,17 @@
 <?php
 
-use SeleniumClient\WebDriver;
-use SeleniumClient\WebDriverWait;
-use SeleniumClient\WebElement;
-use SeleniumClient\By;
-use SeleniumClient\WebDriverWaitTimeoutException;
+require_once __DIR__ . '/AbstractTest.php';
 
-class WebDriverWaitTest extends PHPUnit_Framework_TestCase 
+use SeleniumClient\WebDriverWait;
+use SeleniumClient\By;
+
+class WebDriverWaitTest extends AbstractTest
 {
-	private $_driver = null;
-	private $_url = "http://nsoft.hostei.com/";
-	
-	public function setUp()
-	{
-		$this->_driver = new WebDriver();
-		$this->_driver->get($this->_url);
-	}
-	
-	public function tearDown()
-	{
-		if($this->_driver != null)
-			$this->_driver->quit();
-	}
-	
 	public function testUntilShouldWait()
 	{
-		$this->_driver->findElement(By::id("btnAppendDiv"))->click();		
+		$this->_driver->findElement(By::id("btnAppendDiv"))->click();
 		$wait = new WebDriverWait(8);		
-		$label = $wait->until($this->_driver,"findElement",array(By::id("dDiv1-0"),true));		
+		$label = $wait->until($this->_driver,"findElement",array(By::id("dDiv1-0"),true));
 		$this->assertEquals("Some content",$label->getText());
 	}
 	
@@ -35,7 +19,7 @@ class WebDriverWaitTest extends PHPUnit_Framework_TestCase
 	{
 		
 		$this->setExpectedException('SeleniumClient\WebDriverWaitTimeoutException');		
-		$this->_driver->findElement(By::id("btnAppendDiv"))->click();	
+		$this->_driver->findElement(By::id("btnAppendDiv"))->click();
 		$wait = new WebDriverWait(3);	
 		$label = $wait->until($this->_driver,"findElement",array(By::id("dDiv1-0"),true));
 	

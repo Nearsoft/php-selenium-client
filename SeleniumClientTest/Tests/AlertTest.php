@@ -1,26 +1,21 @@
 <?php
 
+require_once __DIR__ . '/AbstractTest.php';
+
 use SeleniumClient\Alert;
 use SeleniumClient\By;
-use SeleniumClient\WebDriver;
 
-class AlertTest extends PHPUnit_Framework_TestCase
+class AlertTest extends AbstractTest
 {
-	private $_driver = null;
+    /** @var Alert */
 	private $_alert = null;
-	private $_url = "http://nsoft.hostei.com/";
-	
+
 	public function setUp()
 	{
-		$this->_driver = new WebDriver();
+		parent::setUp();
 		$this->_alert = new Alert($this->_driver);
 	}
-	
-	public function tearDown()
-	{
-		if($this->_driver != null) { $this->_driver->quit(); }
-	}
-	
+
 	/*
 	 * TODO:
 	 * consider no selenium server running
@@ -30,8 +25,6 @@ class AlertTest extends PHPUnit_Framework_TestCase
 	
 	public function testGetAlertShouldGetAlertText()
 	{
-		$this->_driver->get($this->_url);
-		
 		$this->_driver->findElement(By::id("btnAlert"))->click();
 
 		$alertText = $this->_alert->getText();
@@ -41,8 +34,6 @@ class AlertTest extends PHPUnit_Framework_TestCase
 	
 	public function testGetAlertShouldDismissAlert()
 	{
-		$this->_driver->get($this->_url);
-		
 		$this->_driver->findElement(By::id("btnConfirm"))->click();
 
 		$this->_alert->dismiss();
@@ -54,8 +45,6 @@ class AlertTest extends PHPUnit_Framework_TestCase
 
 	public function testGetAlertShouldAcceptAlert()
 	{
-		$this->_driver->get($this->_url);
-		
 		$this->_driver->findElement(By::id("btnConfirm"))->click();
 
 		$this->_alert->accept();
@@ -67,8 +56,6 @@ class AlertTest extends PHPUnit_Framework_TestCase
 
 	public function testGetAlertShouldSendKeysToAlert()
 	{
-		$this->_driver->get($this->_url);
-		
 		$this->_driver->findElement(By::id("btnPrompt"))->click();
 
 		$this->_alert->sendKeys("alert text");

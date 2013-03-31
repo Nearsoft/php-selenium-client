@@ -18,14 +18,40 @@ namespace SeleniumClient;
 use SeleniumClient\DesiredCapabilities;
 use SeleniumClient\Http\HttpClient;
 use SeleniumClient\Http\HttpFactory;
+use SeleniumClient\Http\SeleniumInvalidSelectorException;
+use SeleniumClient\Http\SeleniumNoSuchElementException;
 
-require_once 'By.php';
-require_once 'DesiredCapabilities.php';
-require_once 'Http/HttpFactory.php';
-require_once 'Http/HttpClient.php';
-require_once 'TargetLocator.php';
-require_once 'WebElement.php';
+require_once __DIR__ . '/By.php';
+require_once __DIR__ . '/DesiredCapabilities.php';
+require_once __DIR__ . '/Http/Exceptions.php';
+require_once __DIR__ . '/Http/HttpFactory.php';
+require_once __DIR__ . '/Http/HttpClient.php';
+require_once __DIR__ . '/TargetLocator.php';
+require_once __DIR__ . '/WebElement.php';
 
+/**
+ * @param string $selectorValue
+ * @param string $selectorDefinition
+ * @param bool $polling
+ * 
+ * @method \SeleniumClient\WebElement findElementByCssSelector($selectorValue, $polling=false)
+ * @method \SeleniumClient\WebElement findElementById($selectorValue, $polling=false)
+ * @method \SeleniumClient\WebElement findElementByJsSelector($selectorValue, $selectorDefinition='$', $polling=false)
+ * @method \SeleniumClient\WebElement findElementByLinkText($selectorValue, $polling=false)
+ * @method \SeleniumClient\WebElement findElementByName($selectorValue, $polling=false)
+ * @method \SeleniumClient\WebElement findElementByPartialLinkText($selectorValue, $polling=false)
+ * @method \SeleniumClient\WebElement findElementByTagName($selectorValue, $polling=false)
+ * @method \SeleniumClient\WebElement findElementByXPath($selectorValue, $polling=false)
+ *
+ * @method \SeleniumClient\WebElement[] findElementsByCssSelector($selectorValue, $polling=false)
+ * @method \SeleniumClient\WebElement[] findElementsById($selectorValue, $polling=false)
+ * @method \SeleniumClient\WebElement[] findElementsByJsSelector($selectorValue, $selectorDefinition='$', $polling=false)
+ * @method \SeleniumClient\WebElement[] findElementsByLinkText($selectorValue, $polling=false)
+ * @method \SeleniumClient\WebElement[] findElementsByName($selectorValue, $polling=false)
+ * @method \SeleniumClient\WebElement[] findElementsByPartialLinkText($selectorValue, $polling=false)
+ * @method \SeleniumClient\WebElement[] findElementsByTagName($selectorValue, $polling=false)
+ * @method \SeleniumClient\WebElement[] findElementsByXPath($selectorValue, $polling=false)
+ */
 class WebDriver
 {
 	private $_hubUrl = null;
@@ -47,6 +73,39 @@ class WebDriver
 		
 		$this->startSession($desiredCapabilities);
 	}
+
+    /**
+     * @param string $name
+     * @param array  $args
+     * @return mixed
+     * @throws \Exception
+     */
+    public function __call( $name, array $args )
+    {
+        $arr = explode( 'By', $name );
+        $call = $arr[0];
+        $by = count( $arr ) > 1 ? lcfirst( $arr[1] ) : '';
+
+        $valid = false;
+
+        switch ( $call ) {
+            case 'findElement':
+            case 'findElements':
+                if ( method_exists( '\\SeleniumClient\\By', $by ) ) {
+                    $valid = true;
+                }
+        }
+
+        if ( !$valid ) {
+            throw new \Exception( 'Invalid magic call' );
+        }
+
+        $method = new \ReflectionMethod( '\\SeleniumClient\\By', $by );
+        $byArgs = array_splice( $args, 0, $method->getNumberOfParameters() );
+        array_unshift( $args, $method->invokeArgs( null, $byArgs ) );
+
+        return call_user_func_array( array( $this, $call ), $args );
+    }
 	
 	/**
 	 * Set whether production or testing mode for library
@@ -332,57 +391,114 @@ class WebDriver
 			
 			return $fileName;
 		}
-	}
-	
-	/**
-	 * Gets an element within current page
-	 * @param By $locator
-	 * @param Boolean $polling
-	 * @return \SeleniumClient\WebElement
-	 */
-	public function findElement(By $locator, $polling = false)
-	{
-		$command = "element";
-		$params = array ('using' => $locator->getStrategy(), 'value' => $locator->getSelectorValue());
-		$urlHubFormatted = $this->_hubUrl . "/session/{$this->_sessionId}/{$command}";
-		
-		$httpClient = HttpFactory::getClient($this->_environment);
-		$results = $httpClient->setUrl($urlHubFormatted)->setHttpMethod(HttpClient::POST)->setJsonParams($params)->setPolling($polling)->execute();
-		
-		$result = null;
-		if (isset($results["value"]["ELEMENT"]) && trim ($results["value"]["ELEMENT"]) != "") { $result = new WebElement($this, $results["value"]["ELEMENT"]); }
-		return $result;
-	}
-	
-	/**
-	 * Gets elements within current page
-	 * @param By $locator
-	 * @param unknown_type $polling
-	 * @return Array \SeleniumClient\WebElement
-	 */
-	public function findElements(By $locator, $polling = false)
-	{
-		$command = "elements";
-		$params = array('using' => $locator->getStrategy(), 'value' => $locator->getSelectorValue());
-		$urlHubFormatted = $this->_hubUrl . "/session/{$this->_sessionId}/{$command}";
-		
-		$httpClient = HttpFactory::getClient($this->_environment);
-		$results = $httpClient->setUrl($urlHubFormatted)->setHttpMethod(HttpClient::POST)->setJsonParams($params)->setPolling($polling)->execute();
-		
-		$result = null;
-		if (isset($results["value"]) && is_array($results["value"]))
-		{
-			$webElements = array();
-			
-			foreach($results ["value"] as $element) { $webElements[] = new WebElement($this, $element["ELEMENT"]); }
 
-			$result = $webElements;
-		}
-		return $result;
+        return null;
 	}
+
+    /**
+     * Gets an element within current page
+     * @param By   $locator
+     * @param bool $polling
+     * @param int  $elementId
+     * @throws Http\SeleniumNoSuchElementException
+     * @return \SeleniumClient\WebElement
+     */
+	public function findElement(By $locator, $polling = false, $elementId = -1)
+	{
+        if (strpos($locator->getStrategy(), 'js selector ') === 0) {
+            $result = $this->findElements($locator, $polling, $elementId);
+            if (!$result) {
+                throw new SeleniumNoSuchElementException();
+            }
+            return $result[0];
+        } else {
+            $command = "element";
+            if ($elementId >= 0) {
+                $command = "element/{$elementId}/{$command}";
+            }
+            $params = array ('using' => $locator->getStrategy(), 'value' => $locator->getSelectorValue());
+            $urlHubFormatted = $this->_hubUrl . "/session/{$this->_sessionId}/{$command}";
+
+            $httpClient = HttpFactory::getClient($this->_environment);
+            $results = $httpClient->setUrl($urlHubFormatted)->setHttpMethod(HttpClient::POST)->setJsonParams($params)->setPolling($polling)->execute();
+
+            $result = null;
+            if (isset($results["value"]["ELEMENT"]) && trim ($results["value"]["ELEMENT"]) != "") { $result = new WebElement($this, $results["value"]["ELEMENT"]); }
+            return $result;
+        }
+	}
+
+    /**
+     * Gets elements within current page
+     * @param By   $locator
+     * @param bool $polling
+     * @param int  $elementId
+     * @throws SeleniumInvalidSelectorException
+     * @return \SeleniumClient\WebElement[]
+     */
+    public function findElements(By $locator, $polling = false, $elementId = -1)
+    {
+        $environment = $this->_environment;
+        $hubUrl = $this->_hubUrl;
+        $sessionId = $this->_sessionId;
+
+        $execute = function ($command, array $params) use ($polling, $environment, $hubUrl, $sessionId) {
+            $urlHubFormatted = $hubUrl . "/session/{$sessionId}/{$command}";
+            $httpClient = HttpFactory::getClient($environment);
+            return $httpClient->setUrl($urlHubFormatted)
+                ->setHttpMethod(HttpClient::POST)
+                ->setJsonParams($params)
+                ->setPolling($polling)
+                ->execute();
+        };
+
+        if (strpos($locator->getStrategy(), 'js selector ') === 0) {
+            $function = substr($locator->getStrategy(), 12);
+            $script = "return typeof window.{$function};";
+            $valid = $this->executeScript($script) == 'function';
+            $selector = addslashes($locator->getSelectorValue());
+
+            if (!$valid) {
+                throw new SeleniumInvalidSelectorException('The selectorElement is not defined');
+            }
+
+            if ($elementId >= 0) {
+                // todo refactor child selection strategy to separate classes
+                if (strpos($function, 'document.') === 0) {
+                    // assume child.$function($selector)
+                    $function = substr($function, 9);
+                    $script = sprintf('return arguments[0].%s("%s")', $function, $selector);
+                } else {
+                    // assume $function($selector, child)
+                    $script = sprintf('return %s("%s", arguments[0])', $function, $selector);
+                }
+                $args = array(array('ELEMENT' => $elementId));
+            } else {
+                $script = sprintf('return %s("%s")', $function, $selector);
+                $args = array();
+            }
+
+            $params = array('script' => $script, 'args' => $args);
+            $results = $execute('execute', $params);
+        } else {
+            $params = array('using' => $locator->getStrategy(), 'value' => $locator->getSelectorValue());
+            $command = $elementId >= 0 ? "element/{$elementId}/elements" : "elements";
+            $results = $execute($command, $params);
+        }
+
+        $webElements = array();
+        
+        if (isset($results['value']) && is_array($results['value'])) {
+            foreach ($results['value'] as $element) {
+                $webElements[] = new WebElement($this, is_array($element) ? $element['ELEMENT'] : $element);
+            }
+        }
+        
+        return $webElements ?: null;
+    }
 	
 	/**
-	 * Gets element that is currenly focused
+	 * Gets element that is currently focused
 	 * @return \SeleniumClient\WebElement
 	 */
 	public function getActiveElement()
@@ -413,7 +529,7 @@ class WebDriver
 	
 		$wait = new WebDriverWait($timeOutSeconds);
 
-		$dynamicElement = $wait->until($this, "findElement", array($locator, TRUE));
+		$dynamicElement = $wait->until($this, "findElement", array($locator, true));
 
 		return $dynamicElement;
 	}
@@ -436,6 +552,7 @@ class WebDriver
 			}
 			sleep(1);
 		}
+        return false;
 	}
 
 	#endregion
@@ -645,6 +762,7 @@ class WebDriver
 	
 	/**
 	 * Find an element within another element
+     * @deprecated
 	 * @param Integer $elementId
 	 * @param By $locator
 	 * @param Boolean $polling
@@ -652,20 +770,12 @@ class WebDriver
 	 */
 	public function webElementFindElement($elementId, By $locator, $polling = false)
 	{
-		$command = "element";
-		$params = array('using' => $locator->getStrategy(), 'value' => $locator->getSelectorValue());
-		$urlHubFormatted = $this->_hubUrl . "/session/{$this->_sessionId}/element/{$elementId}/{$command}";
-		
-		$httpClient = HttpFactory::getClient($this->_environment);
-		$results = $httpClient->setUrl($urlHubFormatted)->setHttpMethod(HttpClient::POST)->setJsonParams($params)->setPolling($polling)->execute();
-
-		$result = null;
-		if (isset($results["value"]["ELEMENT"]) && trim($results["value"]["ELEMENT"]) != "") { $result = new WebElement($this, $results["value"]["ELEMENT"]); }
-		return $result;
+        return $this->findElement($locator, $polling, $elementId);
 	}
 	
 	/**
 	 * Find elements within another element
+     * @deprecated
 	 * @param Integer $elementId
 	 * @param By $locator
 	 * @param Boolean $polling
@@ -673,23 +783,7 @@ class WebDriver
 	 */
 	public function webElementFindElements($elementId, By $locator, $polling = false)
 	{
-		$command = "elements";
-		$params = array ('using' => $locator->getStrategy (), 'value' => $locator->getSelectorValue());
-		$urlHubFormatted = $this->_hubUrl . "/session/{$this->_sessionId}/element/{$elementId}/{$command}";
-		
-		$httpClient = HttpFactory::getClient($this->_environment);
-		$results = $httpClient->setUrl($urlHubFormatted)->setHttpMethod(HttpClient::POST)->setJsonParams($params)->setPolling($polling)->execute();
-		
-		$result = null;
-		if (isset($results["value"]) && is_array($results["value"]))
-		{
-			$webElements = array();
-			
-			foreach($results ["value"] as $element) { $webElements[] = new WebElement($this, $element["ELEMENT"]); }
-			
-			$result = $webElements;
-		}
-		return $result;
+        return $this->findElements($locator, $polling, $elementId);
 	}
 	
 	/**
@@ -761,11 +855,16 @@ class WebDriver
 		
 		$command = "execute";
 		if($async === true) { $command = "execute_async"; }
-
-		if($args == null) { $args = array(); }
 		
-		$params = array ('script' => $script, 'args' => $args);
+		$params = array ('script' => $script, 'args' => array());
 		$urlHubFormatted = $this->_hubUrl . "/session/{$this->_sessionId}/{$command}";
+
+        foreach ((array)$args as $arg) {
+            if ($arg instanceof WebElement) {
+                $arg = array('ELEMENT' => $arg->getElementId());
+            }
+            $params['args'][] = $arg;
+        }
 		
 		$httpClient = HttpFactory::getClient($this->_environment);
 		$results = $httpClient->setUrl($urlHubFormatted)->setHttpMethod(HttpClient::POST)->setJsonParams($params)->execute();
