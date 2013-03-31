@@ -108,26 +108,42 @@ class WebElement
 	 * @return Array
 	 */
 	public function getCoordinates() {return $this->_driver->webElementGetCoordinates($this->_elementId);}
+
+    /**
+     * @return string
+     */
+    public function getInnerHTML()
+    {
+        return $this->getAttribute( 'innerHTML' );
+    }
 	
 	/**
 	 * Get element's coordinates after scrolling
 	 * @return Array
 	 */
 	public function getLocationOnScreenOnceScrolledIntoView() {return $this->_driver->webElementGetLocationOnScreenOnceScrolledIntoView($this->_elementId);}
-	
+
+    /**
+     * @return string
+     */
+    public function getOuterHTML()
+    {
+        return $this->getAttribute( 'outerHTML' );
+    }
+
 	/**
 	 * Find element within current element
 	 * @param By $locator
 	 * @param Boolean $polling
-	 * @return SeleniumClient\WebElement
+	 * @return \SeleniumClient\WebElement
 	 */
 	public function findElement(By $locator, $polling = false) { return $this->_driver->webElementFindElement($this->_elementId, $locator, $polling); }
 	
 	/**
 	 * Find elements within current element
 	 * @param By $locator
-	 * @param Bolean $polling
-	 * @return Array SeleniumClient\WebElement
+	 * @param Boolean $polling
+	 * @return \SeleniumClient\WebElement[]
 	 */
 	public function findElements(By $locator, $polling = false) { return $this->_driver->webElementFindElements($this->_elementId, $locator, $polling); }
 	
@@ -135,7 +151,7 @@ class WebElement
 	 * Wait for expected element to be present within current element
 	 * @param By $locator
 	 * @param Integer $timeOutSeconds
-	 * @return Ambiguous
+	 * @return mixed
 	 */
 	public function waitForElementUntilIsPresent(By $locator, $timeOutSeconds = 5)
 	{
@@ -144,7 +160,7 @@ class WebElement
 	
 		$wait = new WebDriverWait($timeOutSeconds);
 
-		$dynamicElement = $wait->until($this, "findElement", array($locator, TRUE));
+		$dynamicElement = $wait->until($this, "findElement", array($locator, true));
 		
 		return $dynamicElement;
 	}
@@ -232,7 +248,7 @@ class WebElement
 			$currentText = null;
 
 			$webDriverWait = new WebDriverWait($timeOutSeconds);
-			$dynamicElement = $webDriverWait->until($this, "findElement", array($locator, TRUE));
+			$dynamicElement = $webDriverWait->until($this, "findElement", array($locator, true));
 
 			try
 			{

@@ -38,32 +38,52 @@ class HttpClient
 		$this->_trace = $value;	
 		return $this;
 	}
-	
-	public function setUrl($value)
+
+    /**
+     * @param string $value
+     * @return $this
+     */
+    public function setUrl($value)
 	{
 		$this->_url = $value;
 		return $this;
 	}
-	
+
+    /**
+     * @param bool $value
+     * @return $this
+     */
 	public function setPolling($value)
 	{
 		$this->_polling = $value;
 		return $this;
 	}
-	
+
+    /**
+     * @param string $value
+     * @return $this
+     */
 	public function setJsonParams($value)
 	{
 		$this->_jsonParams = $value;
 		return $this;
 	}
-	
+
+    /**
+     * @param string $value
+     * @return $this
+     */
 	public function setHttpMethod($value)
 	{
 		$this->_httpMethod = $value;
 		return $this;
 	}
-	
-	public function execute()
+
+    /**
+     * @return string The response body
+     * @throws \Exception
+     */
+    public function execute()
 	{
 		if (empty($this->_url) || empty($this->_httpMethod)) { throw new \Exception("Must specify URL and HTTP METHOD"); }
 		
@@ -96,7 +116,7 @@ class HttpClient
 			echo "URL: " . $this->_url . "\n";
 			echo "METHOD: " . $this->_httpMethod . "\n";
 			
-			echo "PARAMETTERS: ";
+			echo "PARAMETERS: ";
 			if (is_array($this->_jsonParams)) { echo print_r($this->_jsonParams); }
 			else echo "NONE"; { echo "\n"; }
 			
@@ -112,5 +132,7 @@ class HttpClient
 		
 		$this->_responseHeaders = $responseHeaders;
 		$this->_responseBody = $responseBody;
+
+        return $this->_responseBody;
 	}
 }

@@ -1,28 +1,13 @@
 <?php
 
+require_once __DIR__ . '/AbstractTest.php';
+
 use SeleniumClient\By;
-use SeleniumClient\WebDriver;
 use SeleniumClient\WebElement;
 
-class WebElementTest extends PHPUnit_Framework_TestCase {	
-	
-	private $_driver = null;
-	private $_url = "http://nsoft.hostei.com/";
-	
-	public function setUp() 
-	{
-		
-		$this->_driver = new WebDriver();
-		$this->_driver->get($this->_url);
-	}
-	
-	public function tearDown() 
-	{
-		if($this->_driver != null)
-		$this->_driver->quit();
-	}
-	
-	public function testGetCoordinatesInViewShouldGetLocationOnScreenOnceScrolledIntoView()
+class WebElementTest extends AbstractTest
+{
+    public function testGetCoordinatesInViewShouldGetLocationOnScreenOnceScrolledIntoView()
 	{
 		$element = $this->_driver->findElement(By::id("txt1"));
 		$coordinates = $element->getLocationOnScreenOnceScrolledIntoView();
@@ -45,22 +30,22 @@ class WebElementTest extends PHPUnit_Framework_TestCase {
 	{
 		$button1 = $this->_driver->findElement(By::id("btnNoAction"));
 		$this->assertEquals( true, $button1->isDisplayed());	
-		$this->_driver->executeScript("document.getElementById('btnNoAction').style.display = 'none';");	
+		$this->_driver->executeScript("document.getElementById('btnNoAction').style.display = 'none';");
 		$this->assertEquals( false, $button1->isDisplayed());
 	}
 	
 	public function testGetAttributeShouldGetData()
 	{
-		$chk = $this->_driver->findElement(By::id("chk3"));	
+		$chk = $this->_driver->findElement(By::id("chk3"));
 		$this->assertEquals( "chk3",strtolower($chk->getAttribute("name")));
 	}
 	
 	public function testIsEnabledShouldDetermineIfEnabled()
 	{
-		$button1 = $this->_driver->findElement(By::id("btnNoAction"));		
+		$button1 = $this->_driver->findElement(By::id("btnNoAction"));
 		$this->assertEquals( true, $button1->isEnabled());	
 	
-		$this->_driver->executeScript("document.getElementById('btnNoAction').disabled = true;");	
+		$this->_driver->executeScript("document.getElementById('btnNoAction').disabled = true;");
 		
 		$this->assertEquals( false, $button1->isEnabled());
 	}
@@ -90,8 +75,23 @@ class WebElementTest extends PHPUnit_Framework_TestCase {
 	
 		$this->assertEquals("", trim($webElement->getAttribute("value")));
 	}
-	
-	
+
+    public function testGetInnerHTMLShouldGetInnerHTML()
+    {
+        $selectBox = $this->_driver->findElement(By::id("sel1"));
+        $text = $selectBox->getInnerHTML();
+        $this->assertContains('<option', $text);
+        $this->assertStringEndsNotWith('</select>', $text);
+    }
+
+    public function testGetOuterHTMLShouldGetOuterHTML()
+    {
+        $selectBox = $this->_driver->findElement(By::id("sel1"));
+        $text = $selectBox->getOuterHTML();
+        $this->assertContains('<option', $text);
+        $this->assertStringEndsWith('</select>', $text);
+    }
+
 	public function testGetTagNameShouldGetTagName()
 	{
 		$webElement = $this->_driver->findElement(By::id("txt1"));
@@ -155,7 +155,7 @@ class WebElementTest extends PHPUnit_Framework_TestCase {
 		
 		$button->click();
 		
-		$this->assertTrue(strstr($this->_driver->getCurrentPageUrl(), "formReceptor") >= 0);	
+		$this->assertTrue(strstr($this->_driver->getCurrentPageUrl(), "formReceptor") >= 0);
 	}
 	
 	public function testSubmitShouldSubmitForm()

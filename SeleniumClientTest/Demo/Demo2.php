@@ -1,16 +1,18 @@
 <?php
 
-require_once 'AutoLoader.php';
+require_once __DIR__ . '/../bootstrap.php';
 
 use SeleniumClient\By;
-use SeleniumClient\SelectElement;
 use SeleniumClient\WebDriver;
 use SeleniumClient\WebDriverWait;
 use SeleniumClient\DesiredCapabilities;
 
-class AlertTest extends PHPUnit_Framework_TestCase
+class Demo2Test extends PHPUnit_Framework_TestCase
 {
+    /** @var WebDriver */
 	private $_driver = null;
+
+    /** @var string */
 	private $_testUrl = null;
 	
 	public function setUp()

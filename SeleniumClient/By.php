@@ -43,10 +43,21 @@ class By
 	 * @return \SeleniumClient\By
 	 */
 	public static function id($selectorValue) { return new By("id", $selectorValue); }
-	
+
+	/**
+	 * Locate by JavaScript selector
+	 * @param string $selectorValue
+     * @param string $selectorDefinition
+	 * @return \SeleniumClient\By
+	 */
+    public static function jsSelector($selectorValue, $selectorDefinition = '$')
+    {
+        return new By("js selector {$selectorDefinition}", $selectorValue);
+    }
+
 	/**
 	 * Locate by element's name
-	 * @param unknown_type $selectorValue
+	 * @param String $selectorValue
 	 * @return \SeleniumClient\By
 	 */
 	public static function name($selectorValue) { return new By("name", $selectorValue); }

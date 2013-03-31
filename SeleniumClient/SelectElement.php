@@ -15,7 +15,7 @@
 
 namespace SeleniumClient;
 
-require_once 'WebElement.php';
+require_once __DIR__ . '/WebElement.php';
 
 class SelectElement
 {
@@ -47,7 +47,7 @@ class SelectElement
 		$matched = false;
 		foreach($options as $option)
 		{
-			
+			/** @var $option WebElement */
 			if(!$option->isSelected())
 			{
 				$option->click();
@@ -74,7 +74,7 @@ class SelectElement
 		$matched = false;
 		foreach($options as $option)
 		{
-
+            /** @var $option WebElement */
 			if(!$option->isSelected())
 			{
 				$option->click();
