@@ -581,7 +581,7 @@ class WebDriverTest extends PHPUnit_Framework_TestCase
 	public function testExecuteScriptShouldGetPageTitle()
 	{
 		$this->_driver->get($this->_url);
-		$this->assertEquals("WebDriverClient SandBox", $this->_driver->executeScript("return document.title"));
+		$this->assertEquals("Nearsoft SeleniumClient SandBox", $this->_driver->executeScript("return document.title"));
 	}
 	
 	public function testExecuteScriptShouldSetInputTextUsingArguments()

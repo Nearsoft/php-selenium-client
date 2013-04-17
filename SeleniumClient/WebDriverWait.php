@@ -34,7 +34,7 @@ class WebDriverWait
 	
 	/**
 	 * Stop current flow until specified condition is completed
-	 * @param WebDriver / WebElement $seleniumObject
+	 * @param SeleniumClient\WebDriver / SeleniumClient\WebElement $seleniumObject
 	 * @param String $method
 	 * @param Array $args
 	 * @throws \Exception

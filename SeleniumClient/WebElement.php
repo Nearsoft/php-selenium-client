@@ -126,7 +126,7 @@ class WebElement
 	 * Find elements within current element
 	 * @param By $locator
 	 * @param Bolean $polling
-	 * @return Array WebElement
+	 * @return Array SeleniumClient\WebElement
 	 */
 	public function findElements(By $locator, $polling = false) { return $this->_driver->webElementFindElements($this->_elementId, $locator, $polling); }
 	
