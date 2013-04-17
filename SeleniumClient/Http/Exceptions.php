@@ -13,6 +13,7 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
+namespace SeleniumClient\Http;
 
 // HTTP Code Exceptions
 class SeleniumInvalidRequestException extends \Exception {

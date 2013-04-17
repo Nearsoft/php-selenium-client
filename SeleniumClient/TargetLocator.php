@@ -13,9 +13,9 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
+namespace SeleniumClient;
+
 require_once 'WebDriver.php';
-require_once 'Alert.php';
-require_once 'WebElement.php';
 
 class TargetLocator
 {
@@ -127,7 +127,7 @@ class TargetLocator
 
 	/**
 	 *  Switches to the currently active modal dialog for this particular driver instance.
-	 * @return Alert
+	 * @return \SeleniumClient\Alert
 	 */
 	public function getAlert()
 	{

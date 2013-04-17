@@ -13,6 +13,7 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
+namespace SeleniumClient;
 
 class By
 {
@@ -25,56 +26,56 @@ class By
 	/**
 	 * Locate by element's css class name
 	 * @param String $selectorValue
-	 * @return By
+	 * @return \SeleniumClient\By
 	 */
 	public static function className($selectorValue) { return new By("class name", $selectorValue); }
 	
 	/**
 	 * Locate by element's css selector path
 	 * @param String $selectorValue
-	 * @return By
+	 * @return \SeleniumClient\By
 	 */
 	public static function cssSelector($selectorValue) { return new By("css selector", $selectorValue); }
 	
 	/**
 	 * Locate by element's id
 	 * @param String $selectorValue
-	 * @return By
+	 * @return \SeleniumClient\By
 	 */
 	public static function id($selectorValue) { return new By("id", $selectorValue); }
 	
 	/**
 	 * Locate by element's name
 	 * @param unknown_type $selectorValue
-	 * @return By
+	 * @return \SeleniumClient\By
 	 */
 	public static function name($selectorValue) { return new By("name", $selectorValue); }
 	
 	/**
 	 * Locate by element's link text
 	 * @param String $selectorValue
-	 * @return By
+	 * @return \SeleniumClient\By
 	 */
 	public static function linkText($selectorValue) { return new By("link text", $selectorValue); }
 	
 	/**
 	 * Locate by part of element's link text
 	 * @param String $selectorValue
-	 * @return By
+	 * @return \SeleniumClient\By
 	 */
 	public static function partialLinkText($selectorValue) { return new By("partial link text", $selectorValue); }
 	
 	/**
 	 * Locate by element's tag name
 	 * @param String $selectorValue
-	 * @return By
+	 * @return \SeleniumClient\By
 	 */
 	public static function tagName($selectorValue) { return new By("tag name", $selectorValue); }
 	
 	/**
 	 * Locate by element's xPath
 	 * @param String $selectorValue
-	 * @return By
+	 * @return \SeleniumClient\By
 	 */
 	public static function xPath($selectorValue) { return new By("xpath", $selectorValue); }
 
