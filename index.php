@@ -1,1 +1,2 @@
-<?php
+<?php 
+header("location: SeleniumClientTest/SandBox/");
