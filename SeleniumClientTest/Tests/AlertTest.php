@@ -8,7 +8,7 @@ class AlertTest extends PHPUnit_Framework_TestCase
 {
 	private $_driver = null;
 	private $_alert = null;
-	private $_url = private $_url = TEST_URL;
+	private $_url = TEST_URL;
 	
 	public function setUp()
 	{
