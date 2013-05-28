@@ -14,4 +14,4 @@ class SeleniumClientAutoLoader {
 
 }
 
-$autoloader = new SeleniumClientAutoLoader();
+new SeleniumClientAutoLoader();

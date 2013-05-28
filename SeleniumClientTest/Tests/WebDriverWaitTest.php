@@ -9,7 +9,7 @@ use SeleniumClient\WebDriverWaitTimeoutException;
 class WebDriverWaitTest extends PHPUnit_Framework_TestCase 
 {
 	private $_driver = null;
-	private $_url = "http://nsoft.hostei.com/";
+	private $_url = TEST_URL;
 	
 	public function setUp()
 	{

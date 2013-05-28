@@ -14,4 +14,7 @@ class SeleniumClientAutoLoader {
 
 }
 
-$autoloader = new SeleniumClientAutoLoader();
+new SeleniumClientAutoLoader();
+
+define("TEST_DOMAIN", "nearsoft-php-seleniumclient.herokuapp.com");
+define("TEST_URL", "http://".TEST_DOMAIN."/SeleniumClientTest/SandBox/");

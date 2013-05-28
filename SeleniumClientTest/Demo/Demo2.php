@@ -15,7 +15,7 @@ class AlertTest extends PHPUnit_Framework_TestCase
 	
 	public function setUp()
 	{
-		$this->_testUrl = "http://nsoft.hostei.com/";
+		$this->_testUrl = "http://nearsoft-php-seleniumclient.herokuapp.com/SeleniumClientTest/SandBox/";
 		
 		$desiredCapabilities = new DesiredCapabilities("firefox");
 		

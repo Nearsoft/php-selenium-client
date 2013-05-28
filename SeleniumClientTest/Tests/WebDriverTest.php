@@ -13,7 +13,7 @@ use SeleniumClient\WebElement;
 class WebDriverTest extends PHPUnit_Framework_TestCase
 {
 	private $_driver = null;
-	private $_url = "http://nsoft.hostei.com/";
+	private $_url = TEST_URL;
 	
 	public function setUp() { $this->_driver = new WebDriver(); }
 	
@@ -292,7 +292,7 @@ class WebDriverTest extends PHPUnit_Framework_TestCase
 		$this->_driver->get($this->_url);
 		$this->_driver->setCookie("test", "1");
 		$this->_driver->setCookie("test2","2", "/");
-		$this->_driver->setCookie("test3", "3", "/", "hostei.com", true, 0);
+		$this->_driver->setCookie("test3", "3", "/", TEST_DOMAIN, true, 0);
 
 		$this->assertEquals(3, count($this->_driver->getCurrentCookies()));
 		$this->_driver->clearCookie("test2");
@@ -305,7 +305,7 @@ class WebDriverTest extends PHPUnit_Framework_TestCase
 		$this->_driver->get($this->_url);
 		$this->_driver->setCookie("test", "1");
 		$this->_driver->setCookie("test2", "2", "/");
-		$this->_driver->setCookie("test3", "3", "/", "hostei.com", true, 0);
+		$this->_driver->setCookie("test3", "3", "/", TEST_DOMAIN, true, 0);
 		
 		$this->assertEquals(3, count($this->_driver->getCurrentCookies()));
 		$this->_driver->clearCurrentCookies();
@@ -318,7 +318,7 @@ class WebDriverTest extends PHPUnit_Framework_TestCase
 		$this->_driver->get($this->_url);
 		$this->_driver->setCookie("test", "1");
 		$this->_driver->setCookie("test2", "2", "/");
-		$this->_driver->setCookie("test3", "3", "/", "hostei.com", true, 0);
+		$this->_driver->setCookie("test3", "3", "/", TEST_DOMAIN, true, 0);
 		
 		$this->assertTrue(is_array($this->_driver->getCurrentCookies()));
 		$this->assertEquals(3, count($this->_driver->getCurrentCookies()));
