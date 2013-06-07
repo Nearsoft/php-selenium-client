@@ -1,0 +1,19 @@
+{
+    "name": "nearsoft/selenium-client",
+    "description": "This library allows creating Selenium Server V2 tests in PHP. It communicates with the WebDriver API through the official JsonWireProtocol.",
+    "minimum-stability": "stable",
+    "authors": [
+        {
+            "name": "Job Apolonio",
+            "email": "jsantiago@nearsoft.com"
+        }
+    ],
+    "require": {
+        "php": ">=5.3.8"
+    },
+    "autoload": {
+        "psr-0": {
+            "": "SeleniumClient"
+        }
+    }
+}
