@@ -43,7 +43,7 @@ class WebDriverWait
 	 * @throws WebDriverWaitTimeoutException
 	 * @return mixed
 	 */
-	public function until($seleniumObject, $method, array $args, callable $callback = null)
+	public function until($seleniumObject, $method, array $args, $callback = null)
 	{
 		if (!isset($seleniumObject)) { throw new \Exception("seleniumObject parameter has not been initialized"); }
 		else if (!isset($method)) { throw new \Exception("method parameter has not been initialized"); }
