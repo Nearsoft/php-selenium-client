@@ -38,11 +38,12 @@ class WebDriverWait
 	 * @param SeleniumClient\WebDriver / SeleniumClient\WebElement $seleniumObject
 	 * @param String $method
 	 * @param Array $args
+	 * @param callable $callback
 	 * @throws \Exception
 	 * @throws WebDriverWaitTimeoutException
 	 * @return mixed
 	 */
-	public function until($seleniumObject, $method, array $args)
+	public function until($seleniumObject, $method, array $args, $callback = null)
 	{
 		if (!isset($seleniumObject)) { throw new \Exception("seleniumObject parameter has not been initialized"); }
 		else if (!isset($method)) { throw new \Exception("method parameter has not been initialized"); }
@@ -51,6 +52,12 @@ class WebDriverWait
 		
 		$wait = true;
 		
+		if (!is_callable($callback)) {
+			$callback = function($x) {
+				return (bool)$x;
+			};
+		}
+
 		while ($wait)
 		{
 			try {
@@ -59,7 +66,7 @@ class WebDriverWait
 
 			}
 			
-			if ($resultObject != null && $resultObject != false) { $wait = false; }
+			if ($callback($resultObject)) { $wait = false; }
 			else
 			{
 				if ($seconds <= 0) 
