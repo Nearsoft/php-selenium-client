@@ -1,26 +1,21 @@
 <?php
 
+require_once __DIR__ . '/AbstractTest.php';
+
 use SeleniumClient\Alert;
 use SeleniumClient\By;
 use SeleniumClient\TargetLocator;
-use SeleniumClient\WebDriver;
 
 
-class TargetLocatorTest extends PHPUnit_Framework_TestCase
+class TargetLocatorTest extends AbstractTest
 {
-	private $_driver = null;
-	private $_targetLocator = null;
-	private $_url = TEST_URL;
+	/** @var \SeleniumClient\TargetLocator */
+    private $_targetLocator = null;
 	
 	public function setUp()
 	{
-		$this->_driver = new WebDriver();
+        parent::setUp();
 		$this->_targetLocator = new TargetLocator($this->_driver);
-	}
-	
-	public function tearDown()
-	{
-		if($this->_driver != null) { $this->_driver->quit(); }
 	}
 	
 	/*
@@ -32,8 +27,6 @@ class TargetLocatorTest extends PHPUnit_Framework_TestCase
 	
 	public function testGetDefaultFrameShouldGetFrameWebElement()
 	{
-		$this->_driver->get($this->_url);
-
 		$webElement = $this->_targetLocator->getDefaultFrame()->findElement(By::id("txt1"));
 		$webElement->sendKeys("test iframe");
 
@@ -42,8 +35,6 @@ class TargetLocatorTest extends PHPUnit_Framework_TestCase
 	
 	public function testGetFrameByIndexShouldGetFrameWebElement()
 	{
-		$this->_driver->get($this->_url);
-
 		$webElement = $this->_targetLocator->getFrameByIndex(0)->findElement(By::id("txt1"));
 		$webElement->sendKeys("test iframe");
 
@@ -52,8 +43,6 @@ class TargetLocatorTest extends PHPUnit_Framework_TestCase
 
 	public function testGetFrameByIndexShouldGetFrameWebElementGetBackToParentWindow()
 	{
-		$this->_driver->get($this->_url);
-		
 		$webElement = $this->_targetLocator->getFrameByIndex(0)->findElement(By::id("txt1"));
 		$webElement->sendKeys("test iframe");
 
@@ -72,8 +61,6 @@ class TargetLocatorTest extends PHPUnit_Framework_TestCase
 
 	public function testGetFrameByNameShouldGetFrameWebElement()
 	{
-		$this->_driver->get($this->_url);
-
 		$webElement = $this->_targetLocator->getFrameByName("iframe1")->findElement(By::id("txt1"));
 		$webElement->sendKeys("test iframe");
 
@@ -82,8 +69,6 @@ class TargetLocatorTest extends PHPUnit_Framework_TestCase
 	
 	public function testGetFrameByNameShouldGetFrameWebElementGetBackToParentWindow()
 	{
-		$this->_driver->get($this->_url);
-		
 		$webElement = $this->_targetLocator->getFrameByName("iframe1")->findElement(By::id("txt1"));
 		$webElement->sendKeys("test iframe");
 
@@ -102,8 +87,6 @@ class TargetLocatorTest extends PHPUnit_Framework_TestCase
 	
 	public function testGetFrameByWebElementShouldGetFrameWebElement()
 	{
-		$this->_driver->get($this->_url);
-
 		$webElement = $this->_driver->findElement(By::id("iframe1"));
 		$webElement = $this->_targetLocator->getFrameByWebElement($webElement)->findElement(By::id("txt1"));
 		$webElement->sendKeys("test iframe");
@@ -113,8 +96,6 @@ class TargetLocatorTest extends PHPUnit_Framework_TestCase
 
 	public function testGetFrameByWebElementShouldGetFrameWebElementGetBackToParentWindow()
 	{
-		$this->_driver->get($this->_url);
-
 		$webElement = $this->_driver->findElement(By::id("iframe1"));
 		$webElement = $this->_targetLocator->getFrameByWebElement($webElement)->findElement(By::id("txt1"));
 		$webElement->sendKeys("test iframe");
@@ -135,8 +116,6 @@ class TargetLocatorTest extends PHPUnit_Framework_TestCase
 
 	public function testGetWindowShouldGetWindowWebElement()
 	{
-		$this->_driver->get($this->_url);
-
 		$this->_driver->findElement(By::id("btnPopUp1"))->click();
 
 		$webElement = $this->_targetLocator->getWindow("popup1")->waitForElementUntilIsPresent(By::id("txt1"));
@@ -147,8 +126,6 @@ class TargetLocatorTest extends PHPUnit_Framework_TestCase
 	
 	public function testGetWindowShouldGetWindowWebElementGetBackToParentWindow()
 	{
-		$this->_driver->get($this->_url);
-
 		$window1Handle = $this->_driver->getCurrentWindowHandle();
 
 		$this->_driver->findElement(By::id("btnPopUp1"))->click();
@@ -177,8 +154,6 @@ class TargetLocatorTest extends PHPUnit_Framework_TestCase
 
 	public function testGetActiveElementShouldGetActiveElement()
 	{
-		$this->_driver->get($this->_url);
-		
 		$this->_driver->findElement(By::id("txt1"))->sendKeys("test");
 		
 		$webElement = $this->_targetLocator->getActiveElement();
@@ -188,8 +163,6 @@ class TargetLocatorTest extends PHPUnit_Framework_TestCase
 
 	public function testGetAlertShouldGetAlertInstance()
 	{
-		$this->_driver->get($this->_url);
-		
 		$this->_driver->findElement(By::id("btnAlert"))->click();
 
 		$alert = $this->_targetLocator->getAlert();
@@ -199,8 +172,6 @@ class TargetLocatorTest extends PHPUnit_Framework_TestCase
 
 	public function testGetAlertShouldGetAlertText()
 	{
-		$this->_driver->get($this->_url);
-		
 		$this->_driver->findElement(By::id("btnAlert"))->click();
 
 		$alertText = $this->_targetLocator->getAlert()->getText();
@@ -210,8 +181,6 @@ class TargetLocatorTest extends PHPUnit_Framework_TestCase
 
 	public function testGetAlertShouldDismissAlert()
 	{
-		$this->_driver->get($this->_url);
-		
 		$this->_driver->findElement(By::id("btnConfirm"))->click();
 
 		$this->_targetLocator->getAlert()->dismiss();
@@ -223,8 +192,6 @@ class TargetLocatorTest extends PHPUnit_Framework_TestCase
 
 	public function testGetAlertShouldAcceptAlert()
 	{
-		$this->_driver->get($this->_url);
-		
 		$this->_driver->findElement(By::id("btnConfirm"))->click();
 
 		$this->_targetLocator->getAlert()->accept();
@@ -236,8 +203,6 @@ class TargetLocatorTest extends PHPUnit_Framework_TestCase
 
 	public function testGetAlertShouldSendKeysToAlert()
 	{
-		$this->_driver->get($this->_url);
-		
 		$this->_driver->findElement(By::id("btnPrompt"))->click();
 
 		$alert = $this->_targetLocator->getAlert();
@@ -248,5 +213,17 @@ class TargetLocatorTest extends PHPUnit_Framework_TestCase
 
 		$this->assertEquals("alert text", $alertText);
 	}
+
+    public function testNewTabShouldGetNewWindow()
+    {
+        $oldHandle1 = $this->_driver->getCurrentWindowHandle();
+        $numHandles = count($this->_driver->getCurrentWindowHandles());
+        $oldHandle2 = $this->_targetLocator->newTab($this->_url);
+        $this->assertEquals($oldHandle1, $oldHandle2);
+        $newHandle = $this->_driver->getCurrentWindowHandle();
+        $this->assertNotEquals($oldHandle1, $newHandle);
+        $this->assertEquals($numHandles + 1, count($this->_driver->getCurrentWindowHandles()));
+    }
+
 	//TODO TEST WITH INVALID URL, INVALID PORT INVALID BROWSERNAME
 }

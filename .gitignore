@@ -1,3 +1,6 @@
+/SeleniumClientTest/phpunit.xml
+/build
+/.idea
 /*.project
 /*.buildpath
 /*.settings

@@ -7,16 +7,6 @@ class DesiredCapabilitiesTest extends PHPUnit_Framework_TestCase {
 	
 	private $_capability = null;
 	
-	public function setUp() 
-	{		
-		
-	}
-	
-	public function tearDown() 
-	{
-		
-	}	
-	
 	public function testDesiredCapabilityShouldConstruct()
 	{
 		$this->_capability = new DesiredCapabilities('firefox','3.6','windows');

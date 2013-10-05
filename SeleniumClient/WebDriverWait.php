@@ -15,7 +15,7 @@
 
 namespace SeleniumClient;
 
-require_once("Exceptions.php");
+require_once __DIR__ . '/Exceptions.php';
 
 class WebDriverWait
 {
@@ -44,59 +44,50 @@ class WebDriverWait
 	 */
 	public function until($seleniumObject, $method, array $args)
 	{
-		if (!isset($seleniumObject)) { throw new \Exception("seleniumObject parameter has not been initialized"); }
-		else if (!isset($method)) { throw new \Exception("method parameter has not been initialized"); }
+        if (!isset($seleniumObject)) {
+            throw new \Exception("seleniumObject parameter has not been initialized");
+        } else if (!isset($method)) {
+            throw new \Exception("method parameter has not been initialized");
+        }
 
-		$seconds = $this->_seconds;
-		
-		$wait = true;
-		
-		while ($wait)
-		{
+        $seconds = $this->_seconds;
+        $elapsed = -1;
+        $start = microtime(true);
+
+        while ($elapsed < $seconds) {
+            // the amount of time to sleep until the next whole second
+            if ($elapsed > 0 && ($sleep = 1000000 * (1 - ($elapsed - (int)$elapsed))) > 0) {
+                usleep($sleep);
+            }
+
 			try {
 				$resultObject = call_user_func_array(array ($seleniumObject, $method), $args);
+                if ($resultObject !== null && $resultObject !== false) {
+                    return $resultObject;
+                }
 			} catch (\Exception $ex) {
-
 			}
-			
-			if ($resultObject != null && $resultObject != false) { $wait = false; }
-			else
-			{
-				if ($seconds <= 0) 
-				{ 
-					$exMessage = "Timeout for specified condition caused by object of class: " . get_class($seleniumObject) . ", method invoked: ". $method . ".";
-					
-					if($args != null && count($args) > 0)
-					{
-						$stringArgs = Array();
-						foreach($args as $arg)
-						{
-							if(is_object($arg) && method_exists( $arg, '__toString' ))
-							{
-								$stringArgs[] = $arg;
-							}
-							else if(is_object($arg) && !method_exists( $arg, '__toString' ))
-							{
-								$stringArgs[] = get_class($arg);
-							}
-							else
-							{
-								$stringArgs[] = $arg;
-							}							
-						}						
-						
-						$exMessage .= " Arguments: <" . implode(">,<",$stringArgs).">";
-					}
-					
-					throw new WebDriverWaitTimeoutException ($exMessage); 
-				}
-				
-				sleep(1);
-				
-				$seconds = $seconds - 1;
-			}
-		}
 
-		return $resultObject;
+            $elapsed = microtime(true) - $start;
+        }
+
+        $exMessage = "Timeout for specified condition caused by object of class: " . get_class($seleniumObject) . ", method invoked: " . $method . ".";
+
+        if ($args != null && count($args) > 0) {
+            $stringArgs = Array();
+            foreach ($args as $arg) {
+                if (is_object($arg) && method_exists($arg, '__toString')) {
+                    $stringArgs[] = $arg;
+                } else if (is_object($arg) && !method_exists($arg, '__toString')) {
+                    $stringArgs[] = get_class($arg);
+                } else {
+                    $stringArgs[] = $arg;
+                }
+            }
+
+            $exMessage .= " Arguments: <" . implode(">,<", $stringArgs) . ">";
+        }
+
+        throw new WebDriverWaitTimeoutException ($exMessage);
 	}
 }

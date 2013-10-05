@@ -1,15 +1,18 @@
 <?php
 
-require_once 'AutoLoader.php';
+require_once __DIR__ . '/../bootstrap.php';
 
 use SeleniumClient\By;
 use SeleniumClient\SelectElement;
 use SeleniumClient\WebDriver;
 use SeleniumClient\DesiredCapabilities;
 
-class AlertTest extends PHPUnit_Framework_TestCase
+class Demo1Test extends PHPUnit_Framework_TestCase
 {
-	private $_driver = null;
+	/** @var WebDriver */
+    private $_driver = null;
+
+    /** @var string */
 	private $_testUrl = null;
 	
 	public function setUp()
@@ -52,6 +55,7 @@ class AlertTest extends PHPUnit_Framework_TestCase
 				
 		//access checkbox
 		$webElement = $this->_driver->findElement(By::cssSelector("html body table tbody tr td fieldset form p input#chk3"));
+
 		$webElement->click();		
 		$this->assertTrue($webElement->isSelected());
 		
