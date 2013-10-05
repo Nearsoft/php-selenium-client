@@ -10,5 +10,9 @@ to one of the project's maintainers.
 Cast
 ====
 
-Maldonado Bustamante Jesus Yair
-Santiago Badillo Job Apolonio
+Maldonado Bustamante Jesus Yair		https://github.com/yair27
+Santiago Badillo Job Apolonio		https://github.com/jobsantiago
+Mark Dexter 						https://github.com/dextercowley
+Miloslav Nenadál					https://github.com/nenadalm
+ron-inbar							https://github.com/ron-inbar
+Andrew Mackrodt						https://github.com/andrewmackrodt
