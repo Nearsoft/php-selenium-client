@@ -827,6 +827,19 @@ class WebDriver
 	#endregion
 
 	#region Javascript Related
+
+	/**
+	 * Sets page_load timeout
+	 * @param int $miliseconds
+	 */
+	public function setPageLoadTimeout($miliseconds)
+	{
+		$params = array ('type' => 'page load','ms' => $miliseconds );
+		$urlHubFormatted = $this->_hubUrl . "/session/{$this->_sessionId}/timeouts";
+		$httpClient = HttpFactory::getClient($this->_environment);
+		$httpClient->setUrl($urlHubFormatted)->setHttpMethod(HttpClient::POST)->setJsonParams($params)->execute();
+	}
+
 	/**
 	 * Set's Async Script timeout
 	 * @param Integer $miliseconds
@@ -1202,17 +1215,5 @@ class WebDriver
 		else{
 			throw new \Exception("Value must be a string");
 		}
-	}
-
-	/**
-	 * Sets page_load timeout
-	 * @param int $miliseconds
-	 */
-	public function setPageLoadTime($miliseconds)
-	{
-		$params = array ('type' => 'page load','ms' => $miliseconds );
-		$urlHubFormatted = $this->_hubUrl . "/session/{$this->_sessionId}/timeouts";
-		$httpClient = HttpFactory::getClient($this->_environment);
-		$httpClient->setUrl($urlHubFormatted)->setHttpMethod(HttpClient::POST)->setJsonParams($params)->execute();
 	}
 }
