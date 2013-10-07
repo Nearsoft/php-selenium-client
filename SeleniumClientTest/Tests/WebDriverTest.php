@@ -673,6 +673,15 @@ class WebDriverTest extends AbstractTest
 		
 		$this->assertFalse($webElement->isDisplayed());		
 	}
+
+	/**
+     * @expectedException SeleniumClient\Http\SeleniumScriptTimeoutException
+     */
+	public function testSetPageLoadTimeout()
+	{
+		$this->_driver->setPageLoadTimeout(1);
+		$this->_driver->get($this->_url."/formReceptor.php");
+	}
 	
 	//TODO TEST WITH INVALID URL, INVALID PORT INVALID BROWSERNAME
 }
