@@ -3,7 +3,7 @@
     "type": "library",
     "description": "This library allows creating Selenium Server V2 tests in PHP. It communicates with the WebDriver API through the official JsonWireProtocol.",
     "keywords": ["selenium","testing","automation","browser","nearsoft"],
-    "license": "Apache License, Version 2.0",
+    "license": "Apache 2",
     "minimum-stability": "stable",
     "authors": [
         {
