@@ -17,17 +17,12 @@ namespace SeleniumClient;
 
 abstract class PlatformType
 {
-	/*
-	Supported Platforms
-	WINDOWS|XP|VISTA|MAC|LINUX|UNIX
-	*/
-
 	const WINDOWS = "WINDOWS";
-	const XP = "XP";
-	const VISTA = "VISTA";
-	const MAC = "MAC";
-	const LINUX = "LINUX";
-	const UNIX = "UNIX";
+	const XP      = "XP";
+	const VISTA   = "VISTA";
+	const MAC     = "MAC";
+	const LINUX   = "LINUX";
+	const UNIX    = "UNIX";
 	
 	public static function isValidPlatformType($platformType)
 	{

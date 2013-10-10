@@ -18,7 +18,7 @@ namespace SeleniumClient\Http;
 abstract class HttpFactory{
 	
 	const PRODUCTIONMODE = "PRODUCTION";
-	const TESTINGMODE = "TESTING";
+	const TESTINGMODE    = "TESTING";
 
     /**
      * @param string $environment

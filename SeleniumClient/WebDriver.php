@@ -223,7 +223,6 @@ class WebDriver
 		$httpClient = HttpFactory::getClient($this->_environment);
 		$httpClient->setUrl($urlHubFormatted)->setHttpMethod(HttpClient::DELETE)->execute();
 	}
-
 	
 	/**
 	 * Navigates to specified url
@@ -254,9 +253,7 @@ class WebDriver
 		$result = null;
 		if (isset($results["value"]) && trim ($results["value"]) != "") { $result = $results ["value"]; }
 		return $result;
-	}
-	
-	
+	}	
 	
 	/**
 	 * Sets default time for selenium to wait for an element to be present
@@ -287,8 +284,7 @@ class WebDriver
 		$result = null;
 		if (is_array($results)) { $result = $results; }
 		return $result;
-	}
-	
+	}	
 	
 	/**
 	 * Navigate forward in history
@@ -300,8 +296,7 @@ class WebDriver
 		
 		$httpClient = HttpFactory::getClient($this->_environment);
 		$httpClient->setUrl($urlHubFormatted)->setHttpMethod(HttpClient::POST)->execute();
-	}
-	
+	}	
 	
 	/**
 	 * Navigate back in history
@@ -313,8 +308,7 @@ class WebDriver
 		
 		$httpClient = HttpFactory::getClient($this->_environment);
 		$httpClient->setUrl($urlHubFormatted)->setHttpMethod(HttpClient::POST)->execute();
-	}
-	
+	}	
 	
 	/**
 	 * Refreshes current page
@@ -513,8 +507,6 @@ class WebDriver
 		if (isset($results["value"]["ELEMENT"]) && trim ($results["value"]["ELEMENT"]) != "") { $result = new WebElement($this, $results["value"]["ELEMENT"]); }
 		return $result;
 	}
-
-	#region Waiting Related
 	
 	/**
 	 * Stops the process until an element is found
@@ -524,13 +516,8 @@ class WebDriver
 	 */
 	public function waitForElementUntilIsPresent(By $locator, $timeOutSeconds = 5)
 	{
-		//We have to validate that timeOutSeconds is int, we have to add a new exception into the selenium exceptions and not use the exceptions that are outsite of the library
-		//if ( !is_int($timeOutSeconds) ) { throw new Not_Int_Exception("wait_for_element_until_is_present", "time_out_seconds"); }
-	
 		$wait = new WebDriverWait($timeOutSeconds);
-
 		$dynamicElement = $wait->until($this, "findElement", array($locator, true));
-
 		return $dynamicElement;
 	}
 
@@ -555,9 +542,6 @@ class WebDriver
         return false;
 	}
 
-	#endregion
-
-	#region WebElement Related
 	/**
 	 * Send text to element
 	 * @param Integer $elementId
@@ -662,8 +646,7 @@ class WebDriver
 		$result = false;
 		if(trim($results ["value"]) == "1") { $result = true; }
 		return $result;
-	}
-	
+	}	
 	
 	/**
 	 * Gets whether an element is currently displayed
@@ -699,8 +682,7 @@ class WebDriver
 		$result = false;
 		if(trim($results ["value"]) == "1") { $result = true; }
 		return $result;
-	}
-	
+	}	
 	
 	/**
 	 * Clear element's value
@@ -714,8 +696,7 @@ class WebDriver
 		$httpClient = HttpFactory::getClient($this->_environment);
 		$httpClient->setUrl($urlHubFormatted)->setHttpMethod(HttpClient::POST)->execute();
 	}
-	
-	
+		
 	/**
 	 * Clicks on an element
 	 * @param Integer $elementId
@@ -823,10 +804,6 @@ class WebDriver
 		}
 		return $result;
 	}
-	
-	#endregion
-
-	#region Javascript Related
 
 	/**
 	 * Sets page_load timeout
@@ -902,9 +879,7 @@ class WebDriver
 	 * @return String
 	 */
 	public function executeAsyncScript($script, $args = null) { return $this->executeScriptInternal($script, true , $args); }
-	#endregion
 
-	#region Windows and Iframes Related
 	/**
 	 * Focus on specified frame
 	 * @param String $frameId
@@ -990,8 +965,7 @@ class WebDriver
 	{
 		$windowHandle = $this->getCurrentWindowHandle();
 		$this->setWindowSize($windowHandle, $width, $height);
-	}
-	
+	}	
 	
 	/**
 	 * Sets specified window's size
@@ -1091,9 +1065,7 @@ class WebDriver
 		if (isset($results["value"]) && is_array($results["value"])) { $result = $results ["value"]; }
 		return $result;
 	}
-	#endregion
 
-	#region Cookies Related
 	/**
 	 * Sets cookie
 	 * @param String $name
@@ -1129,8 +1101,7 @@ class WebDriver
 		$result = null;
 		if (isset($results["value"]) && is_array($results["value"])) { $result = $results ["value"]; }
 		return $result;
-	}
-	
+	}	
 	
 	/**
 	 * Remove cookies

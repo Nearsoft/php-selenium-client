@@ -21,9 +21,6 @@ class WebDriverWaitTest extends AbstractTest
 		$this->setExpectedException('SeleniumClient\WebDriverWaitTimeoutException');		
 		$this->_driver->findElement(By::id("btnAppendDiv"))->click();
 		$wait = new WebDriverWait(3);	
-		$label = $wait->until($this->_driver,"findElement",array(By::id("dDiv1-0"),true));
-	
+		$label = $wait->until($this->_driver,"findElement",array(By::id("dDiv1-0"),true));	
 	}
-	
-
 }

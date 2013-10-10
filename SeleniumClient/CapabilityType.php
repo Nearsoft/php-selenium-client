@@ -17,22 +17,22 @@ namespace SeleniumClient;
 
 abstract class CapabilityType {	
 	
-	const browserName = "browserName";
-	const version = "version";
-	const platform = "platform";	
-	const javascriptEnabled = "javascriptEnabled";
-	const takesScreenshot = "takesScreenshot";
-	const handlesAlerts = "handlesAlerts";
-	const databaseEnabled = "databaseEnabled";
-	const locationContextEnabled = "locationContextEnabled";
-	const applicationCacheEnabled = "applicationCacheEnabled";
+	const browserName              = "browserName";
+	const version                  = "version";
+	const platform                 = "platform";	
+	const javascriptEnabled        = "javascriptEnabled";
+	const takesScreenshot          = "takesScreenshot";
+	const handlesAlerts            = "handlesAlerts";
+	const databaseEnabled          = "databaseEnabled";
+	const locationContextEnabled   = "locationContextEnabled";
+	const applicationCacheEnabled  = "applicationCacheEnabled";
 	const browserConnectionEnabled = "browserConnectionEnabled";
-	const cssSelectorsEnabled = "cssSelectorsEnabled";
-	const webStorageEnabled = "webStorageEnabled";
-	const rotatable = "rotatable";
-	const acceptSslCerts = "acceptSslCerts";
-	const nativeEvents = "nativeEvents";
-	const proxy = "proxy";	
+	const cssSelectorsEnabled      = "cssSelectorsEnabled";
+	const webStorageEnabled        = "webStorageEnabled";
+	const rotatable                = "rotatable";
+	const acceptSslCerts           = "acceptSslCerts";
+	const nativeEvents             = "nativeEvents";
+	const proxy                    = "proxy";	
 	
 	public static function isValidCapabilityType($capabilityType)
 	{

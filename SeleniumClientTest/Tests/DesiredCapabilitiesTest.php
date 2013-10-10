@@ -13,8 +13,6 @@ class DesiredCapabilitiesTest extends PHPUnit_Framework_TestCase {
 		
 		$this->assertEquals(3, count($this->_capability->getCapabilities()));
 		
-		//print_r($this->_capability->getCapabilities());
-		
 		$this->assertEquals("firefox", $this->_capability->getBrowserName());
 		$this->assertEquals("firefox", $this->_capability->getCapability("browserName"));
 		
@@ -30,10 +28,7 @@ class DesiredCapabilitiesTest extends PHPUnit_Framework_TestCase {
 		$this->_capability->setCapability(CapabilityType::javascriptEnabled,1);
 		$this->assertEquals(1, $this->_capability->getCapability(CapabilityType::javascriptEnabled));
 		
-		$this->assertEquals(5, count($this->_capability->getCapabilities()));
-		
-		//print_r($this->_capability->getCapabilities());
-		
+		$this->assertEquals(5, count($this->_capability->getCapabilities()));				
 	}
 
 }

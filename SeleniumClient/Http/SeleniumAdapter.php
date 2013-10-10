@@ -69,9 +69,7 @@ class SeleniumAdapter extends HttpClient
 			switch (intval($this->_responseBody["status"]))
 			{
 				case 7:
-					if (!$this->_polling) {
-						throw new SeleniumNoSuchElementException($message);
-					}
+					if (!$this->_polling) {throw new SeleniumNoSuchElementException($message);}
 					break;
 				case 8:
 					throw new SeleniumNoSuchFrameException($message);

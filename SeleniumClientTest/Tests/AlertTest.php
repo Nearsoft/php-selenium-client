@@ -7,7 +7,6 @@ use SeleniumClient\By;
 
 class AlertTest extends AbstractTest
 {
-    /** @var Alert */
 	private $_alert = null;
 
 	public function setUp()
@@ -15,13 +14,6 @@ class AlertTest extends AbstractTest
 		parent::setUp();
 		$this->_alert = new Alert($this->_driver);
 	}
-
-	/*
-	 * TODO:
-	 * consider no selenium server running
-	 * fail case for non existing url
-	 * test find element by every location method xpath id css	 *
-	 */
 	
 	public function testGetAlertShouldGetAlertText()
 	{
@@ -65,5 +57,4 @@ class AlertTest extends AbstractTest
 
 		$this->assertEquals("alert text", $alertText);
 	}
-	//TODO TEST WITH INVALID URL, INVALID PORT INVALID BROWSERNAME
 }

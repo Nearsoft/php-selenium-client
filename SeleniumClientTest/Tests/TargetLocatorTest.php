@@ -9,7 +9,6 @@ use SeleniumClient\TargetLocator;
 
 class TargetLocatorTest extends AbstractTest
 {
-	/** @var \SeleniumClient\TargetLocator */
     private $_targetLocator = null;
 	
 	public function setUp()
@@ -17,13 +16,6 @@ class TargetLocatorTest extends AbstractTest
         parent::setUp();
 		$this->_targetLocator = new TargetLocator($this->_driver);
 	}
-	
-	/*
-	 * TODO:
-	 * consider no selenium server running
-	 * fail case for non existing url
-	 * test find element by every location method xpath id css	 *
-	 */
 	
 	public function testGetDefaultFrameShouldGetFrameWebElement()
 	{
@@ -224,6 +216,4 @@ class TargetLocatorTest extends AbstractTest
         $this->assertNotEquals($oldHandle1, $newHandle);
         $this->assertEquals($numHandles + 1, count($this->_driver->getCurrentWindowHandles()));
     }
-
-	//TODO TEST WITH INVALID URL, INVALID PORT INVALID BROWSERNAME
 }

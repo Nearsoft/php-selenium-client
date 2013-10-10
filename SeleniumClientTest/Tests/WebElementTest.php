@@ -14,8 +14,7 @@ class WebElementTest extends AbstractTest
 		
 		$this->assertTrue(is_numeric($coordinates["x"]) );
 		$this->assertTrue(is_numeric($coordinates["y"]) );
-	}
-	
+	}	
 	
 	public function testGetCoordinatesShouldGetCoordinates()
 	{
@@ -48,8 +47,7 @@ class WebElementTest extends AbstractTest
 		$this->_driver->executeScript("document.getElementById('btnNoAction').disabled = true;");
 		
 		$this->assertEquals( false, $button1->isEnabled());
-	}
-	
+	}	
 	
 	public function testIsSelectedShouldDetermineIfSelected()
 	{
@@ -209,5 +207,4 @@ class WebElementTest extends AbstractTest
 		$textarea1->sendKeys("יאיר 34557");
 		$this->assertEquals("יאיר 34557", $textarea1->getAttribute("value"));
 	}
-	//TODO TEST WITH INVALID URL, INVALID PORT INVALID BROWSERNAME	
 }

@@ -17,19 +17,20 @@ namespace SeleniumClient\Http;
 
 class HttpClient
 {
-	const POST="POST";
-	const GET="GET";
-	const DELETE="DELETE";
+	const POST   = "POST";
+	const GET    = "GET";
+	const DELETE = "DELETE";
 	
-	protected $_url = null;
-	protected $_polling = null;
+	protected $_url        = null;
+	protected $_polling    = null;
 	protected $_jsonParams = null;
+	
 	protected $_httpMethod = null;
 	
 	protected $_trace = false;
 	
 	protected $_responseHeaders = null;
-	protected $_responseBody = null;
+	protected $_responseBody    = null;
 	
 	public function getTrace() { return $this->_trace; }
 	
@@ -97,13 +98,18 @@ class HttpClient
 		{
 			curl_setopt($curl, CURLOPT_POST, true);
 				
-			if ($this->_jsonParams && is_array($this->_jsonParams)) { curl_setopt($curl, CURLOPT_POSTFIELDS, json_encode($this->_jsonParams)); }
-                        else { curl_setopt($curl, CURLOPT_HTTPHEADER, array('Content-Length: 0')); }
+			if ($this->_jsonParams && is_array($this->_jsonParams)) 
+			{ 
+				curl_setopt($curl, CURLOPT_POSTFIELDS, json_encode($this->_jsonParams)); 
+			}
+            else 
+            { 
+            	curl_setopt($curl, CURLOPT_HTTPHEADER, array('Content-Length: 0')); 
+            }
 		}
 		else if ($this->_httpMethod == HttpClient::DELETE) { curl_setopt($curl, CURLOPT_CUSTOMREQUEST, 'DELETE'); }
 		else if ($this->_httpMethod == HttpClient::GET) { /*NO ACTION NECESSARY*/ }
 		
-		//Curl execution here
 		$rawResponse = trim(curl_exec($curl));
 		
 		$responseBody = json_decode($rawResponse, true);

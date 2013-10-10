@@ -112,8 +112,7 @@ class DesiredCapabilities {
 	public function getIsJavaScriptEnabled()
 	{
 		return $this->getCapability(CapabilityType::javascriptEnabled);
-	}
-	
+	}	
 	
 	/**
 	 * Sets specified capability

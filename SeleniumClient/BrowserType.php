@@ -17,16 +17,11 @@ namespace SeleniumClient;
 
 abstract class BrowserType
 {
-	/*
-	Supported Browsers
-	chrome|firefox|htmlunit|internet explorer|iphone
-	*/
-
-	const CHROME = "chrome";
-	const FIREFOX = "firefox";
-	const HTMLUNIT = "htmlunit";
+	const CHROME            = "chrome";
+	const FIREFOX           = "firefox";
+	const HTMLUNIT          = "htmlunit";
 	const INTERNET_EXPLORER = "internet explorer";
-	const IPHONE = "iphone";
+	const IPHONE            = "iphone";
 	
 	public static function isValidBrowserType($browserType)
 	{

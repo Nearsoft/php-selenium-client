@@ -25,7 +25,6 @@ class Alert
 	 */
 	public function __construct(WebDriver $driver) { $this->_driver = $driver; }
 
-	#region IAlert Members
 	/**
 	 * Gets the text of the alert.
 	 * @return String
@@ -50,5 +49,4 @@ class Alert
 	{
 		$this->_driver->setAlertValue($keysToSend);
 	}
-	#endregion
 }

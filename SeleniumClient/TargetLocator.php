@@ -28,7 +28,6 @@ class TargetLocator
 		$this->_driver = $driver;
 	}
 	
-	#region TargetLocator members
 	/**
 	 * Move to a different frame using its index
 	 * @param Integer $frameIndex
@@ -49,16 +48,7 @@ class TargetLocator
 	 */
 	public function getFrameByName($frameName)
 	{
-		//We should validate that frameName is string
-		/*
-		if ($frameName == null)
-		{
-			throw new ArgumentNullException("frameName", "Frame name cannot be null");
-		}
-		*/
-
 		$this->_driver->getFrame($frameName);
-
 		return $this->_driver;
 	}
 
@@ -69,24 +59,9 @@ class TargetLocator
 	 */
 	public function getFrameByWebElement(WebElement $frameElement)
 	{
-		//We should validate that frameElement is string
-		/*
-		if (frameElement == null)
-		{
-			throw new ArgumentNullException("frameElement", "Frame element cannot be null");
-		}
-
-		RemoteWebElement convertedElement = frameElement as RemoteWebElement;
-		if (convertedElement == null)
-		{
-			throw new ArgumentException("frameElement cannot be converted to RemoteWebElement", "frameElement");
-		}
-		*/
-
 		$frameId = $frameElement->getElementId();
 		$target = array('ELEMENT' => $frameId);
 		$this->_driver->getFrame($target);
-
 		return $this->_driver;
 	}
 
@@ -97,8 +72,7 @@ class TargetLocator
 	 */
 	public function getWindow($windowName)
 	{
-		$this->_driver->getWindow($windowName);
-		
+		$this->_driver->getWindow($windowName);		
 		return $this->_driver;
 	}
 
@@ -109,7 +83,6 @@ class TargetLocator
 	public function getDefaultFrame()
 	{
 		$this->_driver->getFrame(null);
-
 		return $this->_driver;
 	}
 
@@ -119,13 +92,9 @@ class TargetLocator
 	 */
 	public function getActiveElement()
 	{
-		$webElement = null;
-
 		$webElement = $this->_driver->getActiveElement();
-
 		return $webElement;
 	}
-
 
 	/**
 	 *  Switches to the currently active modal dialog for this particular driver instance.
@@ -168,5 +137,4 @@ class TargetLocator
 
         return $oldHandle;
     }
-	#endregion
 }

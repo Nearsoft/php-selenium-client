@@ -9,14 +9,7 @@ use SeleniumClient\WebElement;
 
 
 class WebDriverTest extends AbstractTest
-{
-	/*
-	 * TODO:
-	 * consider no selenium server running
-	 * fail case for non existing url
-	 * test find element by every location method xpath id css	 *
-	 */
-	
+{	
 	public function testAcceptAlertShouldGetText()
 	{
 		$this->_driver->findElement(By::id("btnConfirm"))->click();
@@ -597,7 +590,6 @@ class WebDriverTest extends AbstractTest
 		$webElement->sendKeys("9999");
 		
 		$this->assertEquals("9999", $webElement->getAttribute("value"));
-
 	}
 
     public function testFindElementByJsSelector()
@@ -682,6 +674,4 @@ class WebDriverTest extends AbstractTest
 		$this->_driver->setPageLoadTimeout(1);
 		$this->_driver->get($this->_url."/formReceptor.php");
 	}
-	
-	//TODO TEST WITH INVALID URL, INVALID PORT INVALID BROWSERNAME
 }

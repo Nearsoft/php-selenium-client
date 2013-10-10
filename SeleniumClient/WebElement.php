@@ -98,7 +98,7 @@ class WebElement
      */
     public function setAttribute($attributeName, $value)
     {
-        $key = $attributeName == 'text' // detect whether to use textContent or innerText
+        $key = $attributeName == 'text' 
                 ? 'var k=typeof arguments[0].textContent!="undefined"?"textContent":"innerText"'
                 : sprintf('var k="%s"', addslashes($attributeName));
 
@@ -114,7 +114,6 @@ class WebElement
 	 */
 	public function getAttribute($attributeName)
 	{
-		//attributeName should be string
 		return $this->_driver->webElementGetAttribute($this->_elementId, $attributeName);
 	}
 
@@ -134,8 +133,7 @@ class WebElement
 	 * Gets whether element is enabled
 	 * @return Boolean
 	 */
-	public function isEnabled() { return $this->_driver->webElementIsEnabled($this->_elementId); }
-	
+	public function isEnabled() { return $this->_driver->webElementIsEnabled($this->_elementId); }	
 	
 	/**
 	 * Clear current element's text
@@ -226,14 +224,9 @@ class WebElement
 	 * @return mixed
 	 */
 	public function waitForElementUntilIsPresent(By $locator, $timeOutSeconds = 5)
-	{
-		//We have to validate that timeOutSeconds is int, we have to add a new exception into the selenium exceptions and not use the exceptions that are outsite of the library
-		//if ( !is_int($timeOutSeconds) ) { throw new Not_Int_Exception("wait_for_element_until_is_present", "time_out_seconds"); }
-	
+	{	
 		$wait = new WebDriverWait($timeOutSeconds);
-
-		$dynamicElement = $wait->until($this, "findElement", array($locator, true));
-		
+		$dynamicElement = $wait->until($this, "findElement", array($locator, true));		
 		return $dynamicElement;
 	}
 	
@@ -244,12 +237,8 @@ class WebElement
 	 */
 	public function waitForElementUntilIsDisplayed($timeOutSeconds = 5)
 	{
-		//We have to validate that timeOutSeconds is int, we have to add a new exception into the selenium exceptions and not use the exceptions that are outsite of the library
-		//if ( !is_int($timeOutSeconds) ) { throw new Not_Int_Exception("wait_for_element_until_is_present", "time_out_seconds"); }
-		
 		$wait = new WebDriverWait($timeOutSeconds);
-		$element = $wait->until($this, "isDisplayed", array());
-		
+		$element = $wait->until($this, "isDisplayed", array());		
 		return $this;
 	}
 	
@@ -260,12 +249,8 @@ class WebElement
 	 */
 	public function waitForElementUntilIsEnabled($timeOutSeconds = 5)
 	{
-		//We have to validate that timeOutSeconds is int, we have to add a new exception into the selenium exceptions and not use the exceptions that are outsite of the library
-		//if ( !is_int($timeOutSeconds) ) { throw new Not_Int_Exception("wait_for_element_until_is_present", "time_out_seconds"); }
-		
 		$wait = new WebDriverWait($timeOutSeconds);
-		$element = $wait->until($this, "isEnabled", array());
-		
+		$element = $wait->until($this, "isEnabled", array());		
 		return $this;
 	}
 	
@@ -278,9 +263,6 @@ class WebElement
 	 */
 	public function waitForElementUntilTextIsChanged($targetText, $timeOutSeconds = 5)
 	{
-		//We have to validate that timeOutSeconds is int, we have to add a new exception into the selenium exceptions and not use the exceptions that are outsite of the library
-		//if ( !is_int($timeOutSeconds) ) { throw new Not_Int_Exception("wait_for_element_until_is_present", "time_out_seconds"); }
-		
 		$wait = true;
 		
 		while ($wait)
@@ -308,9 +290,6 @@ class WebElement
 	 */
 	public function waitForElementUntilIsPresentWithSpecificText(By $locator, $targetText, $timeOutSeconds = 5)
 	{
-		//We have to validate that timeOutSeconds is int, we have to add a new exception into the selenium exceptions and not use the exceptions that are outsite of the library
-		//if ( !is_int($timeOutSeconds) ) { throw new Not_Int_Exception("wait_for_element_until_is_present", "time_out_seconds"); }
-
 		$dynamicElement = null;
 		$wait = true;
 		$attempts = $timeOutSeconds;
