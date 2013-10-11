@@ -59,6 +59,7 @@ class WebDriver
 	private $_screenshotsDirectory = null;
 	private $_environment = HttpFactory::PRODUCTIONMODE;
 	private $_capabilities = null;
+	private $_httpClient = null;
 	
 	/**
 	 * @param DesiredCapabilities $desiredCapabilities
@@ -67,10 +68,9 @@ class WebDriver
 	 */
 	public function __construct(DesiredCapabilities $desiredCapabilities = null, $host = "http://localhost", $port = 4444)
 	{
-		$this->_hubUrl = $host . ":" . strval($port) . "/wd/hub";
-		
+		$this->_hubUrl = $host . ":" . strval($port) . "/wd/hub";		
 		if(!isset($desiredCapabilities)) { $desiredCapabilities = new DesiredCapabilities("firefox"); }
-		
+		$this->_httpClient = HttpFactory::getClient($this->_environment);		
 		$this->startSession($desiredCapabilities);
 	}
 
@@ -167,8 +167,7 @@ class WebDriver
 		$params = array ('desiredCapabilities' => $desiredCapabilities->getCapabilities());
 		$urlHubFormatted = $this->_hubUrl . "/{$command}";
 		
-		$httpClient = HttpFactory::getClient($this->_environment);
-		$results = $httpClient->setUrl($urlHubFormatted)->setHttpMethod(HttpClient::POST)->setJsonParams($params)->execute();
+		$results = $this->_httpClient->setUrl($urlHubFormatted)->setHttpMethod(HttpClient::POST)->setJsonParams($params)->execute();
 		$this->_sessionId = $results['sessionId'];
 		$this->_capabilities = $this->setCapabilities();
 	}
@@ -181,8 +180,7 @@ class WebDriver
 		$command = "session";
 		$urlHubFormatted = $this->_hubUrl . "/{$command}/$this->_sessionId";
 		
-		$httpClient = HttpFactory::getClient($this->_environment);
-		$results = $httpClient->setUrl($urlHubFormatted)->setHttpMethod(HttpClient::GET)->execute();
+		$results = $this->_httpClient->setUrl($urlHubFormatted)->setHttpMethod(HttpClient::GET)->execute();
 		
 		$result = null;
 		if (isset($results["value"])) { $result = $results["value"]; }
@@ -198,8 +196,7 @@ class WebDriver
 		$command = "sessions";
 		$urlHubFormatted = $this->_hubUrl . "/{$command}";
 		
-		$httpClient = HttpFactory::getClient($this->_environment);
-		$results = $httpClient->setUrl($urlHubFormatted)->setHttpMethod(HttpClient::GET)->execute();
+		$results = $this->_httpClient->setUrl($urlHubFormatted)->setHttpMethod(HttpClient::GET)->execute();
 		
 		$result = null;
 		if (isset ( $results ["value"] )) { $result = $results["value"]; }
@@ -218,10 +215,8 @@ class WebDriver
 	public function quit()
 	{
 		$command = "session";
-		$urlHubFormatted = $this->_hubUrl . "/{$command}/$this->_sessionId";
-		
-		$httpClient = HttpFactory::getClient($this->_environment);
-		$httpClient->setUrl($urlHubFormatted)->setHttpMethod(HttpClient::DELETE)->execute();
+		$urlHubFormatted = $this->_hubUrl . "/{$command}/$this->_sessionId";		
+		$this->_httpClient->setUrl($urlHubFormatted)->setHttpMethod(HttpClient::DELETE)->execute();
 	}
 	
 	/**
@@ -232,10 +227,8 @@ class WebDriver
 	{
 		$command = "url";
 		$params = array ('url' => $url);
-		$urlHubFormatted = $this->_hubUrl . "/session/{$this->_sessionId}/{$command}";
-		
-		$httpClient = HttpFactory::getClient($this->_environment);
-		$httpClient->setUrl($urlHubFormatted)->setHttpMethod(HttpClient::POST)->setJsonParams($params)->execute();
+		$urlHubFormatted = $this->_hubUrl . "/session/{$this->_sessionId}/{$command}";		
+		$this->_httpClient->setUrl($urlHubFormatted)->setHttpMethod(HttpClient::POST)->setJsonParams($params)->execute();
 	}
 	
 	/**
@@ -247,8 +240,7 @@ class WebDriver
 		$command = "url";
 		$urlHubFormatted = $this->_hubUrl . "/session/{$this->_sessionId}/{$command}";
 		
-		$httpClient = HttpFactory::getClient($this->_environment);
-		$results = $httpClient->setUrl($urlHubFormatted)->setHttpMethod(HttpClient::GET)->execute();
+		$results = $this->_httpClient->setUrl($urlHubFormatted)->setHttpMethod(HttpClient::GET)->execute();
 
 		$result = null;
 		if (isset($results["value"]) && trim ($results["value"]) != "") { $result = $results ["value"]; }
@@ -265,8 +257,7 @@ class WebDriver
 		$params = array ('ms' => $miliseconds );
 		$urlHubFormatted = $this->_hubUrl . "/session/{$this->_sessionId}/timeouts/{$command}";
 		
-		$httpClient = HttpFactory::getClient($this->_environment);
-		$httpClient->setUrl($urlHubFormatted)->setHttpMethod(HttpClient::POST)->setJsonParams($params)->execute();
+		$this->_httpClient->setUrl($urlHubFormatted)->setHttpMethod(HttpClient::POST)->setJsonParams($params)->execute();
 	}
 	
 	/**
@@ -278,8 +269,7 @@ class WebDriver
 		$command = "status";
 		$urlHubFormatted = $this->_hubUrl . "/{$command}";
 		
-		$httpClient = HttpFactory::getClient($this->_environment);
-		$results = $httpClient->setUrl($urlHubFormatted)->setHttpMethod(HttpClient::GET)->execute();
+		$results = $this->_httpClient->setUrl($urlHubFormatted)->setHttpMethod(HttpClient::GET)->execute();
 		
 		$result = null;
 		if (is_array($results)) { $result = $results; }
@@ -292,10 +282,8 @@ class WebDriver
 	public function forward()
 	{
 		$command = "forward";
-		$urlHubFormatted = $this->_hubUrl . "/session/{$this->_sessionId}/{$command}";
-		
-		$httpClient = HttpFactory::getClient($this->_environment);
-		$httpClient->setUrl($urlHubFormatted)->setHttpMethod(HttpClient::POST)->execute();
+		$urlHubFormatted = $this->_hubUrl . "/session/{$this->_sessionId}/{$command}";		
+		$this->_httpClient->setUrl($urlHubFormatted)->setHttpMethod(HttpClient::POST)->execute();
 	}	
 	
 	/**
@@ -305,9 +293,7 @@ class WebDriver
 	{
 		$command = "back";
 		$urlHubFormatted = $this->_hubUrl . "/session/{$this->_sessionId}/{$command}";
-		
-		$httpClient = HttpFactory::getClient($this->_environment);
-		$httpClient->setUrl($urlHubFormatted)->setHttpMethod(HttpClient::POST)->execute();
+		$this->_httpClient->setUrl($urlHubFormatted)->setHttpMethod(HttpClient::POST)->execute();
 	}	
 	
 	/**
@@ -316,10 +302,8 @@ class WebDriver
 	public function refresh()
 	{
 		$command = "refresh";
-		$urlHubFormatted = $this->_hubUrl . "/session/{$this->_sessionId}/{$command}";
-		
-		$httpClient = HttpFactory::getClient($this->_environment);
-		$httpClient->setUrl($urlHubFormatted)->setHttpMethod(HttpClient::POST)->execute();
+		$urlHubFormatted = $this->_hubUrl . "/session/{$this->_sessionId}/{$command}";		
+		$this->_httpClient->setUrl($urlHubFormatted)->setHttpMethod(HttpClient::POST)->execute();
 	}
 	
 	/**
@@ -331,8 +315,7 @@ class WebDriver
 		$command = "source";
 		$urlHubFormatted = $this->_hubUrl . "/session/{$this->_sessionId}/{$command}";
 
-		$httpClient = HttpFactory::getClient($this->_environment);
-		$results = $httpClient->setUrl($urlHubFormatted)->setHttpMethod(HttpClient::GET)->execute();
+		$results = $this->_httpClient->setUrl($urlHubFormatted)->setHttpMethod(HttpClient::GET)->execute();
 		
 		$result = null;
 		if (isset($results["value"]) && trim ($results["value"]) != "") { $result = $results["value"]; }
@@ -348,8 +331,7 @@ class WebDriver
 		$command = "title";
 		$urlHubFormatted = $this->_hubUrl . "/session/{$this->_sessionId}/{$command}";
 		
-		$httpClient = HttpFactory::getClient($this->_environment);
-		$results = $httpClient->setUrl($urlHubFormatted)->setHttpMethod(HttpClient::GET)->execute();
+		$results = $this->_httpClient->setUrl($urlHubFormatted)->setHttpMethod(HttpClient::GET)->execute();
 		
 		$result = null;
 		if (isset($results["value"]) && trim ($results["value"]) != "") { $result = $results["value"]; }
@@ -372,8 +354,7 @@ class WebDriver
 		$command = "screenshot";
 		$urlHubFormatted = $this->_hubUrl . "/session/{$this->_sessionId}/{$command}";
 
-		$httpClient = HttpFactory::getClient($this->_environment);
-		$results = $httpClient->setUrl($urlHubFormatted)->setHttpMethod(HttpClient::GET)->execute();
+		$results = $this->_httpClient->setUrl($urlHubFormatted)->setHttpMethod(HttpClient::GET)->execute();
 		
 		if (isset($results["value"]) && trim($results["value"]) != "")
 		{
@@ -413,8 +394,7 @@ class WebDriver
             $params = array ('using' => $locator->getStrategy(), 'value' => $locator->getSelectorValue());
             $urlHubFormatted = $this->_hubUrl . "/session/{$this->_sessionId}/{$command}";
 
-            $httpClient = HttpFactory::getClient($this->_environment);
-            $results = $httpClient->setUrl($urlHubFormatted)->setHttpMethod(HttpClient::POST)->setJsonParams($params)->setPolling($polling)->execute();
+            $results = $this->_httpClient->setUrl($urlHubFormatted)->setHttpMethod(HttpClient::POST)->setJsonParams($params)->setPolling($polling)->execute();
 
             $result = null;
             if (isset($results["value"]["ELEMENT"]) && trim ($results["value"]["ELEMENT"]) != "") { $result = new WebElement($this, $results["value"]["ELEMENT"]); }
@@ -433,12 +413,12 @@ class WebDriver
     public function findElements(By $locator, $polling = false, $elementId = -1)
     {
         $environment = $this->_environment;
-        $hubUrl = $this->_hubUrl;
-        $sessionId = $this->_sessionId;
+        $hubUrl 	 = $this->_hubUrl;
+        $sessionId   = $this->_sessionId;
+        $httpClient  = $this->_httpClient;
 
-        $execute = function ($command, array $params) use ($polling, $environment, $hubUrl, $sessionId) {
+        $execute = function ($command, array $params) use ($polling, $environment, $hubUrl, $sessionId, $httpClient) {
             $urlHubFormatted = $hubUrl . "/session/{$sessionId}/{$command}";
-            $httpClient = HttpFactory::getClient($environment);
             return $httpClient->setUrl($urlHubFormatted)
                 ->setHttpMethod(HttpClient::POST)
                 ->setJsonParams($params)
@@ -500,8 +480,7 @@ class WebDriver
 		$command = "active";
 		$urlHubFormatted = $this->_hubUrl . "/session/{$this->_sessionId}/element/{$command}";
 		
-		$httpClient = HttpFactory::getClient($this->_environment);
-		$results = $httpClient->setUrl($urlHubFormatted)->setHttpMethod(HttpClient::POST)->execute();
+		$results = $this->_httpClient->setUrl($urlHubFormatted)->setHttpMethod(HttpClient::POST)->execute();
 		
 		$result = null;
 		if (isset($results["value"]["ELEMENT"]) && trim ($results["value"]["ELEMENT"]) != "") { $result = new WebElement($this, $results["value"]["ELEMENT"]); }
@@ -551,10 +530,8 @@ class WebDriver
 	{
 		$command = "value";
 		$params = array('value' => $this->getCharArray($text));
-		$urlHubFormatted = $this->_hubUrl . "/session/{$this->_sessionId}/element/{$elementId}/{$command}";
-		
-		$httpClient = HttpFactory::getClient($this->_environment);
-		$httpClient->setUrl($urlHubFormatted)->setHttpMethod(HttpClient::POST)->setJsonParams($params)->execute();
+		$urlHubFormatted = $this->_hubUrl . "/session/{$this->_sessionId}/element/{$elementId}/{$command}";		
+		$this->_httpClient->setUrl($urlHubFormatted)->setHttpMethod(HttpClient::POST)->setJsonParams($params)->execute();
 	}
 	
 	/**
@@ -585,8 +562,7 @@ class WebDriver
 		$command = "text";
 		$urlHubFormatted = $this->_hubUrl . "/session/{$this->_sessionId}/element/{$elementId}/{$command}";
 		
-		$httpClient = HttpFactory::getClient($this->_environment);
-		$results = $httpClient->setUrl($urlHubFormatted)->setHttpMethod(HttpClient::GET)->execute();
+		$results = $this->_httpClient->setUrl($urlHubFormatted)->setHttpMethod(HttpClient::GET)->execute();
 		
 		$result = null;
 		if (isset($results["value"])) { $result = $results ["value"]; }
@@ -603,8 +579,7 @@ class WebDriver
 		$command = "name";
 		$urlHubFormatted = $this->_hubUrl . "/session/{$this->_sessionId}/element/{$elementId}/{$command}";
 		
-		$httpClient = HttpFactory::getClient($this->_environment);
-		$results = $httpClient->setUrl($urlHubFormatted)->setHttpMethod(HttpClient::GET)->execute();
+		$results = $this->_httpClient->setUrl($urlHubFormatted)->setHttpMethod(HttpClient::GET)->execute();
 		
 		$result = null;
 		if (isset($results["value"]) && trim($results["value"]) != "")  { $result = trim($results ["value"]); }
@@ -622,8 +597,7 @@ class WebDriver
 		$command = "attribute";
 		$urlHubFormatted = $this->_hubUrl . "/session/{$this->_sessionId}/element/{$elementId}/{$command}/{$attributeName}";
 		
-		$httpClient = HttpFactory::getClient($this->_environment);
-		$results = $httpClient->setUrl($urlHubFormatted)->setHttpMethod(HttpClient::GET)->execute();
+		$results = $this->_httpClient->setUrl($urlHubFormatted)->setHttpMethod(HttpClient::GET)->execute();
 		
 		$result = null;
 		if (isset($results["value"]) && trim($results["value"]) != "") { $result = trim($results["value"]); }
@@ -640,8 +614,7 @@ class WebDriver
 		$command = "selected";
 		$urlHubFormatted = $this->_hubUrl . "/session/{$this->_sessionId}/element/{$elementId}/{$command}";
 		
-		$httpClient = HttpFactory::getClient($this->_environment);
-		$results = $httpClient->setUrl($urlHubFormatted)->setHttpMethod(HttpClient::GET)->execute();
+		$results = $this->_httpClient->setUrl($urlHubFormatted)->setHttpMethod(HttpClient::GET)->execute();
 		
 		$result = false;
 		if(trim($results ["value"]) == "1") { $result = true; }
@@ -658,8 +631,7 @@ class WebDriver
 		$command = "displayed";
 		$urlHubFormatted = $this->_hubUrl . "/session/{$this->_sessionId}/element/{$elementId}/{$command}";
 		
-		$httpClient = HttpFactory::getClient($this->_environment);
-		$results = $httpClient->setUrl($urlHubFormatted)->setHttpMethod(HttpClient::GET)->execute();
+		$results = $this->_httpClient->setUrl($urlHubFormatted)->setHttpMethod(HttpClient::GET)->execute();
 		
 		$result = false;
 		if(trim($results ["value"]) == "1") { $result = true; }
@@ -676,8 +648,7 @@ class WebDriver
 		$command = "enabled";
 		$urlHubFormatted = $this->_hubUrl . "/session/{$this->_sessionId}/element/{$elementId}/{$command}";
 		
-		$httpClient = HttpFactory::getClient($this->_environment);
-		$results = $httpClient->setUrl($urlHubFormatted)->setHttpMethod(HttpClient::GET)->execute();
+		$results = $this->_httpClient->setUrl($urlHubFormatted)->setHttpMethod(HttpClient::GET)->execute();
 		
 		$result = false;
 		if(trim($results ["value"]) == "1") { $result = true; }
@@ -691,10 +662,8 @@ class WebDriver
 	public function webElementClear($elementId)
 	{
 		$command = "clear";
-		$urlHubFormatted = $this->_hubUrl . "/session/{$this->_sessionId}/element/{$elementId}/{$command}";
-		
-		$httpClient = HttpFactory::getClient($this->_environment);
-		$httpClient->setUrl($urlHubFormatted)->setHttpMethod(HttpClient::POST)->execute();
+		$urlHubFormatted = $this->_hubUrl . "/session/{$this->_sessionId}/element/{$elementId}/{$command}";		
+		$this->_httpClient->setUrl($urlHubFormatted)->setHttpMethod(HttpClient::POST)->execute();
 	}
 		
 	/**
@@ -704,10 +673,8 @@ class WebDriver
 	public function webElementClick($elementId)
 	{
 		$command = "click";
-		$urlHubFormatted = $this->_hubUrl . "/session/{$this->_sessionId}/element/{$elementId}/{$command}";
-		
-		$httpClient = HttpFactory::getClient($this->_environment);
-		$httpClient->setUrl($urlHubFormatted)->setHttpMethod(HttpClient::POST)->execute();
+		$urlHubFormatted = $this->_hubUrl . "/session/{$this->_sessionId}/element/{$elementId}/{$command}";		
+		$this->_httpClient->setUrl($urlHubFormatted)->setHttpMethod(HttpClient::POST)->execute();
 	}
 	
 	/**
@@ -717,10 +684,8 @@ class WebDriver
 	public function webElementSubmit($elementId)
 	{
 		$command = "submit";
-		$urlHubFormatted = $this->_hubUrl . "/session/{$this->_sessionId}/element/{$elementId}/{$command}";
-		
-		$httpClient = HttpFactory::getClient($this->_environment);
-		$httpClient->setUrl($urlHubFormatted)->setHttpMethod(HttpClient::POST)->execute();
+		$urlHubFormatted = $this->_hubUrl . "/session/{$this->_sessionId}/element/{$elementId}/{$command}";		
+		$this->_httpClient->setUrl($urlHubFormatted)->setHttpMethod(HttpClient::POST)->execute();
 	}
 	
 	/**
@@ -733,8 +698,7 @@ class WebDriver
 		$command = "element";
 		$urlHubFormatted = $this->_hubUrl . "/session/{$this->_sessionId}/{$command}/{$elementId}";
 		
-		$httpClient = HttpFactory::getClient($this->_environment);
-		$results = $httpClient->setUrl($urlHubFormatted)->setHttpMethod(HttpClient::GET)->execute();
+		$results = $this->_httpClient->setUrl($urlHubFormatted)->setHttpMethod(HttpClient::GET)->execute();
 		
 		$result = null;
 		if (isset($results["value"]) && is_array($results["value"])) { $result = $results ["value"]; }
@@ -777,8 +741,7 @@ class WebDriver
 		$command = "location";
 		$urlHubFormatted = $this->_hubUrl . "/session/{$this->_sessionId}/element/{$elementId}/{$command}";
 	
-		$httpClient = HttpFactory::getClient($this->_environment);
-		$results = $httpClient->setUrl($urlHubFormatted)->setHttpMethod(HttpClient::GET)->execute();
+		$results = $this->_httpClient->setUrl($urlHubFormatted)->setHttpMethod(HttpClient::GET)->execute();
 	
 		$result = null;
 		if (isset($results["value"]) && is_array($results["value"])) { $result = $results ["value"]; }
@@ -795,8 +758,7 @@ class WebDriver
 		$command = "location_in_view";
 		$urlHubFormatted = $this->_hubUrl . "/session/{$this->_sessionId}/element/{$elementId}/{$command}";
 	
-		$httpClient = HttpFactory::getClient($this->_environment);
-		$results = $httpClient->setUrl($urlHubFormatted)->setHttpMethod(HttpClient::GET)->execute();
+		$results = $this->_httpClient->setUrl($urlHubFormatted)->setHttpMethod(HttpClient::GET)->execute();
 	
 		$result = null;
 		if (isset($results["value"]) && is_array($results["value"])) {
@@ -813,8 +775,7 @@ class WebDriver
 	{
 		$params = array ('type' => 'page load','ms' => $miliseconds );
 		$urlHubFormatted = $this->_hubUrl . "/session/{$this->_sessionId}/timeouts";
-		$httpClient = HttpFactory::getClient($this->_environment);
-		$httpClient->setUrl($urlHubFormatted)->setHttpMethod(HttpClient::POST)->setJsonParams($params)->execute();
+		$this->_httpClient->setUrl($urlHubFormatted)->setHttpMethod(HttpClient::POST)->setJsonParams($params)->execute();
 	}
 
 	/**
@@ -825,10 +786,8 @@ class WebDriver
 	{
 		$command = "async_script";
 		$params = array('ms' => $miliseconds);
-		$urlHubFormatted = $this->_hubUrl . "/session/{$this->_sessionId}/timeouts/{$command}";
-		
-		$httpClient = HttpFactory::getClient($this->_environment);
-		$httpClient->setUrl($urlHubFormatted)->setHttpMethod(HttpClient::POST)->setJsonParams($params)->execute();
+		$urlHubFormatted = $this->_hubUrl . "/session/{$this->_sessionId}/timeouts/{$command}";		
+		$this->_httpClient->setUrl($urlHubFormatted)->setHttpMethod(HttpClient::POST)->setJsonParams($params)->execute();
 	}
 	
 	/**
@@ -856,8 +815,7 @@ class WebDriver
             $params['args'][] = $arg;
         }
 		
-		$httpClient = HttpFactory::getClient($this->_environment);
-		$results = $httpClient->setUrl($urlHubFormatted)->setHttpMethod(HttpClient::POST)->setJsonParams($params)->execute();
+		$results = $this->_httpClient->setUrl($urlHubFormatted)->setHttpMethod(HttpClient::POST)->setJsonParams($params)->execute();
 
 		$result = null;
 		if (isset($results ["value"])) { $result = $results ["value"]; }
@@ -892,8 +850,7 @@ class WebDriver
 		$params = array ('id' => $frameId);
 		$urlHubFormatted = $this->_hubUrl . "/session/{$this->_sessionId}/{$command}";
 
-		$httpClient = HttpFactory::getClient($this->_environment);
-		$httpClient->setUrl($urlHubFormatted)->setHttpMethod(HttpClient::POST)->setJsonParams($params)->execute();
+		$this->_httpClient->setUrl($urlHubFormatted)->setHttpMethod(HttpClient::POST)->setJsonParams($params)->execute();
 	}
 	
 	/**
@@ -905,9 +862,7 @@ class WebDriver
 		$command = "window";
 		$params = array ('name' => $name); //name parameter could be window name or window handle
 		$urlHubFormatted = $this->_hubUrl . "/session/{$this->_sessionId}/{$command}";
-
-		$httpClient = HttpFactory::getClient($this->_environment);
-		$httpClient->setUrl($urlHubFormatted)->setHttpMethod(HttpClient::POST)->setJsonParams($params)->execute();
+		$this->_httpClient->setUrl($urlHubFormatted)->setHttpMethod(HttpClient::POST)->setJsonParams($params)->execute();
 	}
 	
 	/**
@@ -917,9 +872,7 @@ class WebDriver
 	{
 		$command = "window";
 		$urlHubFormatted = $this->_hubUrl . "/session/{$this->_sessionId}/{$command}";
-
-		$httpClient = HttpFactory::getClient($this->_environment);
-		$httpClient->setUrl($urlHubFormatted)->setHttpMethod(HttpClient::DELETE)->execute();
+		$this->_httpClient->setUrl($urlHubFormatted)->setHttpMethod(HttpClient::DELETE)->execute();
 	}
 	
 	/**
@@ -931,8 +884,7 @@ class WebDriver
 		$command = "window_handle";
 		$urlHubFormatted = $this->_hubUrl . "/session/{$this->_sessionId}/{$command}";
 
-		$httpClient = HttpFactory::getClient($this->_environment);
-		$results = $httpClient->setUrl($urlHubFormatted)->setHttpMethod(HttpClient::GET)->execute();
+		$results = $this->_httpClient->setUrl($urlHubFormatted)->setHttpMethod(HttpClient::GET)->execute();
 		
 		$result = null;
 		if (isset($results["value"])) { $result = $results ["value"]; }
@@ -948,8 +900,7 @@ class WebDriver
 		$command = "window_handles";
 		$urlHubFormatted = $this->_hubUrl . "/session/{$this->_sessionId}/{$command}";
 
-		$httpClient = HttpFactory::getClient($this->_environment);
-		$results = $httpClient->setUrl($urlHubFormatted)->setHttpMethod(HttpClient::GET)->execute();
+		$results = $this->_httpClient->setUrl($urlHubFormatted)->setHttpMethod(HttpClient::GET)->execute();
 		
 		$result = null;
 		if (isset($results["value"]) && is_array($results["value"])) { $result = $results ["value"]; }
@@ -978,9 +929,7 @@ class WebDriver
 		$command = "size";
 		$params = array ('width' => $width, 'height' => $height);
 		$urlHubFormatted = $this->_hubUrl . "/session/{$this->_sessionId}/window/{$windowHandle}/{$command}";
-
-		$httpClient = HttpFactory::getClient($this->_environment);
-		$httpClient->setUrl($urlHubFormatted)->setHttpMethod(HttpClient::POST)->setJsonParams($params)->execute();
+		$this->_httpClient->setUrl($urlHubFormatted)->setHttpMethod(HttpClient::POST)->setJsonParams($params)->execute();
 	}
 	
 	/**
@@ -1003,8 +952,7 @@ class WebDriver
 		$command = "size";
 		$urlHubFormatted = $this->_hubUrl . "/session/{$this->_sessionId}/window/{$windowHandle}/{$command}";
 
-		$httpClient = HttpFactory::getClient($this->_environment);
-		$results = $httpClient->setUrl($urlHubFormatted)->setHttpMethod(HttpClient::GET)->execute();
+		$results = $this->_httpClient->setUrl($urlHubFormatted)->setHttpMethod(HttpClient::GET)->execute();
 		
 		$result = null;
 		if (isset($results["value"]) && is_array($results["value"])) { $result = $results ["value"]; }
@@ -1033,9 +981,7 @@ class WebDriver
 		$command = "position";
 		$params = array ('x' => $x, 'y' => $y);
 		$urlHubFormatted = $this->_hubUrl . "/session/{$this->_sessionId}/window/{$windowHandle}/{$command}";
-
-		$httpClient = HttpFactory::getClient($this->_environment);
-		$httpClient->setUrl($urlHubFormatted)->setHttpMethod(HttpClient::POST)->setJsonParams($params)->execute();
+		$this->_httpClient->setUrl($urlHubFormatted)->setHttpMethod(HttpClient::POST)->setJsonParams($params)->execute();
 	}
 	
 	/**
@@ -1058,8 +1004,7 @@ class WebDriver
 		$command = "position";
 		$urlHubFormatted = $this->_hubUrl . "/session/{$this->_sessionId}/window/{$windowHandle}/{$command}";
 
-		$httpClient = HttpFactory::getClient($this->_environment);
-		$results = $httpClient->setUrl($urlHubFormatted)->setHttpMethod(HttpClient::GET)->execute();
+		$results = $this->_httpClient->setUrl($urlHubFormatted)->setHttpMethod(HttpClient::GET)->execute();
 		
 		$result = null;
 		if (isset($results["value"]) && is_array($results["value"])) { $result = $results ["value"]; }
@@ -1082,8 +1027,7 @@ class WebDriver
 		$params = array ('cookie' => $cookie->getArray());
 		$urlHubFormatted = $this->_hubUrl . "/session/{$this->_sessionId}/{$command}";
 
-		$httpClient = HttpFactory::getClient($this->_environment);
-		$httpClient->setUrl($urlHubFormatted)->setHttpMethod(HttpClient::POST)->setJsonParams($params)->execute();
+		$this->_httpClient->setUrl($urlHubFormatted)->setHttpMethod(HttpClient::POST)->setJsonParams($params)->execute();
 	}
 	
 	/**
@@ -1095,8 +1039,7 @@ class WebDriver
 		$command = "cookie";
 		$urlHubFormatted = $this->_hubUrl . "/session/{$this->_sessionId}/{$command}";
 
-		$httpClient = HttpFactory::getClient($this->_environment);
-		$results = $httpClient->setUrl($urlHubFormatted)->setHttpMethod(HttpClient::GET)->execute();
+		$results = $this->_httpClient->setUrl($urlHubFormatted)->setHttpMethod(HttpClient::GET)->execute();
 		
 		$result = null;
 		if (isset($results["value"]) && is_array($results["value"])) { $result = $results ["value"]; }
@@ -1111,9 +1054,7 @@ class WebDriver
 	{
 		$command = "cookie";
 		$urlHubFormatted = $this->_hubUrl . "/session/{$this->_sessionId}/{$command}/{$cookieName}";
-
-		$httpClient = HttpFactory::getClient($this->_environment);
-		$httpClient->setUrl($urlHubFormatted)->setHttpMethod(HttpClient::DELETE)->execute();
+		$this->_httpClient->setUrl($urlHubFormatted)->setHttpMethod(HttpClient::DELETE)->execute();
 	}
 	
 	/**
@@ -1123,9 +1064,7 @@ class WebDriver
 	{
 		$command = "cookie";
 		$urlHubFormatted = $this->_hubUrl . "/session/{$this->_sessionId}/{$command}";
-
-		$httpClient = HttpFactory::getClient($this->_environment);
-		$httpClient->setUrl($urlHubFormatted)->setHttpMethod(HttpClient::DELETE)->execute();
+		$this->_httpClient->setUrl($urlHubFormatted)->setHttpMethod(HttpClient::DELETE)->execute();
 	}
 
 	/**
@@ -1134,10 +1073,8 @@ class WebDriver
 	public function dismissAlert()
 	{
 		$command = "dismiss_alert";
-		$urlHubFormatted = $this->_hubUrl . "/session/{$this->_sessionId}/{$command}";
-		
-		$httpClient = HttpFactory::getClient($this->_environment);
-		$httpClient->setUrl($urlHubFormatted)->setHttpMethod(HttpClient::POST)->execute();
+		$urlHubFormatted = $this->_hubUrl . "/session/{$this->_sessionId}/{$command}";		
+		$this->_httpClient->setUrl($urlHubFormatted)->setHttpMethod(HttpClient::POST)->execute();
 	}
 
 	/**
@@ -1146,10 +1083,8 @@ class WebDriver
 	public function acceptAlert()
 	{
 		$command = "accept_alert";
-		$urlHubFormatted = $this->_hubUrl . "/session/{$this->_sessionId}/{$command}";
-		
-		$httpClient = HttpFactory::getClient($this->_environment);
-		$httpClient->setUrl($urlHubFormatted)->setHttpMethod(HttpClient::POST)->execute();
+		$urlHubFormatted = $this->_hubUrl . "/session/{$this->_sessionId}/{$command}";		
+		$this->_httpClient->setUrl($urlHubFormatted)->setHttpMethod(HttpClient::POST)->execute();
 	}
 
 	/**
@@ -1161,8 +1096,7 @@ class WebDriver
 		$command = "alert_text";
 		$urlHubFormatted = $this->_hubUrl . "/session/{$this->_sessionId}/{$command}";
 		
-		$httpClient = HttpFactory::getClient($this->_environment);
-		$results = $httpClient->setUrl($urlHubFormatted)->setHttpMethod(HttpClient::GET)->execute();
+		$results = $this->_httpClient->setUrl($urlHubFormatted)->setHttpMethod(HttpClient::GET)->execute();
 		
 		$result = null;
 		if (isset($results["value"])) { $result = $results["value"]; }
@@ -1180,8 +1114,7 @@ class WebDriver
 			$params = array ('text' => $value);
 			$urlHubFormatted = $this->_hubUrl . "/session/{$this->_sessionId}/{$command}";
 
-			$httpClient = HttpFactory::getClient($this->_environment);
-			$httpClient->setUrl($urlHubFormatted)->setHttpMethod(HttpClient::POST)->setJsonParams($params)->execute();
+			$this->_httpClient->setUrl($urlHubFormatted)->setHttpMethod(HttpClient::POST)->setJsonParams($params)->execute();
 		}
 		else{
 			throw new \Exception("Value must be a string");
