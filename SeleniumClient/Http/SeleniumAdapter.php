@@ -14,62 +14,61 @@
 // limitations under the License.
 
 namespace SeleniumClient\Http;
+use SeleniumClient\Commands;
 
 require_once  __DIR__ . "/Exceptions.php";
 
 class SeleniumAdapter extends HttpClient
 {
-	public function execute()
+	public function execute(\SeleniumClient\Commands\Command $command)
 	{
-		$responseBody = parent::execute();
-		
-		$this->validateSeleniumResponseCode();
-		$this->validateHttpCode();
-		
-		return $responseBody;
+		$response = parent::execute($command);
+		$this->validateSeleniumResponseCode($response,$command->getPolling());
+		$this->validateHttpCode($response,$command->getPolling());	
+		return $response;
 	}
 	
-	protected function validateHttpCode()
+	protected function validateHttpCode($response, $polling)
 	{
 		// Http response exceptions
-		switch (intval(trim($this->_responseHeaders['http_code'])))
+		switch (intval(trim($response['headers']['http_code'])))
 		{
 			case 400:
-				throw new SeleniumMissingCommandParametersException((string) $this->_responseHeaders['http_code'], $this->_responseHeaders['url']);
+				throw new SeleniumMissingCommandParametersException((string) $response['headers']['http_code'], $response['headers']['url']);
 				break;
 			case 405:
-				throw new SeleniumInvalidCommandMethodException((string) $this->_responseHeaders['http_code'], $this->_responseHeaders['url']);
+				throw new SeleniumInvalidCommandMethodException((string) $response['headers']['http_code'], $response['headers']['url']);
 				break;
 			case 500:
-				if (!$this->_polling) { throw new SeleniumFailedCommandException((string) $this->_responseHeaders['http_code'], $this->_responseHeaders['url']); }
+				if (!$polling) { throw new SeleniumFailedCommandException((string) $response['headers']['http_code'], $response['headers']['url']); }
 				break;
 			case 501:
-				throw new SeleniumUnimplementedCommandException((string) $this->_responseHeaders['http_code'], $this->_responseHeaders['url']);
+				throw new SeleniumUnimplementedCommandException((string) $response['headers']['http_code'], $response['headers']['url']);
 				break;
 			default:
 				// Looks for 4xx http codes
-				if (preg_match("/^4[0-9][0-9]$/", $this->_responseHeaders['http_code'])) { throw new SeleniumInvalidRequestException((string) $this->_responseHeaders['http_code'], $this->_responseHeaders['url']); }
+				if (preg_match("/^4[0-9][0-9]$/", $response['headers']['http_code'])) { throw new SeleniumInvalidRequestException((string) $response['headers']['http_code'], $response['headers']['url']); }
 				break;
 		}
 	}
 	
-	protected function validateSeleniumResponseCode()
+	protected function validateSeleniumResponseCode($response, $polling)
 	{
 		// Selenium response status exceptions
-		if ($this->_responseBody != null)
+		if ($response['body'] != null)
 		{
-			if (isset($this->_responseBody["value"]["localizedMessage"]))
+			if (isset($response['body']["value"]["localizedMessage"]))
 			{
-				$message = $this->_responseBody["value"]["localizedMessage"];
+				$message = $response['body']["value"]["localizedMessage"];
 			}
 			else
 			{
 				$message = "";
 			}
-			switch (intval($this->_responseBody["status"]))
+			switch (intval($response['body']["status"]))
 			{
 				case 7:
-					if (!$this->_polling) {throw new SeleniumNoSuchElementException($message);}
+					if (!$polling) {throw new SeleniumNoSuchElementException($message);}
 					break;
 				case 8:
 					throw new SeleniumNoSuchFrameException($message);

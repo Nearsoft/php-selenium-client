@@ -13,24 +13,48 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-namespace SeleniumClient;
+namespace SeleniumClient\Commands;
 
 abstract class Command
-{
-	protected $_driver;
+{	
+	protected $_driver;	
+	protected $_path;
+	protected $_httpMethod;	
+	protected $_params;	
+	protected $_urlParams;	
+	protected $_polling;
+	protected $_response;	
 
-	public $url;
-	public $params;
-	public $httpMethod;
+	public function __construct($driver, $params = null, $urlParams = null)
+	{
+		$this->_driver    = $driver;
+		$this->_params    = $params;
+		$this->_urlParams = $urlParams;
+		$this->setUp();	
+		return $this;
+	}	
 
-	/**
-	 * Gets the text of the alert.
-	 * @return String
-	 */
+	abstract protected function setUp();
+
+	protected function setPost()    {$this->_httpMethod = HttpClient::POST }
+	protected function setGet()     {$this->_httpMethod = HttpClient::GET }
+	protected function setDelete()  {$this->_httpMethod = HttpClient::DELETE }
+
+	public function getUrl()        { return "{$this->_driver->getHubUrl()}/{$this->_path}"; }
+	public function getParams()     { return $this->_params; }
+	public function getHttpMethod() { return $this->_httpMethod; }
+	public function getPolling()    { return $this->_polling; }
+	public function getResponse()   { return $this->_response; }
+
+	public function setPolling($value)
+	{
+		$this->_polling = $value;
+	}  
+
 	public function execute() 
 	{
 	  $httpClient = $this->_driver->getHttpClient();
-	  $httpClient->loadCommand($this);
-	  $httpClient->execute();
+	  $this->_response = $httpClient->execute($this);
+	  return $this->_response['body'];
 	}	
 }
