@@ -15,6 +15,8 @@
 
 namespace SeleniumClient\Commands;
 
+use SeleniumClient\Http\HttpClient;
+
 abstract class Command
 {	
 	protected $_driver;	
@@ -36,9 +38,9 @@ abstract class Command
 
 	abstract protected function setUp();
 
-	protected function setPost()    {$this->_httpMethod = HttpClient::POST }
-	protected function setGet()     {$this->_httpMethod = HttpClient::GET }
-	protected function setDelete()  {$this->_httpMethod = HttpClient::DELETE }
+	protected function setPost()    {$this->_httpMethod = HttpClient::POST; }
+	protected function setGet()     {$this->_httpMethod = HttpClient::GET; }
+	protected function setDelete()  {$this->_httpMethod = HttpClient::DELETE; }
 
 	public function getUrl()        { return "{$this->_driver->getHubUrl()}/{$this->_path}"; }
 	public function getParams()     { return $this->_params; }

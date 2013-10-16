@@ -15,8 +15,6 @@
 
 namespace SeleniumClient\Commands;
 
-use SeleniumClient\Http\HttpClient;
-
 class StartSession        extends Command{ public function setup(){ $this->setPost();   $this->_path = "session"; } }
 class GetCapabilities     extends Command{ public function setup(){ $this->setGet();    $this->_path = "session/{$this->_driver->getSessionId()}"; } }
 class Quit                extends Command{ public function setup(){ $this->setDelete(); $this->_path = "session/{$this->_driver->getSessionId()}"; } }
@@ -58,7 +56,7 @@ class ElementLocation     extends Command{ public function setup(){ $this->setGe
 class ElementLocationView extends Command{ public function setup(){ $this->setGet();    $this->_path = "session/{$this->_driver->getSessionId()}/element/{$this->_urlParams['element_id']}/location_in_view"; } }
 
 class LoadTimeout         extends Command{ public function setup(){ $this->setPost();   $this->_path = "session/{$this->_driver->getSessionId()}/timeouts"; } }
-class AsyncScriptTimeout  extends Command{ public function setup(){ $this->setPost();   $this->_path = "session/{$this->_driver->getSessionId()}/timeoutsasync_script"; } }
+class AsyncScriptTimeout  extends Command{ public function setup(){ $this->setPost();   $this->_path = "session/{$this->_driver->getSessionId()}/timeouts/async_script"; } }
 
 class ExecuteScript       extends Command{ public function setup(){ $this->setPost();   $this->_path = "session/{$this->_driver->getSessionId()}/execute"; } }
 class ExecuteAsyncScript  extends Command{ public function setup(){ $this->setPost();   $this->_path = "session/{$this->_driver->getSessionId()}/execute_async"; } }
