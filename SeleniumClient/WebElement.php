@@ -173,9 +173,9 @@ class WebElement
      */
     public function hasClass($class)
     {
-        $script = sprintf("return arguments[0].className.match(/\b{$class}\b/)");
-        $this->_driver->executeScript($script, array(array('ELEMENT' => $this->_elementId)));
-        return $this;
+        $script = sprintf("return (arguments[0].className.split(' ').indexOf('{$class}') > 0);");
+        $result =$this->_driver->executeScript($script, array(array('ELEMENT' => $this->_elementId)));
+        return $result;
     }
 
     /**

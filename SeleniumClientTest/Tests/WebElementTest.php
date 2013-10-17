@@ -7,6 +7,12 @@ use SeleniumClient\WebElement;
 
 class WebElementTest extends AbstractTest
 {
+	public function testGetElementIdShouldGetId()
+	{
+		$element = $this->_driver->findElement(By::id("txt1"));
+		$this->assertTrue(is_numeric($element->getElementId()));
+	}	
+
     public function testGetCoordinatesInViewShouldGetLocationOnScreenOnceScrolledIntoView()
 	{
 		$element = $this->_driver->findElement(By::id("txt1"));
@@ -37,6 +43,15 @@ class WebElementTest extends AbstractTest
 	{
 		$chk = $this->_driver->findElement(By::id("chk3"));
 		$this->assertEquals( "chk3",strtolower($chk->getAttribute("name")));
+	}
+
+	public function testSetAttributeShouldSet()
+	{
+		$webElement = $this->_driver->findElement(By::id("txt1"));
+		$webElement->setAttribute('value','123456');
+		$webElement->setAttribute('type','hidden');
+		$this->assertEquals("123456", $webElement->getAttribute("value"));
+		$this->assertEquals("hidden", $webElement->getAttribute("type"));		
 	}
 	
 	public function testIsEnabledShouldDetermineIfEnabled()
@@ -77,6 +92,14 @@ class WebElementTest extends AbstractTest
         $this->assertEquals("select x-small foo bar", $element->getClassName());
         $element->removeClass("foo");
         $this->assertEquals("select x-small bar", $element->getClassName());
+    }
+
+    public function testHasClass()
+    {
+		$element = $this->_driver->findElement(By::id("txt1"));
+		$element->addClass("foo");
+		$this->assertTrue($element->hasClass("foo"));
+		$this->assertFalse($element->hasClass("someotherclass"));
     }
 	
 	public function testClearShouldSetValueEmpty()
@@ -181,6 +204,13 @@ class WebElementTest extends AbstractTest
 	
 	public function testSubmitShouldSubmitForm()
 	{
+		$form = $this->_driver->findElement(By::xPath("/html/body/table/tbody/tr/td[1]/fieldset/form"));	
+		$form->submit();	
+		$this->assertTrue(strstr($this->_driver->getCurrentPageUrl(), "formReceptor") >= 0);
+	}
+
+	public function testSubmitShouldSubmitFormFromButton()
+	{
 		$button = $this->_driver->findElement(By::id("btnSubmit"));
 	
 		$button->submit();
@@ -188,7 +218,7 @@ class WebElementTest extends AbstractTest
 		$this->assertTrue(strstr($this->_driver->getCurrentPageUrl(), "formReceptor") >= 0);
 	}
 	
-	public function testTextShouldGetText()
+	public function testGetTextShouldGetText()
 	{
 		$label = $this->_driver->findElement(By::xPath("/html/body/table/tbody/tr/td[2]/fieldset/p"));
 		$this->assertEquals("Simple paragraph", $label->getText());
