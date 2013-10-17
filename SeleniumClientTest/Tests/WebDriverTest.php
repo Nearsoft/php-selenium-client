@@ -16,7 +16,7 @@ class WebDriverTest extends AbstractTest
 		$this->_driver->acceptAlert();
 		$this->assertEquals("TRUE", strtoupper($this->_driver->getAlertText()));
 	}
-	
+
 	public function testDismissAlertShouldGetText()
 	{
 		$this->_driver->findElement(By::id("btnConfirm"))->click();
@@ -24,7 +24,15 @@ class WebDriverTest extends AbstractTest
 		$this->assertEquals("FALSE", strtoupper($this->_driver->getAlertText()));
 	}
 	
-	public function testSetPromptTextShouldGetText()
+	public function testDismissAlertShouldMakeAlertBeClosed()
+	{
+		$this->_driver->findElement(By::id("btnAlert"))->click();
+		$this->_driver->dismissAlert();
+		$this->setExpectedException('SeleniumClient\Http\SeleniumNoAlertOpenErrorException');	
+		$this->_driver->getAlertText();
+	}
+	
+	public function testSetAlertValueShouldGetText()
 	{
 		$this->_driver->findElement(By::id("btnPrompt"))->click();
 		$this->_driver->setAlertValue("Some value sent");
@@ -232,6 +240,21 @@ class WebDriverTest extends AbstractTest
 		$alertText = $this->_driver->switchTo()->getAlert()->getText();
 
 		$this->assertEquals("alert text", $alertText);
+	}
+
+	public function testSetCookie()
+	{
+		$this->_driver->setCookie("test", "1");
+		$cookies = $this->_driver->getCurrentCookies();
+		$this->assertEquals('test',$cookies[0]['name']);
+	}
+
+	public function testGetCurrentCookies()
+	{
+		$this->_driver->setCookie("test", "1");
+		$this->_driver->setCookie("test2", "2");
+
+		$this->assertEquals(2, count($this->_driver->getCurrentCookies()));
 	}
 
 	public function testClearCookieShouldClear()
@@ -455,8 +478,8 @@ class WebDriverTest extends AbstractTest
 		$this->_driver->findElement(By::id("btnPopUp1"))->click();
 		$this->_driver->switchTo()->getWindow("popup1");
 		$this->_driver->closeCurrentWindow();
-		
-		$this->assertNotEquals(null, $this->_driver);
+		$this->setExpectedException('SeleniumClient\Http\SeleniumNoSuchWindowException');	
+		$this->_driver->getCurrentPageUrl();		
 	}
 
 	public function testGetWindowShouldAccessContent()
@@ -499,7 +522,9 @@ class WebDriverTest extends AbstractTest
 
     public function testGetCurrentSessionsShouldGetArray()
     {
-        $this->assertTrue(is_array($this->_driver->getCurrentSessions()));
+    	$sessions = $this->_driver->getCurrentSessions();
+        $this->assertTrue(is_array($sessions));
+        $this->assertTrue(count($sessions) > 0);
     }
 
 	public function testExecuteScriptShouldSetInputText()
@@ -523,16 +548,19 @@ class WebDriverTest extends AbstractTest
 		$this->assertEquals("TEST2!", $webElement->getAttribute("value"));
 	}
 	
-	public function testSetAsyncScriptTimeout()
-	{
-		$this->_driver->setAsyncScriptTimeout(10000);
-		$this->assertNotEquals(null, $this->_driver);
-	}
-	
 	public function testExecuteAsyncScriptShouldShowAlertKeepDriverInstance()
 	{
-		$this->_driver->executeAsyncScript("arguments[arguments.length - 1](document.body);");
-		$this->assertNotEquals(null, $this->_driver);
+		//https://code.google.com/p/selenium/wiki/JsonWireProtocol#POST_/session/:sessionId/execute_async
+		//There is an implicit last argument being sent which MUST be invoked as callback by the end of the function
+		$this->_driver->executeAsyncScript("console.log(arguments);document.getElementById('txt1').value='finished';arguments[arguments.length - 1]();", array('foo','var'));
+		$this->assertEquals('finished',$this->_driver->findElement(By::id("txt1"))->getValue());   	
+	}
+
+	public function testSetAsyncScriptTimeout()
+	{
+		$this->_driver->setAsyncScriptTimeout(1);
+		$this->setExpectedException('SeleniumClient\Http\SeleniumScriptTimeoutException');	
+		$this->_driver->executeAsyncScript("setTimeout('arguments[0]()',5000);");
 	}
 	
 	public function testGetCapabilitiesShouldGetInfo() {
@@ -548,29 +576,43 @@ class WebDriverTest extends AbstractTest
 	
 	public function testGetShouldNavigateToUrl()
 	{
+		$url = $this->_url."/formReceptor.php";
+		$this->_driver->get($url);
+		$this->assertEquals($url, $this->_driver->getCurrentPageUrl());
+	}
+
+	public function testGetCurrentPageUrl()
+	{
 		$this->assertEquals($this->_url, $this->_driver->getCurrentPageUrl());
 	}
 	
 	public function testSetImplicitWait()
 	{
-		$this->_driver->setImplicitWait(1000);
-		$this->assertNotEquals(null, $this->_driver);
+		$this->_driver->findElement(By::id("btnAppendDiv"))->click();
+		$this->_driver->setImplicitWait(5000);
+		$webElement = $this->_driver->findElement(By::id("dDiv1-0")); // This takes 5 seconds to be present
+		$this->assertInstanceOf('SeleniumClient\WebElement', $webElement);
 	}
 	
 	public function testStatus()
 	{ 
-		$this->assertTrue(is_array($this->_driver->status()));
+		$status = $this->_driver->status();
+		$expectedKeys = array('status','sessionId','value','state','class','hCode');
+		$this->assertTrue(array_intersect(array_keys($status),$expectedKeys) === $expectedKeys);
 	}
 	
 	public function testRefresh() 
 	{ 
-		$this->assertNotEquals(null, $this->_driver);
+		$webElement = $this->_driver->findElement(By::id("txt1"));
+		$webElement->sendKeys("9999");
+		$this->_driver->refresh();
+		$webElement = $this->_driver->findElement(By::id("txt1"));
+		$this->assertEquals("", $webElement->getAttribute("value"));
 	}
 	
 	public function testPageSource()
 	{
-		$this->assertTrue(is_string($this->_driver->pageSource()));
-		$this->assertTrue(count($this->_driver->pageSource())>0);
+		$this->assertTrue((bool)strpos($this->_driver->pageSource(), '<legend>Form elements</legend>'));		
 	}
 	
 	public function testTitle()
@@ -581,21 +623,24 @@ class WebDriverTest extends AbstractTest
 	
 	public function testFindElement()
 	{
-		$webElement = $this->_driver->findElement(By::id("txt1"));
-		
-		$this->assertTrue($webElement instanceof  WebElement);
-		
-		$webElement->clear();
-		
-		$webElement->sendKeys("9999");
-		
-		$this->assertEquals("9999", $webElement->getAttribute("value"));
+		$webElement = $this->_driver->findElement(By::id("txt1"));	
+		$this->assertInstanceOf('SeleniumClient\WebElement',$webElement);		
+
+		$this->setExpectedException('SeleniumClient\Http\SeleniumNoSuchElementException');	
+		$webElement = $this->_driver->findElement(By::id("NOTEXISTING"));	
+	}
+
+	public function testFindElementInElement()
+	{
+		$parentElement = $this->_driver->findElement(By::id("sel1"));
+		$childElement = $this->_driver->findElement(By::xPath(".//option[@value = '3']"), false, $parentElement->getElementId());	
+		$this->assertInstanceOf('SeleniumClient\WebElement',$childElement);	
 	}
 
     public function testFindElementByJsSelector()
     {
         $input = $this->_driver->findElement(By::jsSelector('input','document.querySelectorAll'));
-        $this->assertTrue($input instanceof  WebElement);
+        $this->assertInstanceOf('SeleniumClient\WebElement',$input);	
         $this->setExpectedException('SeleniumClient\Http\SeleniumInvalidSelectorException');
         $this->_driver->findElement(By::jsSelector('input'));
     }
@@ -610,6 +655,14 @@ class WebDriverTest extends AbstractTest
 		$this->assertTrue(count($webElements)>0);
 	}
 
+	public function testFindElementsInElement()
+	{
+		$parentElement = $this->_driver->findElement(By::id("sel1"));
+		$childElements = $this->_driver->findElements(By::xPath(".//option"), false, $parentElement->getElementId());	
+		$this->assertInternalType('array',$childElements);	
+		$this->assertInstanceOf('SeleniumClient\WebElement',$childElements[1]);	
+	}
+
     public function testFindElementsByJsSelector()
     {
         $inputs = $this->_driver->findElements(By::jsSelector('input','document.querySelectorAll'));
@@ -621,12 +674,115 @@ class WebDriverTest extends AbstractTest
         $this->setExpectedException('SeleniumClient\Http\SeleniumInvalidSelectorException');
         $this->_driver->findElements(By::jsSelector('input'));
     }
+
+    public function testWebElementSendKeysShouldSetKeys()
+    {
+    	$webElement = $this->_driver->findElement(By::id("txt1"));	
+    	$this->_driver->webElementSendKeys($webElement->getElementId(),"some text");
+    	$this->assertEquals('some text',$webElement->getValue());
+    }
+
+    public function testWebElementGetTextShouldGetText()
+    {
+    	$webElement = $this->_driver->findElement(By::xPath("/html/body/h2"));
+    	$this->assertEquals('Nearsoft SeleniumClient SandBox', $this->_driver->webElementGetText($webElement->getElementId()));
+    }  
+
+    public function testWebElementGetTagNameShouldGetTagName()
+    {
+    	$webElement = $this->_driver->findElement(By::xPath("/html/body/h2"));
+    	$this->assertEquals('h2', $this->_driver->webElementGetTagName($webElement->getElementId()));
+    }    
+
+    public function testWebElementGetAttributeShouldGetAttribute()
+    {
+		$webElement = $this->_driver->findElement(By::id("txt2"));
+    	$this->assertEquals('text', $this->_driver->webElementGetAttribute($webElement->getElementId(),'type'));
+    }
+
+    public function testWebElementIsSelected()
+    {
+    	$parentElement = $this->_driver->findElement(By::id("sel1"));
+
+    	$option1 = $this->_driver->findElement(By::xPath(".//option[@value = 'mushrooms']"));
+		$this->assertFalse($this->_driver->webElementIsSelected($option1->getElementId()));
+
+		$option2 = $this->_driver->findElement(By::xPath(".//option[@value = 'greenpeppers']"));
+		$this->assertTrue($this->_driver->webElementIsSelected($option2->getElementId()));
+    }
+
+    public function testWebElementIsDisplayed()
+    {
+    	$webElement = $this->_driver->findElement(By::id("txt1"));
+		$this->assertTrue($this->_driver->webElementIsDisplayed($webElement->getElementId()));   	
+
+		$this->_driver->executeScript("document.getElementById('txt1').style.display='none';");
+		$this->assertFalse($this->_driver->webElementIsDisplayed($webElement->getElementId()));   	
+		$this->_driver->executeScript("document.getElementById('txt1').style.display='block';");
+    }
+
+    public function testWebElementIsEnabled()
+    {
+    	$webElement = $this->_driver->findElement(By::id("txt1"));
+		$this->assertTrue($this->_driver->webElementIsEnabled($webElement->getElementId()));   	
+
+		$this->_driver->executeScript("document.getElementById('txt1').disabled='true';");
+		$this->assertFalse($this->_driver->webElementIsEnabled($webElement->getElementId()));   	
+		$this->_driver->executeScript("document.getElementById('txt1').disabled='false';");
+    }
+
+    public function testWebElementClear()
+    {
+    	$webElement = $this->_driver->findElement(By::id("txt1"));
+		$webElement->sendKeys('999');
+		$this->_driver->webElementClear($webElement->getElementId());
+		$this->assertEquals('',$webElement->getValue());   	
+    }
+
+
+    public function testWebElementClick()
+    {
+    	$webElement = $this->_driver->findElement(By::id("btnAlert"));
+		$this->_driver->webElementClick($webElement->getElementId());
+		$this->assertEquals('Here is the alert',$this->_driver->getAlertText());   	
+    }        
 	
+	public function testWebElementSubmit()
+    {
+    	$webElement = $this->_driver->findElement(By::id("btnSubmit"));
+    	$this->_driver->webElementSubmit($webElement->getElementId());
+		$this->assertEquals($this->_url."formReceptor.php",$this->_driver->getCurrentPageUrl());   	
+    }   
+
+    public function testWebElementDescribe()
+    {
+    	$webElement = $this->_driver->findElement(By::id("btnSubmit"));
+    	$expectedKeys = array('id','enabled','selected','text','displayed','tagName','class','hCode');
+    	$descriptionData = $this->_driver->webElementDescribe($webElement->getElementId());
+		$this->assertTrue(array_intersect(array_keys($descriptionData),$expectedKeys) === $expectedKeys);    	
+    }
+
+    public function testWebElementGetCoordinates()
+    {
+    	$webElement = $this->_driver->findElement(By::id("btnSubmit"));
+    	$result = $this->_driver->webElementGetCoordinates($webElement->getElementId());
+    	$this->assertInternalType('int',$result['x']);    
+    	$this->assertInternalType('int',$result['y']);    
+    }
+
+    public function testWebElementGetLocationOnScreenOnceScrolledIntoView()
+    {
+    	$webElement = $this->_driver->findElement(By::id("btnSubmit"));
+    	$result = $this->_driver->webElementGetLocationOnScreenOnceScrolledIntoView($webElement->getElementId());
+    	$this->assertInternalType('int',$result['x']);    
+    	$this->assertInternalType('int',$result['y']);  
+    }
+
 	public function testBack()
 	{
 		$expectedTitle = $this->_driver->title();
 		
-		$this->_driver->get($this->_url."/free-tools/");
+		$this->_driver->get("http://nearsoft.com");
 		
 		$this->_driver->back();
 		
@@ -666,12 +822,26 @@ class WebDriverTest extends AbstractTest
 		$this->assertFalse($webElement->isDisplayed());		
 	}
 
-	/**
-     * @expectedException SeleniumClient\Http\SeleniumScriptTimeoutException
-     */
 	public function testSetPageLoadTimeout()
 	{
 		$this->_driver->setPageLoadTimeout(1);
+		$this->setExpectedException('SeleniumClient\Http\SeleniumScriptTimeoutException');
 		$this->_driver->get($this->_url."/formReceptor.php");
+	}
+
+	public function testQuit()
+	{	
+		$anotherDriver = new SeleniumClient\WebDriver();
+		$sessionId = $anotherDriver->getSessionId();	
+
+		$containsSession = function($var) use ($sessionId)
+		{
+			return ($var['id'] == $sessionId);
+		};
+
+		$anotherDriver->quit();
+		$sessions = $this->_driver->getCurrentSessions();		
+		$matchedSessions = array_filter($sessions,$containsSession);
+		$this->assertEquals(0, count($matchedSessions));		
 	}
 }
