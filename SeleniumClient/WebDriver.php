@@ -188,7 +188,7 @@ class WebDriver
 	{
 		$command = new Commands\GetCapabilities($this);		
 		$results = $command->execute();
-		return $results["value"];
+		return $results['value'];
 	}
 	
 	/**
@@ -198,10 +198,8 @@ class WebDriver
 	public function getCurrentSessions()
 	{
 		$command = new Commands\GetSessions($this);			
-		$results =$command->execute();		
-		$result = null;
-		if (isset ( $results ["value"] )) { $result = $results["value"]; }
-		return $result;
+		$results = $command->execute();		
+		return $results['value'];
 	}
 
 	/**
@@ -232,10 +230,7 @@ class WebDriver
 	{
 		$command = new Commands\GetCurrentUrl($this);			
 		$results = $command->execute();	
-
-		$result = null;
-		if (isset($results["value"]) && trim ($results["value"]) != "") { $result = $results ["value"]; }
-		return $result;
+		return $results['value'];
 	}	
 	
 	/**
@@ -257,9 +252,7 @@ class WebDriver
 	{
 		$command = new Commands\Status($this);			
 		$results = $command->execute();		
-		$result = null;
-		if (is_array($results)) { $result = $results; }
-		return $result;
+		return $results;
 	}	
 	
 	/**
@@ -297,9 +290,7 @@ class WebDriver
 	{
 		$command = new Commands\Source($this);		
 		$results = $command->execute();		
-		$result = null;
-		if (isset($results["value"]) && trim ($results["value"]) != "") { $result = $results["value"]; }
-		return $result;
+		return $results['value'];
 	}
 	
 	/**
@@ -310,10 +301,7 @@ class WebDriver
 	{
 		$command = new Commands\Title($this);	
 		$results = $command->execute();	
-		
-		$result = null;
-		if (isset($results["value"]) && trim ($results["value"]) != "") { $result = $results["value"]; }
-		return $result;	
+		return $results['value'];	
 	}
 
 	/**
@@ -333,13 +321,13 @@ class WebDriver
 
 		$results = $command->execute();
 		
-		if (isset($results["value"]) && trim($results["value"]) != "")
+		if (isset($results['value']) && trim($results['value']) != "")
 		{
 			if (!file_exists($screenshotsDirectory . "/" . $this->_sessionId)) { mkdir($screenshotsDirectory . "/" . $this->_sessionId, 0777, true); }
 			
 			$fileName = date ("YmdHmsu") . "-" . (count(glob($screenshotsDirectory . "/" . $this->_sessionId . "/*.png")) + 1) .".png";
 			
-			file_put_contents($screenshotsDirectory . "/" . $this->_sessionId . "/" .$fileName, base64_decode($results["value"]));
+			file_put_contents($screenshotsDirectory . "/" . $this->_sessionId . "/" .$fileName, base64_decode($results['value']));
 			
 			return $fileName;
 		}
@@ -374,10 +362,7 @@ class WebDriver
             }
             $command->setPolling($polling);
             $results = $command->execute();       
-
-            $result = null;
-            if (isset($results["value"]["ELEMENT"]) && trim ($results["value"]["ELEMENT"]) != "") { $result = new WebElement($this, $results["value"]["ELEMENT"]); }
-            return $result;
+            return new WebElement($this, $results['value']['ELEMENT']);
         }
 	}
 
@@ -454,10 +439,7 @@ class WebDriver
 	{
 		$command = new Commands\ActiveElement($this);	
 		$results = $command->execute();	
-		
-		$result = null;
-		if (isset($results["value"]["ELEMENT"]) && trim ($results["value"]["ELEMENT"]) != "") { $result = new WebElement($this, $results["value"]["ELEMENT"]); }
-		return $result;
+		return new WebElement($this, $results['value']['ELEMENT']);
 	}
 	
 	/**
@@ -533,10 +515,7 @@ class WebDriver
 	{
 		$command = new Commands\ElementText($this, null , array('element_id' => $elementId));		
 		$results = $command->execute();
-		
-		$result = null;
-		if (isset($results["value"])) { $result = $results ["value"]; }
-		return $result;	
+		return $results['value'];	
 	}
 	
 	/**
@@ -547,11 +526,8 @@ class WebDriver
 	public function webElementGetTagName($elementId)
 	{
 		$command = new Commands\ElementTagName($this, null , array('element_id' => $elementId));		
-		$results = $command->execute();
-		
-		$result = null;
-		if (isset($results["value"]) && trim($results["value"]) != "")  { $result = trim($results ["value"]); }
-		return $result;
+		$results = $command->execute();		
+		return $results['value'];
 	}
 
 	/**
@@ -564,10 +540,7 @@ class WebDriver
 	{
 		$command = new Commands\ElementAttribute($this, null , array('element_id' => $elementId, 'attribute_name' => $attributeName));		
 		$results = $command->execute();
-		
-		$result = null;
-		if (isset($results["value"]) && trim($results["value"]) != "") { $result = trim($results["value"]); }
-		return $result;
+		return $results['value'];
 	}
 	
 	/**
@@ -579,10 +552,7 @@ class WebDriver
 	{
 		$command = new Commands\ElementIsSelected($this, null , array('element_id' => $elementId));		
 		$results = $command->execute();
-		
-		$result = false;
-		if(trim($results ["value"]) == "1") { $result = true; }
-		return $result;		
+		return (trim($results['value']) == "1");		
 	}	
 	
 	/**
@@ -594,10 +564,7 @@ class WebDriver
 	{
 		$command = new Commands\ElementIsDisplayed($this, null , array('element_id' => $elementId));		
 		$results = $command->execute();
-		
-		$result = false;
-		if(trim($results ["value"]) == "1") { $result = true; }
-		return $result;	
+		return (trim($results['value']) == "1");		
 	}
 	
 	/**
@@ -609,10 +576,7 @@ class WebDriver
 	{
 		$command = new Commands\ElementIsEnabled($this, null , array('element_id' => $elementId));		
 		$results = $command->execute();
-		
-		$result = false;
-		if(trim($results ["value"]) == "1") { $result = true; }
-		return $result;
+		return (trim($results['value']) == "1");		
 	}	
 	
 	/**
@@ -654,10 +618,7 @@ class WebDriver
 	{
 		$command = new Commands\DescribeElement($this, null , array('element_id' => $elementId));		
 		$results = $command->execute();
-		
-		$result = null;
-		if (isset($results["value"]) && is_array($results["value"])) { $result = $results ["value"]; }
-		return $result;
+		return $results['value'];
 	}
 	
 	/**
@@ -694,11 +655,8 @@ class WebDriver
 	public function webElementGetCoordinates($elementId)
 	{
 		$command = new Commands\ElementLocation($this, null , array('element_id' => $elementId));		
-		$results = $command->execute();
-		
-		$result = null;
-		if (isset($results["value"]) && is_array($results["value"])) { $result = $results ["value"]; }
-		return $result;		
+		$results = $command->execute();		
+		return $results['value'];		
 	}
 	
 	/**
@@ -710,12 +668,7 @@ class WebDriver
 	{
 		$command = new Commands\ElementLocationView($this, null , array('element_id' => $elementId));		
 		$results = $command->execute();
-		
-		$result = null;
-		if (isset($results["value"]) && is_array($results["value"])) {
-			$result = $results ["value"];
-		}
-		return $result;		
+		return $results['value'];		
 	}
 
 	/**
@@ -771,10 +724,7 @@ class WebDriver
 		}
 
 		$results = $command->execute();
-
-		$result = null;
-		if (isset($results ["value"])) { $result = $results ["value"]; }
-		return $result;
+		return $results['value'];
 	}
 
 	/**
@@ -834,10 +784,7 @@ class WebDriver
 	{
 		$command = new Commands\WindowHandle($this);			
 		$results = $command->execute();
-		
-		$result = null;
-		if (isset($results["value"])) { $result = $results ["value"]; }
-		return $result;		
+		return $results['value'];		
 	}
 	
 	/**
@@ -848,10 +795,7 @@ class WebDriver
 	{
 		$command = new Commands\WindowHandles($this);			
 		$results = $command->execute();
-
-		$result = null;
-		if (isset($results["value"]) && is_array($results["value"])) { $result = $results ["value"]; }
-		return $result;				
+		return $results['value'];				
 	}
 	
 	/**
@@ -897,10 +841,7 @@ class WebDriver
 	{
 		$command = new Commands\GetWindowSize($this, null, array('window_handle' => $windowHandle));			
 		$results = $command->execute();
-		
-		$result = null;
-		if (isset($results["value"]) && is_array($results["value"])) { $result = $results ["value"]; }
-		return $result;
+		return $results['value'];
 	}
 	
 	/**
@@ -946,10 +887,7 @@ class WebDriver
 	{
 		$command = new Commands\GetWindowPosition($this, null, array('window_handle' => $windowHandle));
 		$results = $command->execute(); 
-		
-		$result = null;
-		if (isset($results["value"]) && is_array($results["value"])) { $result = $results ["value"]; }
-		return $result;		
+		return $results['value'];		
 	}
 
 	/**
@@ -977,9 +915,7 @@ class WebDriver
 	{
 		$command = new Commands\GetCookies($this);
 		$results = $command->execute(); 		
-		$result = null;
-		if (isset($results["value"]) && is_array($results["value"])) { $result = $results ["value"]; }
-		return $result;		
+		return $results['value'];		
 	}	
 	
 	/**
@@ -1027,10 +963,7 @@ class WebDriver
 	{
 		$command = new Commands\GetAlertText($this);
 		$results = $command->execute(); 	
-		
-		$result = null;
-		if (isset($results["value"])) { $result = $results["value"]; }
-		return $result;
+		return $results['value'];
 	}
 	
 	/**
