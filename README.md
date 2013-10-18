@@ -11,7 +11,7 @@ One of the goals is to provide a client usage as close as possible to the Seleni
 
 ##Documentation
 
-#[Please refer to our wiki](https://github.com/Nearsoft/PHP-SeleniumClient/wiki)
+[Please refer to our wiki](https://github.com/Nearsoft/PHP-SeleniumClient/wiki)
 
 ##Quickstart
 
