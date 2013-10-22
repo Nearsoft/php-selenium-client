@@ -766,7 +766,24 @@ class WebDriver
 		$command = new Commands\Window($this, $params);		
 		$command->execute();
 	}
-	
+
+    /**
+     * Maximizes specified Window
+     * @param String $windowHandle
+     */
+    public function maximizeWindow($windowHandle) {
+        $commannd = new Commands\WindowMaximize($this, null, array('window_handle'=> $windowHandle));
+        $commannd->execute();
+
+    }
+
+    /**
+     * Maximizes current Window
+     */
+    public function maximizeCurrentWindow() {
+     $this->maximizeWindow($this->getCurrentWindowHandle());
+    }
+
 	/**
 	 * Closes current window
 	 */

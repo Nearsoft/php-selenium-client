@@ -63,6 +63,7 @@ class ExecuteAsyncScript  extends Command{ public function setup(){ $this->setPo
 
 class Frame               extends Command{ public function setup(){ $this->setPost();   $this->_path = "session/{$this->_driver->getSessionId()}/frame"; } }
 class Window              extends Command{ public function setup(){ $this->setPost();   $this->_path = "session/{$this->_driver->getSessionId()}/window"; } }
+class WindowMaximize      extends Command{ public function setUp(){ $this->setPost();   $this->_path = "session/{$this->_driver->getSessionId()}/window/{$this->_urlParams['window_handle']}/maximize"; } }
 class CloseWindow         extends Command{ public function setup(){ $this->setDelete(); $this->_path = "session/{$this->_driver->getSessionId()}/window"; } }
 class WindowHandle        extends Command{ public function setup(){ $this->setGet();    $this->_path = "session/{$this->_driver->getSessionId()}/window_handle"; } }
 class WindowHandles       extends Command{ public function setup(){ $this->setGet();    $this->_path = "session/{$this->_driver->getSessionId()}/window_handles"; } }
