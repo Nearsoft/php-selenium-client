@@ -23,13 +23,13 @@ class HttpClient
 	const GET    = "GET";
 	const DELETE = "DELETE";
 	
-	protected $_trace = false;	
+	protected $_traceAll = false;	
 	
-	public function getTrace() { return $this->_trace; }
+	public function getTraceAll() { return $this->_traceAll; }
 	
-	public function setTrace($value)
+	public function setTraceAll($value)
 	{
-		$this->_trace = $value;	
+		$this->_traceAll = $value;	
 		return $this;
 	}
 
@@ -37,7 +37,7 @@ class HttpClient
      * @return string The response body
      * @throws \Exception
      */
-    public function execute(\SeleniumClient\Commands\Command $command)
+    public function execute(\SeleniumClient\Commands\Command $command, $trace = false)
 	{
 		if ($command->getUrl() == "" || $command->getHttpMethod() == "") { throw new \Exception("Must specify URL and HTTP METHOD"); }
 		
@@ -69,7 +69,7 @@ class HttpClient
 		
 		$responseHeaders=curl_getinfo($curl);
 		
-		if ($this->_trace)
+		if ($this->_traceAll || $trace)
 		{
 			echo "\n***********************************************************************\n";
 			echo "URL: " . $command->getUrl() . "\n";

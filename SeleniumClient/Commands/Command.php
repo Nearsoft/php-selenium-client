@@ -53,10 +53,10 @@ abstract class Command
 		$this->_polling = $value;
 	}  
 
-	public function execute() 
+	public function execute($trace = false) 
 	{
 	  $httpClient = $this->_driver->getHttpClient();
-	  $this->_response = $httpClient->execute($this);
+	  $this->_response = $httpClient->execute($this, $trace);
 	  return $this->_response['body'];
 	}	
 }
