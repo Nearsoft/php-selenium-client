@@ -473,15 +473,24 @@ class WebDriverTest extends AbstractTest
 		$this->assertEquals(3, count($this->_driver->getCurrentWindowHandles()));
 	}
 
-    public function testMaximizeCurrentWindowShouldMaximizesCurrentWindow()
+    public function testMaximizeCurrentWindowShouldMaximizeCurrentWindow()
     {
-
 		$dimensionsBefore = $this->_driver->getCurrentWindowSize();
 		$this->_driver->maximizeCurrentWindow();
 		$dimensionsAfter = $this->_driver->getCurrentWindowSize();
 		$this->assertTrue($dimensionsAfter['height'] > $dimensionsBefore['height']);
 		$this->assertTrue($dimensionsAfter['width'] > $dimensionsBefore['width']);
     }
+
+    public function testMaximizeWindowShouldMaximizeWindow()
+    {
+    	$windowHandle = $this->_driver->getCurrentWindowHandle();
+    	$dimensionsBefore = $this->_driver->getWindowSize($windowHandle);
+		$this->_driver->maximizeWindow($windowHandle);
+		$dimensionsAfter = $this->_driver->getWindowSize($windowHandle);
+		$this->assertTrue($dimensionsAfter['height'] > $dimensionsBefore['height']);
+		$this->assertTrue($dimensionsAfter['width'] > $dimensionsBefore['width']);
+	}
 
 	public function testCloseCurrentWindowShouldClose()
 	{
