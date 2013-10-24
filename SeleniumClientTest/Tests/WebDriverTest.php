@@ -473,42 +473,15 @@ class WebDriverTest extends AbstractTest
 		$this->assertEquals(3, count($this->_driver->getCurrentWindowHandles()));
 	}
 
-    //* ##########################################################
-    //*   ** Test maximize Window and maximize Current Window **
-    //* ##########################################################
-
     public function testMaximizeCurrentWindowShouldMaximizesCurrentWindow()
     {
 
-       $this->_driver->findElement(By::id("btnPopUp1"))->click();
-       $this->_driver->switchTo()->getWindow("popup1");
-
-       $this->_driver->executeScript ("var h=window.innerHeight;  x=document.getElementById('txt1');  x.value= h;" );
-       sleep(1);
-
-       $this->_driver->maximizeCurrentWindow();
-
-       $this->_driver->executeScript ("var h=window.innerHeight;  y=document.getElementById('txtArea1');  y.value= h;");
-       sleep(4);
-
-       $webElementHeightBefore = $this->_driver->findElement(By::id("txt1"));
-       $webElementHeightAfter  = $this->_driver->findElement(By::id("txtArea1"));
-
-       $HeightBefore = intval($webElementHeightBefore->getValue());
-       $HeightAfter  = intval($webElementHeightAfter->getValue());
-
-       var_dump($HeightBefore);
-       var_dump($HeightAfter);
-       $this->assertTrue($HeightAfter > $HeightBefore);
-
-
+		$dimensionsBefore = $this->_driver->getCurrentWindowSize();
+		$this->_driver->maximizeCurrentWindow();
+		$dimensionsAfter = $this->_driver->getCurrentWindowSize();
+		$this->assertTrue($dimensionsAfter['height'] > $dimensionsBefore['height']);
+		$this->assertTrue($dimensionsAfter['width'] > $dimensionsBefore['width']);
     }
-
-
-    //* ##########################################################
-    //* ** End Test maximize Window and maximize Current Window **
-    //* ##########################################################
-
 
 	public function testCloseCurrentWindowShouldClose()
 	{
