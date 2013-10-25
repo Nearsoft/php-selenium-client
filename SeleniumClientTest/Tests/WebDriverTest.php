@@ -357,36 +357,12 @@ class WebDriverTest extends AbstractTest
 		}
 	}
 	
-	public function testGetWindowPositionShouldGetArray()
-	{
-		$window1Handle = $this->_driver->getCurrentWindowHandle();
-		
-		$position = $this->_driver->getWindowPosition($window1Handle);
-		
-		$this->assertTrue(is_numeric($position["x"]));
-		$this->assertTrue(is_numeric($position["y"]));
-	}
-	
 	public function testGetCurrentWindowPositionShouldGetArray()
 	{
 		$position = $this->_driver->getCurrentWindowPosition();
 		
 		$this->assertTrue(is_numeric($position["x"]));
 		$this->assertTrue(is_numeric($position["y"]));
-	}
-	
-	public function testSetWindowPositionShouldGetArray()
-	{
-		$window1Handle = $this->_driver->getCurrentWindowHandle();
-
-		$this->_driver->setWindowSize($window1Handle, 200,200);
-		
-		$this->_driver->setWindowPosition($window1Handle, 100, 50);
-		
-		$position = $this->_driver->getWindowPosition($window1Handle);
-
-		$this->assertEquals(100, $position["x"]);
-		$this->assertEquals(50, $position["y"]);
 	}
 	
 	public function testSetCurrentWindowPositionShouldGetArray()
@@ -401,32 +377,12 @@ class WebDriverTest extends AbstractTest
 		$this->assertEquals(60, $position["y"]);
 	}
 	
-	public function testGetWindowSizeShouldGetArray()
-	{
-		$window1Handle = $this->_driver->getCurrentWindowHandle();
-		$dimensions = $this->_driver->getWindowSize($window1Handle);
-
-		$this->assertTrue(is_numeric($dimensions["width"]));
-		$this->assertTrue(is_numeric($dimensions["height"]));
-	}
-	
 	public function testGetCurrentWindowSizeShouldGetArray()
 	{
 		$dimensions = $this->_driver->getCurrentWindowSize();
 		
 		$this->assertTrue(is_numeric($dimensions["width"]));
 		$this->assertTrue(is_numeric($dimensions["height"]));
-	}
-
-	public function testSetWindowSizeShouldGetArray()
-	{
-		$window1Handle = $this->_driver->getCurrentWindowHandle();
-
-		$this->_driver->setWindowSize($window1Handle, 432, 520);
-		$dimensions = $this->_driver->getWindowSize($window1Handle);
-		
-		$this->assertEquals(432, $dimensions["width"]);
-		$this->assertEquals(520, $dimensions["height"]);
 	}
 	
 	public function testSetCurrentWindowSizeShouldGetArray()
@@ -481,16 +437,6 @@ class WebDriverTest extends AbstractTest
 		$this->assertTrue($dimensionsAfter['height'] > $dimensionsBefore['height']);
 		$this->assertTrue($dimensionsAfter['width'] > $dimensionsBefore['width']);
     }
-
-    public function testMaximizeWindowShouldMaximizeWindow()
-    {
-    	$windowHandle = $this->_driver->getCurrentWindowHandle();
-    	$dimensionsBefore = $this->_driver->getWindowSize($windowHandle);
-		$this->_driver->maximizeWindow($windowHandle);
-		$dimensionsAfter = $this->_driver->getWindowSize($windowHandle);
-		$this->assertTrue($dimensionsAfter['height'] > $dimensionsBefore['height']);
-		$this->assertTrue($dimensionsAfter['width'] > $dimensionsBefore['width']);
-	}
 
 	public function testCloseCurrentWindowShouldClose()
 	{

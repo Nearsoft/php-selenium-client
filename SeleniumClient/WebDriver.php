@@ -573,20 +573,11 @@ class WebDriver
 	}
 
     /**
-     * Maximizes specified Window
-     * @param String $windowHandle
-     */
-    public function maximizeWindow($windowHandle) {
-        $commannd = new Commands\WindowMaximize($this, null, array('window_handle'=> $windowHandle));
-        $commannd->execute();
-
-    }
-
-    /**
      * Maximizes current Window
      */
     public function maximizeCurrentWindow() {
-     $this->maximizeWindow($this->getCurrentWindowHandle());
+     	$commannd = new Commands\WindowMaximize($this, null, array('window_handle' => 'current'));
+        $commannd->execute();
     }
 
 	/**
@@ -627,20 +618,8 @@ class WebDriver
 	 */
 	public function setCurrentWindowSize($width, $height)
 	{
-		$windowHandle = $this->getCurrentWindowHandle();
-		$this->setWindowSize($windowHandle, $width, $height);
-	}	
-	
-	/**
-	 * Sets specified window's size
-	 * @param String $windowHandle
-	 * @param Integer $width
-	 * @param Integer $height
-	 */
-	public function setWindowSize($windowHandle, $width, $height)
-	{
 		$params = array ('width' => $width, 'height' => $height);
-		$command = new Commands\SetWindowSize($this, $params, array('window_handle' => $windowHandle));			
+		$command = new Commands\SetWindowSize($this, $params, array('window_handle' => 'current'));			
 		$command->execute();
 	}
 	
@@ -650,18 +629,7 @@ class WebDriver
 	 */
 	public function getCurrentWindowSize()
 	{
-		$windowHandle = $this->getCurrentWindowHandle();
-		return $this->getWindowSize($windowHandle);
-	}
-	
-	/**
-	 * Gets specified window's size
-	 * @param String $windowHandle
-	 * @return Array
-	 */
-	public function getWindowSize($windowHandle)
-	{
-		$command = new Commands\GetWindowSize($this, null, array('window_handle' => $windowHandle));			
+		$command = new Commands\GetWindowSize($this, null,  array('window_handle' => 'current'));			
 		$results = $command->execute();
 		return $results['value'];
 	}
@@ -673,20 +641,8 @@ class WebDriver
 	 */
 	public function setCurrentWindowPosition($x, $y)
 	{
-		$windowHandle = $this->getCurrentWindowHandle();
-		$this->setWindowPosition($windowHandle,$x, $y);
-	}
-	
-	/**
-	 * Sets specified window's position
-	 * @param String $windowHandle
-	 * @param Integer $x
-	 * @param Integer $y
-	 */
-	public function setWindowPosition($windowHandle, $x, $y)
-	{
 		$params = array ('x' => $x, 'y' => $y);
-		$command = new Commands\SetWindowPosition($this, $params, array('window_handle' => $windowHandle));			
+		$command = new Commands\SetWindowPosition($this, $params,  array('window_handle' => 'current'));			
 		$command->execute();
 	}
 	
@@ -696,20 +652,9 @@ class WebDriver
 	 */
 	public function getCurrentWindowPosition()
 	{
-		$windowHandle = $this->getCurrentWindowHandle();
-		return $this->getWindowPosition($windowHandle);
-	}
-	
-	/**
-	 * Gets specified window's position
-	 * @param String $windowHandle
-	 * @return Array
-	 */
-	public function getWindowPosition($windowHandle)
-	{
-		$command = new Commands\GetWindowPosition($this, null, array('window_handle' => $windowHandle));
+		$command = new Commands\GetWindowPosition($this, null, array('window_handle' => 'current'));
 		$results = $command->execute(); 
-		return $results['value'];		
+		return $results['value'];	
 	}
 
 	/**
