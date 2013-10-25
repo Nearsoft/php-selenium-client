@@ -96,10 +96,11 @@ class WebElement
      * @param $webElementCompare
      * @return boolean
      */
-    public function compareToOther(WebElement $webElementCompare) {
-        $command = new Commands\CompareToOther
-        ($this->_driver, null , array('element_id' => $this->getElementId(), 'element_id_compare' => $webElementCompare->getElementId()));
-        $results = $command->execute(true);
+    public function compareToOther(WebElement $webElementCompare)
+    {
+        $params = array('element_id' => $this->getElementId(), 'element_id_compare' => $webElementCompare->getElementId());
+        $command = new Commands\CompareToOther($this->_driver, null , $params);
+        $results = $command->execute();
         return (trim($results['value']) == "1");
     }
 
