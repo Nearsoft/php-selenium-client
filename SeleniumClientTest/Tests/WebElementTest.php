@@ -138,12 +138,10 @@ class WebElementTest extends AbstractTest
 	
 	public function testDescribeShouldGetElementId()
 	{
-		
-		$webElement = $this->_driver->findElement(By::id("txt1"));
-		
-		$webElementDescription = $webElement->describe();
-		
-		$this->assertEquals( $webElement->getElementId(), trim($webElementDescription["id"]));	
+		$webElement = $this->_driver->findElement(By::id("btnSubmit"));
+    	$expectedKeys = array('id','enabled','selected','text','displayed','tagName','class','hCode');
+    	$descriptionData = $webElement->describe();
+		$this->assertTrue(array_intersect(array_keys($descriptionData),$expectedKeys) === $expectedKeys);    
 	}
 
     public function testFindElementByJsSelectorShouldGetChildElement()
@@ -201,6 +199,13 @@ class WebElementTest extends AbstractTest
 		
 		$this->assertTrue(strstr($this->_driver->getCurrentPageUrl(), "formReceptor") >= 0);
 	}
+
+	public function testClickShouldGetAlert()
+    {
+    	$webElement = $this->_driver->findElement(By::id("btnAlert"));
+		$webElement->click();
+		$this->assertEquals('Here is the alert',$this->_driver->getAlertText());   	
+    }   
 	
 	public function testSubmitShouldSubmitForm()
 	{
