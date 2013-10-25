@@ -134,7 +134,18 @@ class WebElementTest extends AbstractTest
 		$webElement = $this->_driver->findElement(By::id("txt1"));
 		$this->assertEquals("input",strtolower($webElement->getTagName()));
 	}
-	
+
+    public function testCompareToShouldCompareElementWithID()
+    {
+       $webElement1 = $this->_driver->findElement(By::id("txt1"));
+       $webElementOther = $this->_driver->findElement(By::xPath("//*[@id='txt1']"));
+       $webElement2 = $this->_driver->findElement(By::id("txt2"));
+
+       $this->assertFalse($webElement1->compareToOther($webElement2));
+       $this->assertTrue ($webElement1->compareToOther($webElementOther));
+    }
+
+
 	
 	public function testDescribeShouldGetElementId()
 	{

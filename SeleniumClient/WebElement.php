@@ -90,6 +90,19 @@ class WebElement
 	 */
 	public function getTagName() { return $this->_driver->webElementGetTagName($this->_elementId); }
 
+
+    /**
+     * Test if two element refer to the same DOM element.
+     * @param $webElementCompare
+     * @return boolean
+     */
+    public function compareToOther(WebElement $webElementCompare) {
+        $command = new Commands\CompareToOther
+        ($this->_driver, null , array('element_id' => $this->getElementId(), 'element_id_compare' => $webElementCompare->getElementId()));
+        $results = $command->execute(true);
+        return (trim($results['value']) == "1");
+    }
+
     /**
      * Sets element's specified attribute's value
      * @param string $attributeName The element's attribute name

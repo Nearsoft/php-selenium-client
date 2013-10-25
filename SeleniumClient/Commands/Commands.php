@@ -54,6 +54,8 @@ class ElementSubmit       extends Command{ public function setup(){ $this->setPo
 class DescribeElement     extends Command{ public function setup(){ $this->setGet();    $this->_path = "session/{$this->_driver->getSessionId()}/element/{$this->_urlParams['element_id']}"; } }
 class ElementLocation     extends Command{ public function setup(){ $this->setGet();    $this->_path = "session/{$this->_driver->getSessionId()}/element/{$this->_urlParams['element_id']}/location"; } }
 class ElementLocationView extends Command{ public function setup(){ $this->setGet();    $this->_path = "session/{$this->_driver->getSessionId()}/element/{$this->_urlParams['element_id']}/location_in_view"; } }
+class CompareToOther      extends Command{ public function setup(){ $this->setGet();    $this->_path = "session/{$this->_driver->getSessionId()}/element/{$this->_urlParams['element_id']}/equals/{$this->_urlParams['element_id_compare']}"; } }
+
 
 class LoadTimeout         extends Command{ public function setup(){ $this->setPost();   $this->_path = "session/{$this->_driver->getSessionId()}/timeouts"; } }
 class AsyncScriptTimeout  extends Command{ public function setup(){ $this->setPost();   $this->_path = "session/{$this->_driver->getSessionId()}/timeouts/async_script"; } }
