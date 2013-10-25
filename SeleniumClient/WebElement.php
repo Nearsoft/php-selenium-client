@@ -123,6 +123,20 @@ class WebElement
 		return $results['value'];
 	}
 
+
+    /**
+     * Test if two element refer to the same DOM element.
+     * @param $webElementCompare
+     * @return boolean
+     */
+    public function compareToOther(WebElement $webElementCompare)
+    {
+        $params = array('element_id' => $this->getElementId(), 'element_id_compare' => $webElementCompare->getElementId());
+        $command = new Commands\CompareToOther($this->_driver, null , $params);
+        $results = $command->execute();
+        return (trim($results['value']) == "1");
+    }
+
     /**
      * Sets element's specified attribute's value
      * @param string $attributeName The element's attribute name
