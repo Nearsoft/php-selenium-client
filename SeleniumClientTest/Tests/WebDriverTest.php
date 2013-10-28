@@ -244,9 +244,26 @@ class WebDriverTest extends AbstractTest
 
 	public function testSetCookie()
 	{
+		$url = parse_url( $this->_url );
+		$host = strpos( $url['host'], '.' ) !== false ? $url['host'] : null;
+
 		$this->_driver->setCookie("test", "1");
+
+		$expiry = time() + 604800;
+
+		$this->_driver->setCookie("test2", "2", "/", $host, false, $expiry);
+
 		$cookies = $this->_driver->getCurrentCookies();
-		$this->assertEquals('test',$cookies[0]['name']);
+
+		$this->assertEquals('test',$cookies[0]->getName());
+		$this->assertEquals('1',$cookies[0]->getValue());
+
+		$this->assertEquals('test2',$cookies[1]->getName());
+		$this->assertEquals('2',$cookies[1]->getValue());
+		$this->assertEquals('/',$cookies[1]->getPath());
+		$this->assertEquals($host,$cookies[1]->getDomain());
+		$this->assertEquals(false,$cookies[1]->getSecure());
+		$this->assertEquals($expiry,$cookies[1]->getExpiry());
 	}
 
 	public function testGetCurrentCookies()

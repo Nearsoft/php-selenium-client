@@ -681,8 +681,8 @@ class WebDriver
 	public function getCurrentCookies()
 	{
 		$command = new Commands\GetCookies($this);
-		$results = $command->execute(); 		
-		return $results['value'];		
+		$results = $command->execute(); 	
+		return Cookie::buildFromArray($results['value']);		
 	}	
 	
 	/**
