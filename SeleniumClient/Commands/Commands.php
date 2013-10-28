@@ -48,6 +48,7 @@ class ElementAttribute    extends Command{ public function setup(){ $this->setGe
 class ElementIsSelected   extends Command{ public function setup(){ $this->setGet();    $this->_path = "session/{$this->_driver->getSessionId()}/element/{$this->_urlParams['element_id']}/selected"; } }
 class ElementIsDisplayed  extends Command{ public function setup(){ $this->setGet();    $this->_path = "session/{$this->_driver->getSessionId()}/element/{$this->_urlParams['element_id']}/displayed"; } }
 class ElementIsEnabled    extends Command{ public function setup(){ $this->setGet();    $this->_path = "session/{$this->_driver->getSessionId()}/element/{$this->_urlParams['element_id']}/enabled"; } }
+class ElementSize         extends Command{ public function setUp(){ $this->setGet();    $this->_path = "session/{$this->_driver->getSessionId()}/element/{$this->_urlParams['element_id']}/size"; } }
 class ClearElement        extends Command{ public function setup(){ $this->setPost();   $this->_path = "session/{$this->_driver->getSessionId()}/element/{$this->_urlParams['element_id']}/clear"; } }
 class ClickElement        extends Command{ public function setup(){ $this->setPost();   $this->_path = "session/{$this->_driver->getSessionId()}/element/{$this->_urlParams['element_id']}/click"; } }
 class ElementSubmit       extends Command{ public function setup(){ $this->setPost();   $this->_path = "session/{$this->_driver->getSessionId()}/element/{$this->_urlParams['element_id']}/submit"; } }
