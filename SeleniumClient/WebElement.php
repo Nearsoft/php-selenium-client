@@ -198,7 +198,18 @@ class WebElement
 		$results = $command->execute();
 		return (trim($results['value']) == "1");		 
 	}
-	
+
+    /**
+     * Gets an element's size in pixels
+     * @return array
+     */
+    public function getElementSize()
+    {
+        $command = new Commands\ElementSize($this->_driver, null , array('element_id' => $this->_elementId));
+        $results = $command->execute();
+        return $results['value'];
+    }
+
 	/**
 	 * Clear current element's text
 	 */

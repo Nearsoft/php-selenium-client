@@ -77,6 +77,15 @@ class WebElementTest extends AbstractTest
 		$this->assertEquals( true, $selectBoxOption->isSelected());
 	}
 
+    public function testElementSizeShouldGetElementSizeInPixels ()
+    {
+        $webElement = $this->_driver->findElement(By::id("txtArea1"));
+        $dimensions = $webElement->getElementSize();
+
+        $this->assertTrue(is_numeric($dimensions['width']));
+        $this->assertTrue(is_numeric($dimensions['height']));
+    }
+
     public function testClassMethodsAffectElementClassName()
     {
         $element = $this->_driver->findElement(By::id("sel1"));
