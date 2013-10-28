@@ -30,6 +30,12 @@ class WebElementTest extends AbstractTest
 		$this->assertTrue(is_numeric($coordinates["x"]) );
 		$this->assertTrue(is_numeric($coordinates["y"]) );
 	}
+
+    public function testGetCSSPropertyShouldReturnValueOfCssProperty() {
+        $element = $this->_driver->findElement(By::xPath('/html/body/table/tbody/tr/td[2]'));
+        $property = $element->getCSSProperty('vertical-align');
+        $this->assertEquals('top', $property);
+    }
 	
 	public function testIsDisplayedShouldDetermineIfDisplayed()
 	{

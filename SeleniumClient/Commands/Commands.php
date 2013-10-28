@@ -45,6 +45,7 @@ class ElementValue        extends Command{ public function setup(){ $this->setPo
 class ElementText         extends Command{ public function setup(){ $this->setGet();    $this->_path = "session/{$this->_driver->getSessionId()}/element/{$this->_urlParams['element_id']}/text"; } }
 class ElementTagName      extends Command{ public function setup(){ $this->setGet();    $this->_path = "session/{$this->_driver->getSessionId()}/element/{$this->_urlParams['element_id']}/name"; } }
 class ElementAttribute    extends Command{ public function setup(){ $this->setGet();    $this->_path = "session/{$this->_driver->getSessionId()}/element/{$this->_urlParams['element_id']}/attribute/{$this->_urlParams['attribute_name']}"; } }
+class ElementPropertyName extends Command{ public function setup(){ $this->setGet();    $this->_path = "session/{$this->_driver->getSessionId()}/element/{$this->_urlParams['element_id']}/css/{$this->_urlParams['propertyName']}"; } }
 class ElementIsSelected   extends Command{ public function setup(){ $this->setGet();    $this->_path = "session/{$this->_driver->getSessionId()}/element/{$this->_urlParams['element_id']}/selected"; } }
 class ElementIsDisplayed  extends Command{ public function setup(){ $this->setGet();    $this->_path = "session/{$this->_driver->getSessionId()}/element/{$this->_urlParams['element_id']}/displayed"; } }
 class ElementIsEnabled    extends Command{ public function setup(){ $this->setGet();    $this->_path = "session/{$this->_driver->getSessionId()}/element/{$this->_urlParams['element_id']}/enabled"; } }
@@ -56,7 +57,6 @@ class DescribeElement     extends Command{ public function setup(){ $this->setGe
 class ElementLocation     extends Command{ public function setup(){ $this->setGet();    $this->_path = "session/{$this->_driver->getSessionId()}/element/{$this->_urlParams['element_id']}/location"; } }
 class ElementLocationView extends Command{ public function setup(){ $this->setGet();    $this->_path = "session/{$this->_driver->getSessionId()}/element/{$this->_urlParams['element_id']}/location_in_view"; } }
 class CompareToOther      extends Command{ public function setup(){ $this->setGet();    $this->_path = "session/{$this->_driver->getSessionId()}/element/{$this->_urlParams['element_id']}/equals/{$this->_urlParams['element_id_compare']}"; } }
-
 
 class LoadTimeout         extends Command{ public function setup(){ $this->setPost();   $this->_path = "session/{$this->_driver->getSessionId()}/timeouts"; } }
 class AsyncScriptTimeout  extends Command{ public function setup(){ $this->setPost();   $this->_path = "session/{$this->_driver->getSessionId()}/timeouts/async_script"; } }

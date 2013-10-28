@@ -166,6 +166,18 @@ class WebElement
 		return $results['value'];		
 	}
 
+    /**
+     * Gets element's property CSS
+     * @param $propertyName
+     * @return String
+     */
+    public function getCSSProperty ($propertyName) {
+        $params  = array('element_id' => $this->getElementId(), 'propertyName' => $propertyName);
+        $command = new Commands\ElementPropertyName($this->_driver, null , $params);
+        $results  = $command->execute();
+        return $results['value'];
+    }
+
 	/**
 	 * Gets whether element is selected
 	 * @return Boolean
