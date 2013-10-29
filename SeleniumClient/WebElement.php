@@ -126,7 +126,7 @@ class WebElement
 
     /**
      * Test if two element refer to the same DOM element.
-     * @param $webElementCompare
+     * @param WebElement $webElementCompare
      * @return boolean
      */
     public function compareToOther(WebElement $webElementCompare)
@@ -168,7 +168,7 @@ class WebElement
 
     /**
      * Gets element's property CSS
-     * @param $propertyName
+     * @param string $propertyName
      * @return String
      */
     public function getCSSProperty ($propertyName) {
