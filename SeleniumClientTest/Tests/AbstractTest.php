@@ -112,7 +112,7 @@ class AbstractTest extends PHPUnit_Framework_TestCase {
                 self::$_handle = null;
                 return;
             }
-            $this->_driver->clearCurrentCookies();
+            $this->_driver->manage()->deleteAllCookies();
             $this->_driver->setImplicitWait(0);
             $this->_driver->setCurrentWindowPosition($this->_position['x'], $this->_position['y'] );
             $this->_driver->setCurrentWindowSize($this->_size['width'], $this->_size['height'] );

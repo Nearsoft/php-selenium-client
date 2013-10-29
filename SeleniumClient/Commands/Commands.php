@@ -75,7 +75,7 @@ class GetWindowSize       extends Command{ public function setup(){ $this->setGe
 class SetWindowPosition   extends Command{ public function setup(){ $this->setPost();   $this->_path = "session/{$this->_driver->getSessionId()}/window/{$this->_urlParams['window_handle']}/position"; } }
 class GetWindowPosition   extends Command{ public function setup(){ $this->setGet();    $this->_path = "session/{$this->_driver->getSessionId()}/window/{$this->_urlParams['window_handle']}/position"; } }
 
-class SetCookie           extends Command{ public function setup(){ $this->setPost();   $this->_path = "session/{$this->_driver->getSessionId()}/cookie"; } }
+class AddCookie           extends Command{ public function setup(){ $this->setPost();   $this->_path = "session/{$this->_driver->getSessionId()}/cookie"; } }
 class GetCookies          extends Command{ public function setup(){ $this->setGet();    $this->_path = "session/{$this->_driver->getSessionId()}/cookie"; } }
 class ClearCookie         extends Command{ public function setup(){ $this->setDelete(); $this->_path = "session/{$this->_driver->getSessionId()}/cookie/{$this->_urlParams['cookie_name']}"; } }
 class ClearCookies        extends Command{ public function setup(){ $this->setDelete(); $this->_path = "session/{$this->_driver->getSessionId()}/cookie"; } }

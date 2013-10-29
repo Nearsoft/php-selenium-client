@@ -62,6 +62,7 @@ class WebDriver
 	private $_environment = HttpFactory::PRODUCTIONMODE;
 	private $_capabilities = null;
 	private $_httpClient = null;
+	private $_options = null;
 	
 	/**
 	 * @param DesiredCapabilities $desiredCapabilities
@@ -155,6 +156,19 @@ class WebDriver
 	 */
 	public function setScreenShotsDirectory($value) { $this->_screenshotsDirectory = $value; }
 	
+	/**
+	 * Gets Options object
+	 * @return SeleniumClient\Options
+	 */
+	public function manage()
+	{
+		if(!$this->_options)
+		{
+			$this->_options = new Options($this);
+		}
+		return $this->_options;
+	}
+
 	/**
 	 * Creates new target locator to be handled
 	 * @return \SeleniumClient\TargetLocator
@@ -655,53 +669,6 @@ class WebDriver
 		$command = new Commands\GetWindowPosition($this, null, array('window_handle' => 'current'));
 		$results = $command->execute(); 
 		return $results['value'];	
-	}
-
-	/**
-	 * Sets cookie
-	 * @param String $name
-	 * @param String $value
-	 * @param String $path
-	 * @param String $domain
-	 * @param Boolean $secure
-	 * @param Integer $expiry
-	 */
-	public function setCookie($name, $value, $path = null, $domain = null, $secure = null, $expiry = null)
-	{
-		$cookie = new Cookie($name, $value, $path, $domain, $secure, $expiry);
-		$params = array ('cookie' => $cookie->getArray());
-		$command = new Commands\SetCookie($this, $params);
-		$results = $command->execute(); 		
-	}
-	
-	/**
-	 * Gets current cookies
-	 * @return Array
-	 */
-	public function getCurrentCookies()
-	{
-		$command = new Commands\GetCookies($this);
-		$results = $command->execute(); 	
-		return Cookie::buildFromArray($results['value']);		
-	}	
-	
-	/**
-	 * Remove cookies
-	 * @param String $cookieName
-	 */
-	public function clearCookie($cookieName)
-	{
-		$command = new Commands\ClearCookie($this, null, array('cookie_name' => $cookieName));
-		$command->execute(); 			
-	}
-	
-	/**
-	 * Removes all current cookies
-	 */
-	public function clearCurrentCookies()
-	{
-		$command = new Commands\ClearCookies($this);
-		$command->execute(); 	
 	}
 
 	/**
