@@ -17,3 +17,4 @@ Miloslav Nenadál					https://github.com/nenadalm
 ron-inbar							https://github.com/ron-inbar
 Andrew Mackrodt						https://github.com/andrewmackrodt
 Alexey Alexeev                      https://github.com/voodoo144
+Luis Barreras						https://github.com/LuisRBarreras
