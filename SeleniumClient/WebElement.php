@@ -76,19 +76,66 @@ class WebElement
 	 * Send text to element
 	 * @param String $text
 	 */
-	public function sendKeys($text) { $this->_driver->webElementSendKeys($this->_elementId,$text); }
+	public function sendKeys($text) 
+	{ 
+		$params = array('value' => $this->getCharArray($text));
+		$command = new Commands\ElementValue($this->_driver, $params , array('element_id' => $this->_elementId));	
+		$command->execute();	
+	}
+
+	/**
+	 * Returns array of chars from String
+	 * @param String $text
+	 * @return array
+	 */
+	private function getCharArray($text)
+	{
+		$encoding = \mb_detect_encoding($text);
+		$len = \mb_strlen($text, $encoding);
+		$ret = array();
+		while($len) {
+			$ret[] = \mb_substr($text, 0, 1, $encoding);
+			$text = \mb_substr($text, 1, $len, $encoding);
+			$len = \mb_strlen($text, $encoding);
+		}
+		return $ret;
+	}
 	
 	/**
 	 * Gets element's visible text
 	 * @return String
 	 */
-	public function getText() { return $this->_driver->webElementGetText($this->_elementId); }
-	
+	public function getText()
+	{
+		$command = new Commands\ElementText($this->_driver, null , array('element_id' => $this->_elementId));		
+		$results = $command->execute();
+		return $results['value'];	
+	}
+
 	/**
 	 * Gets element's tag name
 	 * @return String
 	 */
-	public function getTagName() { return $this->_driver->webElementGetTagName($this->_elementId); }
+	public function getTagName() 
+	{
+		$command = new Commands\ElementTagName($this->_driver, null , array('element_id' => $this->_elementId));		
+		$results = $command->execute();		
+		return $results['value'];
+	}
+
+
+    /**
+     * Test if two element refer to the same DOM element.
+     * @param WebElement $webElementCompare
+     * @return boolean
+     */
+    public function compareToOther(WebElement $webElementCompare)
+    {
+        $params = array('element_id' => $this->getElementId(), 'element_id_compare' => $webElementCompare->getElementId());
+        $command = new Commands\CompareToOther($this->_driver, null , $params);
+        $results = $command->execute();
+        return (trim($results['value']) == "1");
+    }
 
     /**
      * Sets element's specified attribute's value
@@ -103,7 +150,7 @@ class WebElement
                 : sprintf('var k="%s"', addslashes($attributeName));
 
         $script = sprintf("{$key};arguments[0][k]='%s';return true", addslashes($value));
-        $this->_driver->executeScript( $script, array( array( 'ELEMENT' => $this->getElementId() ) ) );
+        $this->_driver->executeScript( $script, array( array( 'ELEMENT' => $this->_elementId ) ) );
         return $this;
     }
 
@@ -114,47 +161,104 @@ class WebElement
 	 */
 	public function getAttribute($attributeName)
 	{
-		return $this->_driver->webElementGetAttribute($this->_elementId, $attributeName);
+		$command = new Commands\ElementAttribute($this->_driver, null , array('element_id' => $this->_elementId, 'attribute_name' => $attributeName));		
+		$results = $command->execute();
+		return $results['value'];		
 	}
+
+    /**
+     * Gets element's property CSS
+     * @param string $propertyName
+     * @return String
+     */
+    public function getCSSProperty ($propertyName) {
+        $params  = array('element_id' => $this->getElementId(), 'propertyName' => $propertyName);
+        $command = new Commands\ElementPropertyName($this->_driver, null , $params);
+        $results  = $command->execute();
+        return $results['value'];
+    }
 
 	/**
 	 * Gets whether element is selected
 	 * @return Boolean
 	 */
-	public function isSelected() { return $this->_driver->webElementIsSelected($this->_elementId); }
+	public function isSelected() 
+	{
+		$command = new Commands\ElementIsSelected($this->_driver, null , array('element_id' => $this->_elementId));
+		$results = $command->execute();
+		return (trim($results['value']) == "1");		 
+	}
 	
 	/**
 	 * Gets whether element is displayed
 	 * @return Boolean
 	 */
-	public function isDisplayed() { return $this->_driver->webElementIsDisplayed($this->_elementId); }
-	
+	public function isDisplayed() 
+	{
+		$command = new Commands\ElementIsDisplayed($this->_driver, null , array('element_id' => $this->_elementId));	
+		$results = $command->execute();
+		return (trim($results['value']) == "1");		
+	}
+
 	/**
 	 * Gets whether element is enabled
 	 * @return Boolean
 	 */
-	public function isEnabled() { return $this->_driver->webElementIsEnabled($this->_elementId); }	
-	
+	public function isEnabled() 
+	{
+		$command = new Commands\ElementIsEnabled($this->_driver, null , array('element_id' => $this->_elementId));	
+		$results = $command->execute();
+		return (trim($results['value']) == "1");		 
+	}
+
+    /**
+     * Gets an element's size in pixels
+     * @return array
+     */
+    public function getElementSize()
+    {
+        $command = new Commands\ElementSize($this->_driver, null , array('element_id' => $this->_elementId));
+        $results = $command->execute();
+        return $results['value'];
+    }
+
 	/**
 	 * Clear current element's text
 	 */
-	public function clear() { return $this->_driver->webElementClear($this->_elementId); }
+	public function clear() 
+	{
+		$command = new Commands\ClearElement($this->_driver, null , array('element_id' => $this->_elementId));		
+		$command->execute();
+	}
 	
 	/**
 	 * Click on element
 	 */
-	public function click() { $this->_driver->webElementClick($this->_elementId); }
+	public function click() 
+	{
+		$command = new Commands\ClickElement($this->_driver, null , array('element_id' => $this->_elementId));		
+		$command->execute(); 
+	}
 	
 	/**
 	 * Submit form from element
 	 */
-	public function submit() { $this->_driver->webElementSubmit($this->_elementId); }
+	public function submit() 
+	{
+		$command = new Commands\ElementSubmit($this->_driver, null , array('element_id' => $this->_elementId));		
+		$command->execute(); 
+	}
 	
 	/**
 	 * Gets element's description
 	 * @return Array
 	 */
-	public function describe() { return $this->_driver->webElementDescribe($this->_elementId); }
+	public function describe() 
+	{
+		$command = new Commands\DescribeElement($this->_driver, null , array('element_id' => $this->_elementId));		
+		$results = $command->execute();
+		return $results['value']; 
+	}
 
     /**
      * @param string $class
@@ -193,13 +297,23 @@ class WebElement
 	 * Get element's coordinates
 	 * @return Array
 	 */
-	public function getCoordinates() {return $this->_driver->webElementGetCoordinates($this->_elementId);}
+	public function getCoordinates() 
+	{
+		$command = new Commands\ElementLocation($this->_driver, null , array('element_id' => $this->_elementId));		
+		$results = $command->execute();		
+		return $results['value'];		
+	}
 	
 	/**
 	 * Get element's coordinates after scrolling
 	 * @return Array
 	 */
-	public function getLocationOnScreenOnceScrolledIntoView() {return $this->_driver->webElementGetLocationOnScreenOnceScrolledIntoView($this->_elementId);}
+	public function getLocationOnScreenOnceScrolledIntoView()
+	{
+		$command = new Commands\ElementLocationView($this->_driver, null , array('element_id' => $this->_elementId));		
+		$results = $command->execute();
+		return $results['value'];		
+	}
 
 	/**
 	 * Find element within current element
@@ -207,7 +321,10 @@ class WebElement
 	 * @param Boolean $polling
 	 * @return \SeleniumClient\WebElement
 	 */
-	public function findElement(By $locator, $polling = false) { return $this->_driver->findElement($locator, $polling, $this->_elementId); }
+	public function findElement(By $locator, $polling = false) 
+	{
+		return $this->_driver->findElement($locator, $polling, $this->_elementId); 
+	}
 	
 	/**
 	 * Find elements within current element
@@ -215,7 +332,10 @@ class WebElement
 	 * @param Boolean $polling
 	 * @return \SeleniumClient\WebElement[]
 	 */
-	public function findElements(By $locator, $polling = false) { return $this->_driver->findElements($locator, $polling, $this->_elementId); }
+	public function findElements(By $locator, $polling = false) 
+	{
+		return $this->_driver->findElements($locator, $polling, $this->_elementId); 
+	}
 	
 	/**
 	 * Wait for expected element to be present within current element

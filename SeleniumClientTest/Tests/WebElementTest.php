@@ -30,6 +30,12 @@ class WebElementTest extends AbstractTest
 		$this->assertTrue(is_numeric($coordinates["x"]) );
 		$this->assertTrue(is_numeric($coordinates["y"]) );
 	}
+
+    public function testGetCSSPropertyShouldReturnValueOfCssProperty() {
+        $element = $this->_driver->findElement(By::xPath('/html/body/table/tbody/tr/td[2]'));
+        $property = $element->getCSSProperty('vertical-align');
+        $this->assertEquals('top', $property);
+    }
 	
 	public function testIsDisplayedShouldDetermineIfDisplayed()
 	{
@@ -76,6 +82,15 @@ class WebElementTest extends AbstractTest
 		
 		$this->assertEquals( true, $selectBoxOption->isSelected());
 	}
+
+    public function testElementSizeShouldGetElementSizeInPixels ()
+    {
+        $webElement = $this->_driver->findElement(By::id("txtArea1"));
+        $dimensions = $webElement->getElementSize();
+
+        $this->assertTrue(is_numeric($dimensions['width']));
+        $this->assertTrue(is_numeric($dimensions['height']));
+    }
 
     public function testClassMethodsAffectElementClassName()
     {
@@ -134,16 +149,25 @@ class WebElementTest extends AbstractTest
 		$webElement = $this->_driver->findElement(By::id("txt1"));
 		$this->assertEquals("input",strtolower($webElement->getTagName()));
 	}
-	
+
+    public function testCompareToShouldCompareElementWithID()
+    {
+       $webElement1 = $this->_driver->findElement(By::id("txt1"));
+       $webElementOther = $this->_driver->findElement(By::xPath("//*[@id='txt1']"));
+       $webElement2 = $this->_driver->findElement(By::id("txt2"));
+
+       $this->assertFalse($webElement1->compareToOther($webElement2));
+       $this->assertTrue ($webElement1->compareToOther($webElementOther));
+    }
+
+
 	
 	public function testDescribeShouldGetElementId()
 	{
-		
-		$webElement = $this->_driver->findElement(By::id("txt1"));
-		
-		$webElementDescription = $webElement->describe();
-		
-		$this->assertEquals( $webElement->getElementId(), trim($webElementDescription["id"]));	
+		$webElement = $this->_driver->findElement(By::id("btnSubmit"));
+    	$expectedKeys = array('id','enabled','selected','text','displayed','tagName','class','hCode');
+    	$descriptionData = $webElement->describe();
+		$this->assertTrue(array_intersect(array_keys($descriptionData),$expectedKeys) === $expectedKeys);    
 	}
 
     public function testFindElementByJsSelectorShouldGetChildElement()
@@ -201,6 +225,13 @@ class WebElementTest extends AbstractTest
 		
 		$this->assertTrue(strstr($this->_driver->getCurrentPageUrl(), "formReceptor") >= 0);
 	}
+
+	public function testClickShouldGetAlert()
+    {
+    	$webElement = $this->_driver->findElement(By::id("btnAlert"));
+		$webElement->click();
+		$this->assertEquals('Here is the alert',$this->_driver->getAlertText());   	
+    }   
 	
 	public function testSubmitShouldSubmitForm()
 	{

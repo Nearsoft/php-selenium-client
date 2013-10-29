@@ -244,9 +244,26 @@ class WebDriverTest extends AbstractTest
 
 	public function testSetCookie()
 	{
+		$url = parse_url( $this->_url );
+		$host = strpos( $url['host'], '.' ) !== false ? $url['host'] : null;
+
 		$this->_driver->setCookie("test", "1");
+
+		$expiry = time() + 604800;
+
+		$this->_driver->setCookie("test2", "2", "/", $host, false, $expiry);
+
 		$cookies = $this->_driver->getCurrentCookies();
-		$this->assertEquals('test',$cookies[0]['name']);
+
+		$this->assertEquals('test',$cookies[0]->getName());
+		$this->assertEquals('1',$cookies[0]->getValue());
+
+		$this->assertEquals('test2',$cookies[1]->getName());
+		$this->assertEquals('2',$cookies[1]->getValue());
+		$this->assertEquals('/',$cookies[1]->getPath());
+		$this->assertEquals($host,$cookies[1]->getDomain());
+		$this->assertEquals(false,$cookies[1]->getSecure());
+		$this->assertEquals($expiry,$cookies[1]->getExpiry());
 	}
 
 	public function testGetCurrentCookies()
@@ -357,36 +374,12 @@ class WebDriverTest extends AbstractTest
 		}
 	}
 	
-	public function testGetWindowPositionShouldGetArray()
-	{
-		$window1Handle = $this->_driver->getCurrentWindowHandle();
-		
-		$position = $this->_driver->getWindowPosition($window1Handle);
-		
-		$this->assertTrue(is_numeric($position["x"]));
-		$this->assertTrue(is_numeric($position["y"]));
-	}
-	
 	public function testGetCurrentWindowPositionShouldGetArray()
 	{
 		$position = $this->_driver->getCurrentWindowPosition();
 		
 		$this->assertTrue(is_numeric($position["x"]));
 		$this->assertTrue(is_numeric($position["y"]));
-	}
-	
-	public function testSetWindowPositionShouldGetArray()
-	{
-		$window1Handle = $this->_driver->getCurrentWindowHandle();
-
-		$this->_driver->setWindowSize($window1Handle, 200,200);
-		
-		$this->_driver->setWindowPosition($window1Handle, 100, 50);
-		
-		$position = $this->_driver->getWindowPosition($window1Handle);
-
-		$this->assertEquals(100, $position["x"]);
-		$this->assertEquals(50, $position["y"]);
 	}
 	
 	public function testSetCurrentWindowPositionShouldGetArray()
@@ -401,32 +394,12 @@ class WebDriverTest extends AbstractTest
 		$this->assertEquals(60, $position["y"]);
 	}
 	
-	public function testGetWindowSizeShouldGetArray()
-	{
-		$window1Handle = $this->_driver->getCurrentWindowHandle();
-		$dimensions = $this->_driver->getWindowSize($window1Handle);
-
-		$this->assertTrue(is_numeric($dimensions["width"]));
-		$this->assertTrue(is_numeric($dimensions["height"]));
-	}
-	
 	public function testGetCurrentWindowSizeShouldGetArray()
 	{
 		$dimensions = $this->_driver->getCurrentWindowSize();
 		
 		$this->assertTrue(is_numeric($dimensions["width"]));
 		$this->assertTrue(is_numeric($dimensions["height"]));
-	}
-
-	public function testSetWindowSizeShouldGetArray()
-	{
-		$window1Handle = $this->_driver->getCurrentWindowHandle();
-
-		$this->_driver->setWindowSize($window1Handle, 432, 520);
-		$dimensions = $this->_driver->getWindowSize($window1Handle);
-		
-		$this->assertEquals(432, $dimensions["width"]);
-		$this->assertEquals(520, $dimensions["height"]);
 	}
 	
 	public function testSetCurrentWindowSizeShouldGetArray()
@@ -472,7 +445,16 @@ class WebDriverTest extends AbstractTest
 
 		$this->assertEquals(3, count($this->_driver->getCurrentWindowHandles()));
 	}
-	
+
+    public function testMaximizeCurrentWindowShouldMaximizeCurrentWindow()
+    {
+		$dimensionsBefore = $this->_driver->getCurrentWindowSize();
+		$this->_driver->maximizeCurrentWindow();
+		$dimensionsAfter = $this->_driver->getCurrentWindowSize();
+		$this->assertTrue($dimensionsAfter['height'] > $dimensionsBefore['height']);
+		$this->assertTrue($dimensionsAfter['width'] > $dimensionsBefore['width']);
+    }
+
 	public function testCloseCurrentWindowShouldClose()
 	{
 		$this->_driver->findElement(By::id("btnPopUp1"))->click();
@@ -673,109 +655,6 @@ class WebDriverTest extends AbstractTest
         $this->assertGreaterThan(0, count($inputs));
         $this->setExpectedException('SeleniumClient\Http\SeleniumInvalidSelectorException');
         $this->_driver->findElements(By::jsSelector('input'));
-    }
-
-    public function testWebElementSendKeysShouldSetKeys()
-    {
-    	$webElement = $this->_driver->findElement(By::id("txt1"));	
-    	$this->_driver->webElementSendKeys($webElement->getElementId(),"some text");
-    	$this->assertEquals('some text',$webElement->getValue());
-    }
-
-    public function testWebElementGetTextShouldGetText()
-    {
-    	$webElement = $this->_driver->findElement(By::xPath("/html/body/h2"));
-    	$this->assertEquals('Nearsoft SeleniumClient SandBox', $this->_driver->webElementGetText($webElement->getElementId()));
-    }  
-
-    public function testWebElementGetTagNameShouldGetTagName()
-    {
-    	$webElement = $this->_driver->findElement(By::xPath("/html/body/h2"));
-    	$this->assertEquals('h2', $this->_driver->webElementGetTagName($webElement->getElementId()));
-    }    
-
-    public function testWebElementGetAttributeShouldGetAttribute()
-    {
-		$webElement = $this->_driver->findElement(By::id("txt2"));
-    	$this->assertEquals('text', $this->_driver->webElementGetAttribute($webElement->getElementId(),'type'));
-    }
-
-    public function testWebElementIsSelected()
-    {
-    	$parentElement = $this->_driver->findElement(By::id("sel1"));
-
-    	$option1 = $this->_driver->findElement(By::xPath(".//option[@value = 'mushrooms']"));
-		$this->assertFalse($this->_driver->webElementIsSelected($option1->getElementId()));
-
-		$option2 = $this->_driver->findElement(By::xPath(".//option[@value = 'greenpeppers']"));
-		$this->assertTrue($this->_driver->webElementIsSelected($option2->getElementId()));
-    }
-
-    public function testWebElementIsDisplayed()
-    {
-    	$webElement = $this->_driver->findElement(By::id("txt1"));
-		$this->assertTrue($this->_driver->webElementIsDisplayed($webElement->getElementId()));   	
-
-		$this->_driver->executeScript("document.getElementById('txt1').style.display='none';");
-		$this->assertFalse($this->_driver->webElementIsDisplayed($webElement->getElementId()));   	
-		$this->_driver->executeScript("document.getElementById('txt1').style.display='block';");
-    }
-
-    public function testWebElementIsEnabled()
-    {
-    	$webElement = $this->_driver->findElement(By::id("txt1"));
-		$this->assertTrue($this->_driver->webElementIsEnabled($webElement->getElementId()));   	
-
-		$this->_driver->executeScript("document.getElementById('txt1').disabled='true';");
-		$this->assertFalse($this->_driver->webElementIsEnabled($webElement->getElementId()));   	
-		$this->_driver->executeScript("document.getElementById('txt1').disabled='false';");
-    }
-
-    public function testWebElementClear()
-    {
-    	$webElement = $this->_driver->findElement(By::id("txt1"));
-		$webElement->sendKeys('999');
-		$this->_driver->webElementClear($webElement->getElementId());
-		$this->assertEquals('',$webElement->getValue());   	
-    }
-
-
-    public function testWebElementClick()
-    {
-    	$webElement = $this->_driver->findElement(By::id("btnAlert"));
-		$this->_driver->webElementClick($webElement->getElementId());
-		$this->assertEquals('Here is the alert',$this->_driver->getAlertText());   	
-    }        
-	
-	public function testWebElementSubmit()
-    {
-    	$webElement = $this->_driver->findElement(By::id("btnSubmit"));
-    	$this->_driver->webElementSubmit($webElement->getElementId());
-		$this->assertEquals($this->_url."formReceptor.php",$this->_driver->getCurrentPageUrl());   	
-    }   
-
-    public function testWebElementDescribe()
-    {
-    	$webElement = $this->_driver->findElement(By::id("btnSubmit"));
-    	$expectedKeys = array('id','enabled','selected','text','displayed','tagName','class','hCode');
-    	$descriptionData = $this->_driver->webElementDescribe($webElement->getElementId());
-		$this->assertTrue(array_intersect(array_keys($descriptionData),$expectedKeys) === $expectedKeys);    	
-    }
-
-    public function testWebElementGetCoordinates()
-    {
-    	$webElement = $this->_driver->findElement(By::id("btnSubmit"));
-    	$result = $this->_driver->webElementGetCoordinates($webElement->getElementId());
-    	$this->assertInternalType('int',$result['x']);    
-    	$this->assertInternalType('int',$result['y']);    
-    }
-
-    public function testWebElementGetLocationOnScreenOnceScrolledIntoView()
-    {
-    	$webElement = $this->_driver->findElement(By::id("btnSubmit"));
-    	$result = $this->_driver->webElementGetLocationOnScreenOnceScrolledIntoView($webElement->getElementId());
-    	$this->assertInternalType('int',$result['x']);    
-    	$this->assertInternalType('int',$result['y']);  
     }
 
 	public function testBack()

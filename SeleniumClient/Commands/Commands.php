@@ -45,15 +45,18 @@ class ElementValue        extends Command{ public function setup(){ $this->setPo
 class ElementText         extends Command{ public function setup(){ $this->setGet();    $this->_path = "session/{$this->_driver->getSessionId()}/element/{$this->_urlParams['element_id']}/text"; } }
 class ElementTagName      extends Command{ public function setup(){ $this->setGet();    $this->_path = "session/{$this->_driver->getSessionId()}/element/{$this->_urlParams['element_id']}/name"; } }
 class ElementAttribute    extends Command{ public function setup(){ $this->setGet();    $this->_path = "session/{$this->_driver->getSessionId()}/element/{$this->_urlParams['element_id']}/attribute/{$this->_urlParams['attribute_name']}"; } }
+class ElementPropertyName extends Command{ public function setup(){ $this->setGet();    $this->_path = "session/{$this->_driver->getSessionId()}/element/{$this->_urlParams['element_id']}/css/{$this->_urlParams['propertyName']}"; } }
 class ElementIsSelected   extends Command{ public function setup(){ $this->setGet();    $this->_path = "session/{$this->_driver->getSessionId()}/element/{$this->_urlParams['element_id']}/selected"; } }
 class ElementIsDisplayed  extends Command{ public function setup(){ $this->setGet();    $this->_path = "session/{$this->_driver->getSessionId()}/element/{$this->_urlParams['element_id']}/displayed"; } }
 class ElementIsEnabled    extends Command{ public function setup(){ $this->setGet();    $this->_path = "session/{$this->_driver->getSessionId()}/element/{$this->_urlParams['element_id']}/enabled"; } }
+class ElementSize         extends Command{ public function setUp(){ $this->setGet();    $this->_path = "session/{$this->_driver->getSessionId()}/element/{$this->_urlParams['element_id']}/size"; } }
 class ClearElement        extends Command{ public function setup(){ $this->setPost();   $this->_path = "session/{$this->_driver->getSessionId()}/element/{$this->_urlParams['element_id']}/clear"; } }
 class ClickElement        extends Command{ public function setup(){ $this->setPost();   $this->_path = "session/{$this->_driver->getSessionId()}/element/{$this->_urlParams['element_id']}/click"; } }
 class ElementSubmit       extends Command{ public function setup(){ $this->setPost();   $this->_path = "session/{$this->_driver->getSessionId()}/element/{$this->_urlParams['element_id']}/submit"; } }
 class DescribeElement     extends Command{ public function setup(){ $this->setGet();    $this->_path = "session/{$this->_driver->getSessionId()}/element/{$this->_urlParams['element_id']}"; } }
 class ElementLocation     extends Command{ public function setup(){ $this->setGet();    $this->_path = "session/{$this->_driver->getSessionId()}/element/{$this->_urlParams['element_id']}/location"; } }
 class ElementLocationView extends Command{ public function setup(){ $this->setGet();    $this->_path = "session/{$this->_driver->getSessionId()}/element/{$this->_urlParams['element_id']}/location_in_view"; } }
+class CompareToOther      extends Command{ public function setup(){ $this->setGet();    $this->_path = "session/{$this->_driver->getSessionId()}/element/{$this->_urlParams['element_id']}/equals/{$this->_urlParams['element_id_compare']}"; } }
 
 class LoadTimeout         extends Command{ public function setup(){ $this->setPost();   $this->_path = "session/{$this->_driver->getSessionId()}/timeouts"; } }
 class AsyncScriptTimeout  extends Command{ public function setup(){ $this->setPost();   $this->_path = "session/{$this->_driver->getSessionId()}/timeouts/async_script"; } }
@@ -63,6 +66,7 @@ class ExecuteAsyncScript  extends Command{ public function setup(){ $this->setPo
 
 class Frame               extends Command{ public function setup(){ $this->setPost();   $this->_path = "session/{$this->_driver->getSessionId()}/frame"; } }
 class Window              extends Command{ public function setup(){ $this->setPost();   $this->_path = "session/{$this->_driver->getSessionId()}/window"; } }
+class WindowMaximize      extends Command{ public function setUp(){ $this->setPost();   $this->_path = "session/{$this->_driver->getSessionId()}/window/{$this->_urlParams['window_handle']}/maximize"; } }
 class CloseWindow         extends Command{ public function setup(){ $this->setDelete(); $this->_path = "session/{$this->_driver->getSessionId()}/window"; } }
 class WindowHandle        extends Command{ public function setup(){ $this->setGet();    $this->_path = "session/{$this->_driver->getSessionId()}/window_handle"; } }
 class WindowHandles       extends Command{ public function setup(){ $this->setGet();    $this->_path = "session/{$this->_driver->getSessionId()}/window_handles"; } }

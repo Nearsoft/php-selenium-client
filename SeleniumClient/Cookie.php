@@ -47,17 +47,34 @@ class Cookie {
 		if($expiry != null){ $this->_expiry = $expiry; }
 	}
 	
-	public function getArray() {
-		
-		$array = array ();
-		
-		$array["name"]   = $this->_name;		
-		$array["value"]  = $this->_value;			
-		$array["path"]   = $this->_path;		
-		$array["domain"] = $this->_domain;		
-		$array["secure"] = $this->_secure;		
-		$array["expiry"] = $this->_expiry;
-		
+	public function getName()   { return $this->_name; }
+	public function getValue()  { return $this->_value; }
+	public function getPath()   { return $this->_path; }
+	public function getDomain() { return $this->_domain; }
+	public function getSecure() { return $this->_secure; }
+	public function getExpiry() { return $this->_expiry; }
+
+	public static function buildFromArray($items)
+	{
+		$cookies = array();
+
+		foreach($items as $item)
+		{
+			$cookies[] = new Cookie($item['name'],$item['value'],$item['path'],$item['domain'],$item['secure'],$item['expiry']);
+		}
+
+		return $cookies;
+	}
+
+	public function getArray() {		
+		$array = array(
+				"name"   => $this->_name,		
+				"value"  => $this->_value,			
+				"path"   => $this->_path,		
+				"domain" => $this->_domain,		
+				"secure" => $this->_secure,		
+				"expiry" => $this->_expiry
+			);				
 		return $array;
 	}
 }

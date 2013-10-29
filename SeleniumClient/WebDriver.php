@@ -477,201 +477,6 @@ class WebDriver
 	}
 
 	/**
-	 * Send text to element
-	 * @param Integer $elementId
-	 * @param String $text
-	 */
-	public function webElementSendKeys($elementId, $text)
-	{
-		$params = array('value' => $this->getCharArray($text));
-		$command = new Commands\ElementValue($this, $params , array('element_id' => $elementId));	
-		$command->execute();	
-	}
-	
-	/**
-	 * Returns array of chars from String
-	 * @param String $text
-	 * @return array
-	 */
-	private function getCharArray($text)
-	{
-		$encoding = \mb_detect_encoding($text);
-		$len = \mb_strlen($text, $encoding);
-		$ret = array();
-		while($len) {
-			$ret[] = \mb_substr($text, 0, 1, $encoding);
-			$text = \mb_substr($text, 1, $len, $encoding);
-			$len = \mb_strlen($text, $encoding);
-		}
-		return $ret;
-	}
-	
-	/**
-	 * Gets element's visible text
-	 * @param Integer $elementId
-	 * @return String
-	 */
-	public function webElementGetText($elementId)
-	{
-		$command = new Commands\ElementText($this, null , array('element_id' => $elementId));		
-		$results = $command->execute();
-		return $results['value'];	
-	}
-	
-	/**
-	 * Gets element's tag name
-	 * @param Integer $elementId
-	 * @return String
-	 */
-	public function webElementGetTagName($elementId)
-	{
-		$command = new Commands\ElementTagName($this, null , array('element_id' => $elementId));		
-		$results = $command->execute();		
-		return $results['value'];
-	}
-
-	/**
-	 * Gets element's specified attribute
-	 * @param Integer $elementId
-	 * @param String $attributeName
-	 * @return String
-	 */
-	public function webElementGetAttribute($elementId, $attributeName)
-	{
-		$command = new Commands\ElementAttribute($this, null , array('element_id' => $elementId, 'attribute_name' => $attributeName));		
-		$results = $command->execute();
-		return $results['value'];
-	}
-	
-	/**
-	 * Gets whether an element is selected
-	 * @param Integer $elementId
-	 * @return boolean
-	 */
-	public function webElementIsSelected($elementId)
-	{
-		$command = new Commands\ElementIsSelected($this, null , array('element_id' => $elementId));		
-		$results = $command->execute();
-		return (trim($results['value']) == "1");		
-	}	
-	
-	/**
-	 * Gets whether an element is currently displayed
-	 * @param Integer $elementId
-	 * @return boolean
-	 */
-	public function webElementIsDisplayed($elementId)
-	{
-		$command = new Commands\ElementIsDisplayed($this, null , array('element_id' => $elementId));		
-		$results = $command->execute();
-		return (trim($results['value']) == "1");		
-	}
-	
-	/**
-	 * Gets whether an element is currently enabled
-	 * @param Integer $elementId
-	 * @return boolean
-	 */
-	public function webElementIsEnabled($elementId)
-	{
-		$command = new Commands\ElementIsEnabled($this, null , array('element_id' => $elementId));		
-		$results = $command->execute();
-		return (trim($results['value']) == "1");		
-	}	
-	
-	/**
-	 * Clear element's value
-	 * @param Integer $elementId
-	 */
-	public function webElementClear($elementId)
-	{
-		$command = new Commands\ClearElement($this, null , array('element_id' => $elementId));		
-		$command->execute();
-	}
-		
-	/**
-	 * Clicks on an element
-	 * @param Integer $elementId
-	 */
-	public function webElementClick($elementId)
-	{
-		$command = new Commands\ClickElement($this, null , array('element_id' => $elementId));		
-		$command->execute();
-	}
-	
-	/**
-	 * Execute form submit from element
-	 * @param Integer $elementId
-	 */
-	public function webElementSubmit($elementId)
-	{
-		$command = new Commands\ElementSubmit($this, null , array('element_id' => $elementId));		
-		$command->execute();
-	}
-	
-	/**
-	 * Gets element's description
-	 * @param Integer $elementId
-	 * @return Array
-	 */
-	public function webElementDescribe($elementId)
-	{
-		$command = new Commands\DescribeElement($this, null , array('element_id' => $elementId));		
-		$results = $command->execute();
-		return $results['value'];
-	}
-	
-	/**
-	 * Find an element within another element
-     * @deprecated
-	 * @param Integer $elementId
-	 * @param By $locator
-	 * @param Boolean $polling
-	 * @return \SeleniumClient\WebElement
-	 */
-	public function webElementFindElement($elementId, By $locator, $polling = false)
-	{
-        return $this->findElement($locator, $polling, $elementId);
-	}
-	
-	/**
-	 * Find elements within another element
-     * @deprecated
-	 * @param Integer $elementId
-	 * @param By $locator
-	 * @param Boolean $polling
-	 * @return \SeleniumClient\WebElement 
-	 */
-	public function webElementFindElements($elementId, By $locator, $polling = false)
-	{
-        return $this->findElements($locator, $polling, $elementId);
-	}
-	
-	/**
-	 * Gets element's coordinates
-	 * @param Integer $elementId
-	 * @return Array
-	 */
-	public function webElementGetCoordinates($elementId)
-	{
-		$command = new Commands\ElementLocation($this, null , array('element_id' => $elementId));		
-		$results = $command->execute();		
-		return $results['value'];		
-	}
-	
-	/**
-	 * Gets element's coordinates after scrolling
-	 * @param Integer $elementId
-	 * @return Array
-	 */
-	public function webElementGetLocationOnScreenOnceScrolledIntoView($elementId)
-	{
-		$command = new Commands\ElementLocationView($this, null , array('element_id' => $elementId));		
-		$results = $command->execute();
-		return $results['value'];		
-	}
-
-	/**
 	 * Sets page_load timeout
 	 * @param int $miliseconds
 	 */
@@ -766,7 +571,15 @@ class WebDriver
 		$command = new Commands\Window($this, $params);		
 		$command->execute();
 	}
-	
+
+    /**
+     * Maximizes current Window
+     */
+    public function maximizeCurrentWindow() {
+     	$commannd = new Commands\WindowMaximize($this, null, array('window_handle' => 'current'));
+        $commannd->execute();
+    }
+
 	/**
 	 * Closes current window
 	 */
@@ -805,20 +618,8 @@ class WebDriver
 	 */
 	public function setCurrentWindowSize($width, $height)
 	{
-		$windowHandle = $this->getCurrentWindowHandle();
-		$this->setWindowSize($windowHandle, $width, $height);
-	}	
-	
-	/**
-	 * Sets specified window's size
-	 * @param String $windowHandle
-	 * @param Integer $width
-	 * @param Integer $height
-	 */
-	public function setWindowSize($windowHandle, $width, $height)
-	{
 		$params = array ('width' => $width, 'height' => $height);
-		$command = new Commands\SetWindowSize($this, $params, array('window_handle' => $windowHandle));			
+		$command = new Commands\SetWindowSize($this, $params, array('window_handle' => 'current'));			
 		$command->execute();
 	}
 	
@@ -828,18 +629,7 @@ class WebDriver
 	 */
 	public function getCurrentWindowSize()
 	{
-		$windowHandle = $this->getCurrentWindowHandle();
-		return $this->getWindowSize($windowHandle);
-	}
-	
-	/**
-	 * Gets specified window's size
-	 * @param String $windowHandle
-	 * @return Array
-	 */
-	public function getWindowSize($windowHandle)
-	{
-		$command = new Commands\GetWindowSize($this, null, array('window_handle' => $windowHandle));			
+		$command = new Commands\GetWindowSize($this, null,  array('window_handle' => 'current'));			
 		$results = $command->execute();
 		return $results['value'];
 	}
@@ -851,20 +641,8 @@ class WebDriver
 	 */
 	public function setCurrentWindowPosition($x, $y)
 	{
-		$windowHandle = $this->getCurrentWindowHandle();
-		$this->setWindowPosition($windowHandle,$x, $y);
-	}
-	
-	/**
-	 * Sets specified window's position
-	 * @param String $windowHandle
-	 * @param Integer $x
-	 * @param Integer $y
-	 */
-	public function setWindowPosition($windowHandle, $x, $y)
-	{
 		$params = array ('x' => $x, 'y' => $y);
-		$command = new Commands\SetWindowPosition($this, $params, array('window_handle' => $windowHandle));			
+		$command = new Commands\SetWindowPosition($this, $params,  array('window_handle' => 'current'));			
 		$command->execute();
 	}
 	
@@ -874,20 +652,9 @@ class WebDriver
 	 */
 	public function getCurrentWindowPosition()
 	{
-		$windowHandle = $this->getCurrentWindowHandle();
-		return $this->getWindowPosition($windowHandle);
-	}
-	
-	/**
-	 * Gets specified window's position
-	 * @param String $windowHandle
-	 * @return Array
-	 */
-	public function getWindowPosition($windowHandle)
-	{
-		$command = new Commands\GetWindowPosition($this, null, array('window_handle' => $windowHandle));
+		$command = new Commands\GetWindowPosition($this, null, array('window_handle' => 'current'));
 		$results = $command->execute(); 
-		return $results['value'];		
+		return $results['value'];	
 	}
 
 	/**
@@ -914,8 +681,8 @@ class WebDriver
 	public function getCurrentCookies()
 	{
 		$command = new Commands\GetCookies($this);
-		$results = $command->execute(); 		
-		return $results['value'];		
+		$results = $command->execute(); 	
+		return Cookie::buildFromArray($results['value']);		
 	}	
 	
 	/**
