@@ -22,38 +22,8 @@ use SeleniumClient\Http\HttpFactory;
 use SeleniumClient\Http\SeleniumInvalidSelectorException;
 use SeleniumClient\Http\SeleniumNoSuchElementException;
 
-require_once __DIR__ . '/By.php';
-require_once __DIR__ . '/DesiredCapabilities.php';
-require_once __DIR__ . '/Http/Exceptions.php';
-require_once __DIR__ . '/Http/HttpFactory.php';
-require_once __DIR__ . '/Http/HttpClient.php';
-require_once __DIR__ . '/TargetLocator.php';
-require_once __DIR__ . '/WebElement.php';
 require_once __DIR__ . '/Commands/Commands.php';
 
-/**
- * @param string $selectorValue
- * @param string $selectorDefinition
- * @param bool $polling
- * 
- * @method \SeleniumClient\WebElement findElementByCssSelector($selectorValue, $polling=false)
- * @method \SeleniumClient\WebElement findElementById($selectorValue, $polling=false)
- * @method \SeleniumClient\WebElement findElementByJsSelector($selectorValue, $selectorDefinition='$', $polling=false)
- * @method \SeleniumClient\WebElement findElementByLinkText($selectorValue, $polling=false)
- * @method \SeleniumClient\WebElement findElementByName($selectorValue, $polling=false)
- * @method \SeleniumClient\WebElement findElementByPartialLinkText($selectorValue, $polling=false)
- * @method \SeleniumClient\WebElement findElementByTagName($selectorValue, $polling=false)
- * @method \SeleniumClient\WebElement findElementByXPath($selectorValue, $polling=false)
- *
- * @method \SeleniumClient\WebElement[] findElementsByCssSelector($selectorValue, $polling=false)
- * @method \SeleniumClient\WebElement[] findElementsById($selectorValue, $polling=false)
- * @method \SeleniumClient\WebElement[] findElementsByJsSelector($selectorValue, $selectorDefinition='$', $polling=false)
- * @method \SeleniumClient\WebElement[] findElementsByLinkText($selectorValue, $polling=false)
- * @method \SeleniumClient\WebElement[] findElementsByName($selectorValue, $polling=false)
- * @method \SeleniumClient\WebElement[] findElementsByPartialLinkText($selectorValue, $polling=false)
- * @method \SeleniumClient\WebElement[] findElementsByTagName($selectorValue, $polling=false)
- * @method \SeleniumClient\WebElement[] findElementsByXPath($selectorValue, $polling=false)
- */
 class WebDriver
 {
 	private $_hubUrl = null;
@@ -78,6 +48,10 @@ class WebDriver
 	}
 
     /**
+     * Calls findElement and findElements methods through method missing call.
+     * The methods should be invoked with the format 'findElementBy<strategy>'.
+     * Arguments should match those required by findElement and findElements methods.
+     * i.e. findElementByCssSelector, findElementByTagName, findElementsByXPath
      * @param string $name
      * @param array  $args
      * @return mixed
