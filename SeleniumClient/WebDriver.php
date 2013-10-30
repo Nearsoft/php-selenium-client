@@ -22,6 +22,7 @@ use SeleniumClient\Http\HttpFactory;
 use SeleniumClient\Http\SeleniumInvalidSelectorException;
 use SeleniumClient\Http\SeleniumNoSuchElementException;
 
+require_once __DIR__ . '/Exceptions.php';
 require_once __DIR__ . '/Commands/Commands.php';
 
 class WebDriver
@@ -48,7 +49,7 @@ class WebDriver
 	}
 
     /**
-     * Calls findElement and findElements methods through method missing call.
+     * Enables findElement and findElements methods be invoked through method missing.
      * The methods should be invoked with the format 'findElementBy<strategy>'.
      * Arguments should match those required by findElement and findElements methods.
      * i.e. findElementByCssSelector, findElementByTagName, findElementsByXPath

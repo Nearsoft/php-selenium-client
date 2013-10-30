@@ -97,7 +97,7 @@ class Options
 	 * Remove a cookie
 	 * @param SeleniumClient\Cookie $cookie
 	 */
-	public function deleteCookie(SeleniumClient\Cookie $cookie)
+	public function deleteCookie(Cookie $cookie)
 	{
 		$this->deleteCookieNamed($cookie->getName());			
 	}

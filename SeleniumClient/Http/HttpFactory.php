@@ -18,7 +18,6 @@ namespace SeleniumClient\Http;
 abstract class HttpFactory{
 	
 	const PRODUCTIONMODE = "PRODUCTION";
-	const TESTINGMODE    = "TESTING";
 
     /**
      * @param string $environment
@@ -30,16 +29,12 @@ abstract class HttpFactory{
 		switch(strtoupper($environment))
 		{			
 			case HttpFactory::PRODUCTIONMODE:
-				require_once __DIR__ . "/SeleniumAdapter.php";
 				return new SeleniumAdapter();
 				break;
-            /*
-            case HttpFactory::TESTINGMODE:
-                require_once __DIR__ . "/../../SeleniumClientTest/HttpClientMock.php";
-                return new \HttpClientMock();
+            default:
+                throw new \Exception( 'Invalid environment' );
                 break;
-            */
-		}
-        throw new \Exception( 'Invalid environment' );
+
+		}        
 	}
 }
