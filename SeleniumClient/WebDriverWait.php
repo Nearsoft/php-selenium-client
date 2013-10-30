@@ -15,8 +15,6 @@
 
 namespace SeleniumClient;
 
-require_once __DIR__ . '/Exceptions.php';
-
 class WebDriverWait
 {
 	private $_seconds;

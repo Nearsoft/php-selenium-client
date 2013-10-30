@@ -17,8 +17,6 @@ namespace SeleniumClient;
 
 use SeleniumClient\Http\SeleniumJavaScriptErrorException;
 
-require_once __DIR__ . '/WebDriver.php';
-
 class TargetLocator
 {
 	private $_driver;

@@ -16,8 +16,6 @@
 namespace SeleniumClient\Http;
 use SeleniumClient\Commands;
 
-require_once  __DIR__ . "/Exceptions.php";
-
 class SeleniumAdapter extends HttpClient
 {
 	public function execute(\SeleniumClient\Commands\Command $command)
