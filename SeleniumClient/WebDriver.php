@@ -22,39 +22,11 @@ use SeleniumClient\Http\HttpFactory;
 use SeleniumClient\Http\SeleniumInvalidSelectorException;
 use SeleniumClient\Http\SeleniumNoSuchElementException;
 
-require_once __DIR__ . '/By.php';
-require_once __DIR__ . '/DesiredCapabilities.php';
+require_once __DIR__ . '/Exceptions.php';
 require_once __DIR__ . '/Http/Exceptions.php';
-require_once __DIR__ . '/Http/HttpFactory.php';
-require_once __DIR__ . '/Http/HttpClient.php';
-require_once __DIR__ . '/TargetLocator.php';
-require_once __DIR__ . '/WebElement.php';
 require_once __DIR__ . '/Commands/Commands.php';
 require_once __DIR__ . '/Navigation.php';
 
-/**
- * @param string $selectorValue
- * @param string $selectorDefinition
- * @param bool $polling
- * 
- * @method \SeleniumClient\WebElement findElementByCssSelector($selectorValue, $polling=false)
- * @method \SeleniumClient\WebElement findElementById($selectorValue, $polling=false)
- * @method \SeleniumClient\WebElement findElementByJsSelector($selectorValue, $selectorDefinition='$', $polling=false)
- * @method \SeleniumClient\WebElement findElementByLinkText($selectorValue, $polling=false)
- * @method \SeleniumClient\WebElement findElementByName($selectorValue, $polling=false)
- * @method \SeleniumClient\WebElement findElementByPartialLinkText($selectorValue, $polling=false)
- * @method \SeleniumClient\WebElement findElementByTagName($selectorValue, $polling=false)
- * @method \SeleniumClient\WebElement findElementByXPath($selectorValue, $polling=false)
- *
- * @method \SeleniumClient\WebElement[] findElementsByCssSelector($selectorValue, $polling=false)
- * @method \SeleniumClient\WebElement[] findElementsById($selectorValue, $polling=false)
- * @method \SeleniumClient\WebElement[] findElementsByJsSelector($selectorValue, $selectorDefinition='$', $polling=false)
- * @method \SeleniumClient\WebElement[] findElementsByLinkText($selectorValue, $polling=false)
- * @method \SeleniumClient\WebElement[] findElementsByName($selectorValue, $polling=false)
- * @method \SeleniumClient\WebElement[] findElementsByPartialLinkText($selectorValue, $polling=false)
- * @method \SeleniumClient\WebElement[] findElementsByTagName($selectorValue, $polling=false)
- * @method \SeleniumClient\WebElement[] findElementsByXPath($selectorValue, $polling=false)
- */
 class WebDriver
 {
 	private $_hubUrl = null;
@@ -80,6 +52,10 @@ class WebDriver
 	}
 
     /**
+     * Enables findElement and findElements methods be invoked through method missing.
+     * The methods should be invoked with the format 'findElementBy<strategy>'.
+     * Arguments should match those required by findElement and findElements methods.
+     * i.e. findElementByCssSelector, findElementByTagName, findElementsByXPath
      * @param string $name
      * @param array  $args
      * @return mixed
@@ -254,7 +230,7 @@ class WebDriver
 	 * Gets current url
 	 * @return String
 	 */
-	public function getCurrentPageUrl()
+	public function getCurrentUrl()
 	{
 		$command = new Commands\GetCurrentUrl($this);			
 		$results = $command->execute();	
@@ -433,17 +409,6 @@ class WebDriver
     }
 	
 	/**
-	 * Gets element that is currently focused
-	 * @return \SeleniumClient\WebElement
-	 */
-	public function getActiveElement()
-	{
-		$command = new Commands\ActiveElement($this);	
-		$results = $command->execute();	
-		return new WebElement($this, $results['value']['ELEMENT']);
-	}
-	
-	/**
 	 * Stops the process until an element is found
 	 * @param By $locator
 	 * @param Integer $timeOutSeconds
@@ -550,51 +515,10 @@ class WebDriver
 	public function executeAsyncScript($script, $args = null) { return $this->executeScriptInternal($script, true , $args); }
 
 	/**
-	 * Focus on specified frame
-	 * @param String $frameId
-	 */
-	public function getFrame($frameId)
-	{
-		//frameId can be string, int or array
-
-		$params = array ('id' => $frameId);
-		$command = new Commands\Frame($this, $params);		
-		$command->execute();
-	}
-	
-	/**
-	 * Changes focus to specified window
-	 * @param String $name
-	 */
-	public function getWindow($name)
-	{
-		$params = array ('name' => $name); //name parameter could be window name or window handle
-		$command = new Commands\Window($this, $params);		
-		$command->execute();
-	}
-
-    /**
-     * Maximizes current Window
-     */
-    public function maximizeCurrentWindow() {
-     	$commannd = new Commands\WindowMaximize($this, null, array('window_handle' => 'current'));
-        $commannd->execute();
-    }
-
-	/**
-	 * Closes current window
-	 */
-	public function closeCurrentWindow()
-	{
-		$command = new Commands\CloseWindow($this);		
-		$command->execute();
-	}
-	
-	/**
 	 * Gets current window's identifier
 	 * @return String
 	 */
-	public function getCurrentWindowHandle()
+	public function getWindowHandle()
 	{
 		$command = new Commands\WindowHandle($this);			
 		$results = $command->execute();
@@ -605,57 +529,11 @@ class WebDriver
 	 * Gets a list of available windows in current session
 	 * @return Array
 	 */
-	public function getCurrentWindowHandles()
+	public function getWindowHandles()
 	{
 		$command = new Commands\WindowHandles($this);			
 		$results = $command->execute();
 		return $results['value'];				
-	}
-	
-	/**
-	 * Sets current window size
-	 * @param Integer $width
-	 * @param Integer $height
-	 */
-	public function setCurrentWindowSize($width, $height)
-	{
-		$params = array ('width' => $width, 'height' => $height);
-		$command = new Commands\SetWindowSize($this, $params, array('window_handle' => 'current'));			
-		$command->execute();
-	}
-	
-	/**
-	 * Gets current window's size
-	 * @return Array
-	 */
-	public function getCurrentWindowSize()
-	{
-		$command = new Commands\GetWindowSize($this, null,  array('window_handle' => 'current'));			
-		$results = $command->execute();
-		return $results['value'];
-	}
-	
-	/**
-	 * Sets current window's position
-	 * @param Integer $x
-	 * @param Integer $y
-	 */
-	public function setCurrentWindowPosition($x, $y)
-	{
-		$params = array ('x' => $x, 'y' => $y);
-		$command = new Commands\SetWindowPosition($this, $params,  array('window_handle' => 'current'));			
-		$command->execute();
-	}
-	
-	/**
-	 * Gets current window's position
-	 * @return Array
-	 */
-	public function getCurrentWindowPosition()
-	{
-		$command = new Commands\GetWindowPosition($this, null, array('window_handle' => 'current'));
-		$results = $command->execute(); 
-		return $results['value'];	
 	}
 
 	/**

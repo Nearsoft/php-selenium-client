@@ -38,12 +38,12 @@ class Demo2Test extends PHPUnit_Framework_TestCase
 		$this->_driver->acceptAlert();
 		
 		//get main window handle
-		$mainWindowHandle = $this->_driver->getCurrentWindowHandle();
+		$mainWindowHandle = $this->_driver->getWindowHandle();
 		
 		//open popup window / handle its elements
 		$this->_driver->findElement(By::id("btnPopUp1"))->click();
 		
-		$this->_driver->switchTo()->getWindow("popup1");
+		$this->_driver->switchTo()->window("popup1");
 		
 		$webElement = $this->_driver->waitForElementUntilIsPresent(By::id("txt1"));
 		
@@ -51,19 +51,19 @@ class Demo2Test extends PHPUnit_Framework_TestCase
 		
 		$this->assertEquals("test window", $webElement->getAttribute("value"));
 		
-		$this->_driver->closeCurrentWindow();
+		$this->_driver->manage()->window()->close();
 		
-		$this->_driver->switchTo()->getWindow($mainWindowHandle);
+		$this->_driver->switchTo()->window($mainWindowHandle);
 		
 		//get iframe / handle its elements
-		$this->_driver->getFrame("iframe1");
+		$this->_driver->switchTo()->frame("iframe1");
 		
 		$webElement = $this->_driver->waitForElementUntilIsPresent(By::id("txt1"));
 		$webElement->sendKeys("test iframe");
 		
 		$this->assertEquals("test iframe", $webElement->getAttribute("value"));
-		
-		$this->_driver->switchTo()->getWindow($mainWindowHandle);
+	
+		$this->_driver->switchTo()->window($mainWindowHandle);
 		
 		//wait for element to be present
 		$this->_driver->findElement(By::id("btnAppendDiv"))->click();

@@ -17,8 +17,6 @@ namespace SeleniumClient;
 
 use SeleniumClient\CapabilityType;
 
-require_once __DIR__ . '/CapabilityType.php';
-
 class DesiredCapabilities {	
 	
 	private $_capabilities = null;

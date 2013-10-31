@@ -15,8 +15,6 @@
 
 namespace SeleniumClient;
 
-require_once __DIR__ . '/WebElement.php';
-
 class SelectElement
 {
 	private $_element;

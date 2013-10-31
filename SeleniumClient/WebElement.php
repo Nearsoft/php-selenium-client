@@ -17,20 +17,6 @@ namespace SeleniumClient;
 
 use SeleniumClient\Http\SeleniumStaleElementReferenceException;
 
-/**
- * @param string $value The attribute value
- *
- * @method \SeleniumClient\WebElement setClassName($value) Set element's class name
- * @method \SeleniumClient\WebElement setInnerHTML($value) Set element's inner html
- * @method void setOuterHTML($value) Set element's outer html
- * @method \SeleniumClient\WebElement setText($value) Set element's text
- * @method \SeleniumClient\WebElement setValue($value) Set element's value
- *
- * @method string getClassName() Get element's class name
- * @method string getInnerHTML() Get element's inner html
- * @method string getOuterHTML() Get element's outer html
- * @method string getValue() Get element's value
- */
 class WebElement
 {
 	private $_driver = null;
@@ -43,6 +29,10 @@ class WebElement
 	}
 
     /**
+     * Enables setAttribute and getAttribute methods be invoked through method missing.
+     * The methods should be invoked with the format 'set/get<Javascript notated attribute name>'.
+     * Arguments should match those required by setAttribute and getAttribute methods.
+     * i.e. setClassName, getInnerHTML, getClassName
      * @param string $name
      * @param array  $args
      * @return mixed

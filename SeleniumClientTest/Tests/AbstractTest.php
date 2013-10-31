@@ -64,7 +64,6 @@ class AbstractTest extends PHPUnit_Framework_TestCase {
                 $driver = new WebDriver( $capabilities );
                 self::$_driverInstances[] = $driver;
             } else {
-                /** @var $driver WebDriver */
                 $driver = end( self::$_driverInstances );
             }
         } else {
@@ -75,9 +74,9 @@ class AbstractTest extends PHPUnit_Framework_TestCase {
 
         $this->_driver = $driver;
         $this->_driver->get($this->_url);
-        $this->_position = $this->_driver->getCurrentWindowPosition();
-        $this->_size = $this->_driver->getCurrentWindowSize();
-        self::$_handle = $this->_driver->getCurrentWindowHandle();
+        $this->_position = $this->_driver->manage()->window()->getPosition();
+        $this->_size = $this->_driver->manage()->window()->getSize();
+        self::$_handle = $this->_driver->getWindowHandle();
     }
 
     public function tearDown()
@@ -93,20 +92,20 @@ class AbstractTest extends PHPUnit_Framework_TestCase {
             } catch ( Exception $e ) {
             }
             try {
-                foreach ( $this->_driver->getCurrentWindowHandles() as $handle ) {
+                foreach ( $this->_driver->getWindowHandles() as $handle ) {
                     // skip the original window
                     if ( $handle == self::$_handle ) {
                         continue;
                     }
                     // try to close any other windows that were opened
                     try {
-                        $this->_driver->getWindow( $handle );
-                        $this->_driver->closeCurrentWindow();
+                        $this->_driver->switchTo()->window($handle);
+                        $this->_driver->manage()->window()->close();
                     } catch ( Exception $e ) {
                     }
                 }
-                $this->_driver->getWindow( self::$_handle );
-                $this->_driver->getActiveElement();
+                $this->_driver->switchTo()->window( self::$_handle );
+                $this->_driver->switchTo()->activeElement();
             } catch ( SeleniumUnknownErrorException $e ) {
                 // test case may have closed the parent window
                 self::$_handle = null;
@@ -114,8 +113,8 @@ class AbstractTest extends PHPUnit_Framework_TestCase {
             }
             $this->_driver->manage()->deleteAllCookies();
             $this->_driver->setImplicitWait(0);
-            $this->_driver->setCurrentWindowPosition($this->_position['x'], $this->_position['y'] );
-            $this->_driver->setCurrentWindowSize($this->_size['width'], $this->_size['height'] );
+            $this->_driver->manage()->window()->setPosition($this->_position['x'], $this->_position['y'] );
+            $this->_driver->manage()->window()->setSize($this->_size['width'], $this->_size['height'] );
             $this->_driver->setPageLoadTimeout(10000);
         } else {
             try{

@@ -73,6 +73,6 @@ class Demo1Test extends PHPUnit_Framework_TestCase
 		$webElement = $this->_driver->findElement(By::cssSelector("html body h2#h2FormReceptor"));
 		$this->assertEquals("Form receptor", $webElement->getText());
 		
-		sleep(20);
+		sleep(5);
 	}
 }
