@@ -14,7 +14,7 @@ class NavigationTest extends AbstractTest
 
         $navigation->to($url);
 
-        $this->assertEquals($url, $this->_driver->getCurrentPageUrl());
+        $this->assertEquals($url, $this->_driver->getCurrentUrl());
     }
 
     public function testBackShouldBackBrowserHistory()
