@@ -5,7 +5,7 @@
 	</head>
 	<body>
 		<h2>Popup content</h2>
-		<form action="formReceptor.php" method="post">
+		<form id="popupForm" class="forms" action="formReceptor.php" method="post">
 			<p><input id="txt1" name="txt1" type="text" /></p>
 			<p>
 				<select id="sel1" name="sel1">

@@ -31,12 +31,12 @@
 	</head>
 	<body>
 		<h2>Nearsoft SeleniumClient SandBox</h2>
-		<table style="width: 100%;">
+		<table id="table1" class="tables" style="width: 100%;">
 			<tr>
 				<td style="width: 50%; vertical-align: top;">
 					<fieldset>
 						<legend>Form elements</legend>
-						<form action="formReceptor.php" method="post">
+						<form id="mainForm" class="forms" action="formReceptor.php" method="post">
 							<p><input id="txt1" name="txt1" type="text" /></p>
 							<p><input id="txt2" name="txt2" type="text" value="Default text" /></p>
 							<p>
@@ -76,8 +76,8 @@
 				<td style="width: 50%; vertical-align: top;">
 					<fieldset>
 						<legend>Page elements</legend>
-						<p>Simple paragraph</p>
-						<p><a href="http://www.nearsoft.com">Go to nearsoft.com</a></p>
+						<p id="p1" class="paragraphs">Simple paragraph</p>
+						<p id="p2" class="paragraphs">Go to <a href="http://www.nearsoft.com">nearsoft.com</a></p>
 						<p><input id="btnAlert" type="button" value="Bring up alert" onclick="javascript:alert('Here is the alert');" /></p>
 						<p><input id="btnPrompt" type="button" value="Bring up prompt" onclick="javascript:var p=prompt('Enter some text');alert(p);" /></p>
 						<p>
