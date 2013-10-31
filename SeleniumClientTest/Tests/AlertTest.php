@@ -14,47 +14,44 @@ class AlertTest extends AbstractTest
 		parent::setUp();
 		$this->_alert = new Alert($this->_driver);
 	}
-	
+
 	public function testGetAlertShouldGetAlertText()
 	{
 		$this->_driver->findElement(By::id("btnAlert"))->click();
-
 		$alertText = $this->_alert->getText();
-
 		$this->assertEquals("Here is the alert", $alertText);
 	}
 	
 	public function testGetAlertShouldDismissAlert()
 	{
 		$this->_driver->findElement(By::id("btnConfirm"))->click();
-
 		$this->_alert->dismiss();
-
 		$alertText = $this->_alert->getText();
-
 		$this->assertEquals("false", $alertText);
+	}
+
+	public function testDismissAlertShouldMakeAlertBeClosed()
+	{
+		$this->_driver->findElement(By::id("btnAlert"))->click();
+		$this->_alert->dismiss();
+		$this->setExpectedException('SeleniumClient\Http\SeleniumNoAlertOpenErrorException');	
+		$this->_alert->getText();
 	}
 
 	public function testGetAlertShouldAcceptAlert()
 	{
 		$this->_driver->findElement(By::id("btnConfirm"))->click();
-
 		$this->_alert->accept();
-
 		$alertText = $this->_alert->getText();
-
 		$this->assertEquals("true", $alertText);
 	}
 
 	public function testGetAlertShouldSendKeysToAlert()
 	{
 		$this->_driver->findElement(By::id("btnPrompt"))->click();
-
 		$this->_alert->sendKeys("alert text");
 		$this->_alert->accept();
-
 		$alertText = $this->_alert->getText();
-
 		$this->assertEquals("alert text", $alertText);
 	}
 }

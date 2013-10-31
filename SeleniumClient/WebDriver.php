@@ -534,50 +534,5 @@ class WebDriver
 		$command = new Commands\WindowHandles($this);			
 		$results = $command->execute();
 		return $results['value'];				
-	}
-
-	/**
-	 * Sends false to current alert
-	 */
-	public function dismissAlert()
-	{
-		$command = new Commands\DismissAlert($this);
-		$command->execute(); 	
-	}
-
-	/**
-	 * Sends true to current alert
-	 */
-	public function acceptAlert()
-	{
-		$command = new Commands\AcceptAlert($this);
-		$command->execute(); 	
-	}
-
-	/**
-	 * Gets current alert's text
-	 * @return String
-	 */
-	public function getAlertText()
-	{
-		$command = new Commands\GetAlertText($this);
-		$results = $command->execute(); 	
-		return $results['value'];
-	}
-	
-	/**
-	 * Sends text to alert input
-	 * @param String $value
-	 */
-	public function setAlertValue($value)
-	{
-		if(is_string($value)){
-			$params = array ('text' => $value);
-			$command = new Commands\SetAlertText($this, $params);
-			$command->execute();
-		}
-		else{
-			throw new \Exception("Value must be a string");
-		}
-	}
+	}	
 }

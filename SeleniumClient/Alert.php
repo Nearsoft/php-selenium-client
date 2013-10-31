@@ -29,24 +29,44 @@ class Alert
 	 * Gets the text of the alert.
 	 * @return String
 	 */
-	public function getText() { return $this->_driver->getAlertText(); }
+	public function getText() 
+	{ 
+		$command = new Commands\GetAlertText($this->_driver);
+		$results = $command->execute(); 	
+		return $results['value'];
+	}
 
 	/**
 	 * Dismisses the alert.
 	 */
-	public function dismiss() { $this->_driver->dismissAlert(); }
+	public function dismiss() 
+	{ 
+		$command = new Commands\DismissAlert($this->_driver);
+		$command->execute(); 	
+	}
 
 	/**
 	 * Accepts the alert.
 	 */
-	public function accept() { $this->_driver->acceptAlert(); }
+	public function accept() 
+	{ 
+		$command = new Commands\AcceptAlert($this->_driver);
+		$command->execute(); 	
+	}
 
 	/**
 	 * Sends keys to the alert.
-	 * @param String $keysToSend
+	 * @param String $string
 	 */
-	public function sendKeys($keysToSend)
+	public function sendKeys($string)
 	{
-		$this->_driver->setAlertValue($keysToSend);
+		if(is_string($string)){
+			$params = array ('text' => $string);
+			$command = new Commands\SetAlertText($this->_driver, $params);
+			$command->execute();
+		}
+		else{
+			throw new \Exception("Value must be a string");
+		}
 	}
 }

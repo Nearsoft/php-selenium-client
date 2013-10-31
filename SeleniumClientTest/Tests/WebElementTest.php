@@ -230,7 +230,7 @@ class WebElementTest extends AbstractTest
     {
     	$webElement = $this->_driver->findElement(By::id("btnAlert"));
 		$webElement->click();
-		$this->assertEquals('Here is the alert',$this->_driver->getAlertText());   	
+		$this->assertEquals('Here is the alert',$this->_driver->switchTo()->alert()->getText());   	
     }   
 	
 	public function testSubmitShouldSubmitForm()

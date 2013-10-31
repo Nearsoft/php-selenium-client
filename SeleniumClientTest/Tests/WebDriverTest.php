@@ -2,7 +2,6 @@
 
 require_once __DIR__ . '/AbstractTest.php';
 
-use SeleniumClient\Alert;
 use SeleniumClient\By;
 use SeleniumClient\TargetLocator;
 use SeleniumClient\WebElement;
@@ -10,102 +9,14 @@ use SeleniumClient\WebElement;
 
 class WebDriverTest extends AbstractTest
 {	
-	public function testAcceptAlertShouldGetText()
-	{
-		$this->_driver->findElement(By::id("btnConfirm"))->click();
-		$this->_driver->acceptAlert();
-		$this->assertEquals("TRUE", strtoupper($this->_driver->getAlertText()));
-	}
-
-	public function testDismissAlertShouldGetText()
-	{
-		$this->_driver->findElement(By::id("btnConfirm"))->click();
-		$this->_driver->dismissAlert();
-		$this->assertEquals("FALSE", strtoupper($this->_driver->getAlertText()));
-	}
 	
-	public function testDismissAlertShouldMakeAlertBeClosed()
-	{
-		$this->_driver->findElement(By::id("btnAlert"))->click();
-		$this->_driver->dismissAlert();
-		$this->setExpectedException('SeleniumClient\Http\SeleniumNoAlertOpenErrorException');	
-		$this->_driver->getAlertText();
-	}
-	
-	public function testSetAlertValueShouldGetText()
-	{
-		$this->_driver->findElement(By::id("btnPrompt"))->click();
-		$this->_driver->setAlertValue("Some value sent");
-		$this->_driver->acceptAlert();
-		$this->assertEquals("Some value sent", $this->_driver->getAlertText());
-	}
-	
-	public function testGetAlertTextShouldGetText()
-	{
-		$this->_driver->findElement(By::id("btnAlert"))->click();
-		$this->assertEquals("Here is the alert", $this->_driver->getAlertText());
-	}
 	
 	public function testSwitchToShouldGetTargetLocatorInstance()
 	{
 		$result = $this->_driver->switchTo();
-
 		$this->assertTrue($result instanceof TargetLocator);
 	}	
-
-	public function testSwitchToGetAlertShouldGetAlertInstance()
-	{
-		$this->_driver->findElement(By::id("btnAlert"))->click();
-
-		$alert = $this->_driver->switchTo()->alert();
-		
-		$this->assertTrue($alert instanceof Alert);
-	}
-
-	public function testSwitchToGetAlertShouldGetAlertText()
-	{
-		$this->_driver->findElement(By::id("btnAlert"))->click();
-
-		$alertText = $this->_driver->switchTo()->alert()->getText();
-
-		$this->assertEquals("Here is the alert", $alertText);
-	}
-
-	public function testSwitchToGetAlertShouldDismissAlert()
-	{
-		$this->_driver->findElement(By::id("btnConfirm"))->click();
-
-		$this->_driver->switchTo()->alert()->dismiss();
-
-		$alertText = $this->_driver->switchTo()->alert()->getText();
-
-		$this->assertEquals("false", $alertText);
-	}
-
-	public function testSwitchToGetAlertShouldAcceptAlert()
-	{
-		$this->_driver->findElement(By::id("btnConfirm"))->click();
-
-		$this->_driver->switchTo()->alert()->accept();
-
-		$alertText = $this->_driver->switchTo()->alert()->getText();
-
-		$this->assertEquals("true", $alertText);
-	}
-
-	public function testSwitchToGetAlertShouldSendKeysToAlert()
-	{
-		$this->_driver->findElement(By::id("btnPrompt"))->click();
-
-		$alert = $this->_driver->switchTo()->alert();
-		$alert->sendKeys("alert text");
-		$alert->accept();
-
-		$alertText = $this->_driver->switchTo()->alert()->getText();
-
-		$this->assertEquals("alert text", $alertText);
-	}
-
+	
 	public function testScreenshotsShouldCreateFile()
 	{
 		$screenShotsDirectory = "/tmp/selenium screenshots";

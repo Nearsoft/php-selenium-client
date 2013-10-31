@@ -34,8 +34,9 @@ class Demo2Test extends PHPUnit_Framework_TestCase
 		//click button/get alert text
 		$this->_driver->get($this->_testUrl);
 		$this->_driver->findElement(By::id("btnAlert"))->click();
-		$this->assertEquals("Here is the alert", $this->_driver->getAlertText());
-		$this->_driver->acceptAlert();
+		$alert = $this->_driver->switchTo()->alert();
+		$this->assertEquals("Here is the alert", $alert->getText());
+		$alert->accept();
 		
 		//get main window handle
 		$mainWindowHandle = $this->_driver->getWindowHandle();

@@ -2,7 +2,6 @@
 
 require_once __DIR__ . '/AbstractTest.php';
 
-use SeleniumClient\Alert;
 use SeleniumClient\By;
 use SeleniumClient\TargetLocator;
 use SeleniumClient\WebElement;

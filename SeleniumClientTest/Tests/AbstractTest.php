@@ -1,5 +1,6 @@
 <?php
 
+use SeleniumClient\Alert;
 use SeleniumClient\DesiredCapabilities;
 use SeleniumClient\Http\SeleniumUnknownErrorException;
 use SeleniumClient\WebDriver;
@@ -88,7 +89,8 @@ class AbstractTest extends PHPUnit_Framework_TestCase {
 
         if ( self::$_config['persist'] ) {
             try {
-                $this->_driver->dismissAlert();
+                $alert = new Alert($this->_driver);
+                $alert->dismiss();
             } catch ( Exception $e ) {
             }
             try {

@@ -52,10 +52,10 @@ One of the goals is to provide a client usage as close as possible to the Seleni
 		$driver->switchTo()->window("windowName");
 	
 * Manage alerts
-
-		$driver->getAlertText();
-		$driver->acceptAlert();
-		$driver->dismissAlert();
+		$alert = $driver->switchTo()->alert();
+		$alert->getText();
+		$alert->accept();
+		$alert->dismiss();
 	
 * Wait for elements to be present
 
