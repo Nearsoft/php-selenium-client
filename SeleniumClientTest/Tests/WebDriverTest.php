@@ -506,16 +506,7 @@ class WebDriverTest extends AbstractTest
 		$expectedKeys = array('status','sessionId','value','state','class','hCode');
 		$this->assertEquals(asort(array_keys($status)),asort($expectedKeys));
 	}
-	
-	public function testRefresh() 
-	{ 
-		$webElement = $this->_driver->findElement(By::id("txt1"));
-		$webElement->sendKeys("9999");
-		$this->_driver->refresh();
-		$webElement = $this->_driver->findElement(By::id("txt1"));
-		$this->assertEquals("", $webElement->getAttribute("value"));
-	}
-	
+
 	public function testPageSource()
 	{
 		$this->assertTrue((bool)strpos($this->_driver->pageSource(), '<legend>Form elements</legend>'));		
@@ -581,30 +572,6 @@ class WebDriverTest extends AbstractTest
         $this->_driver->findElements(By::jsSelector('input'));
     }
 
-	public function testBack()
-	{
-		$expectedTitle = $this->_driver->title();
-		
-		$this->_driver->get("http://nearsoft.com");
-		
-		$this->_driver->back();
-		
-		$this->assertEquals($expectedTitle, $this->_driver->title());
-	}
-	
-	public function testForward()
-	{
-		$this->_driver->get($this->_url."/formReceptor.php");
-		
-		$expectedTitle = $this->_driver->title();
-		
-		$this->_driver->back();
-		
-		$this->_driver->forward();
-		
-		$this->assertEquals($expectedTitle, $this->_driver->title());
-	}
-	
 	public function testWaitForElementUntilIsPresent()
 	{
 		$this->_driver->findElement(By::id("btnAppendDiv"))->click();

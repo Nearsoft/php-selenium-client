@@ -30,6 +30,7 @@ require_once __DIR__ . '/Http/HttpClient.php';
 require_once __DIR__ . '/TargetLocator.php';
 require_once __DIR__ . '/WebElement.php';
 require_once __DIR__ . '/Commands/Commands.php';
+require_once __DIR__ . '/Navigation.php';
 
 /**
  * @param string $selectorValue
@@ -63,6 +64,7 @@ class WebDriver
 	private $_capabilities = null;
 	private $_httpClient = null;
 	private $_options = null;
+    private $_navigate = null;
 	
 	/**
 	 * @param DesiredCapabilities $desiredCapabilities
@@ -137,7 +139,20 @@ class WebDriver
 	 * @return String
 	 */
 	public function getHubUrl() { return $this->_hubUrl; }
-	
+
+    /**
+     * Get Navigation object
+     * @return Selenium\Navigation
+     */
+    public function navigate()
+    {
+        if(!$this->_navigate)
+        {
+            $this->_navigate = new Navigation($this);
+        }
+        return $this->_navigate;
+    }
+
 	/**
 	 * Get assigned session id
 	 * @return Integer
@@ -231,9 +246,8 @@ class WebDriver
 	 */
 	public function get($url)
 	{
-		$params = array ('url' => $url);
-		$command = new Commands\GetUrl($this,$params);	
-		$command->execute();	
+        $navigate = $this->navigate();
+        $navigate->to($url);
 	}
 	
 	/**
@@ -268,34 +282,7 @@ class WebDriver
 		$results = $command->execute();		
 		return $results;
 	}	
-	
-	/**
-	 * Navigate forward in history
-	 */
-	public function forward()
-	{
-		$command = new Commands\Forward($this);		
-		$command->execute();	
-	}	
-	
-	/**
-	 * Navigate back in history
-	 */
-	public function back()
-	{
-		$command = new Commands\Back($this);		
-		$command->execute();	
-	}	
-	
-	/**
-	 * Refreshes current page
-	 */
-	public function refresh()
-	{
-		$command = new Commands\Refresh($this);		
-		$command->execute();	
-	}
-	
+
 	/**
 	 * Gets current page source
 	 * @return String
