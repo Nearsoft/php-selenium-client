@@ -51,149 +51,13 @@ class WebDriverTest extends AbstractTest
 		$result = $this->_driver->switchTo();
 
 		$this->assertTrue($result instanceof TargetLocator);
-	}
-
-	public function testSwitchToDefaultFrameShouldGetFrameWebElement()
-	{
-		$webElement = $this->_driver->switchTo()->getDefaultFrame()->findElement(By::id("txt1"));
-		$webElement->sendKeys("test iframe");
-
-		$this->assertEquals("test iframe", $webElement->getAttribute("value"));
-	}
-	
-	public function testSwitchToFrameByIndexShouldGetFrameWebElement()
-	{
-		$webElement = $this->_driver->switchTo()->getFrameByIndex(0)->findElement(By::id("txt1"));
-		$webElement->sendKeys("test iframe");
-
-		$this->assertEquals("test iframe", $webElement->getAttribute("value"));
-	}
-
-	public function testSwitchToFrameByIndexShouldGetFrameWebElementGetBackToParentWindow()
-	{
-		$webElement = $this->_driver->switchTo()->getFrameByIndex(0)->findElement(By::id("txt1"));
-		$webElement->sendKeys("test iframe");
-
-		$this->assertEquals("test iframe", $webElement->getAttribute("value"));
-
-		$webElement = $this->_driver->switchTo()->getDefaultFrame()->findElement(By::id("txt1"));
-		$webElement->sendKeys("test iframe default");
-
-		$this->assertEquals("test iframe default", $webElement->getAttribute("value"));
-
-		$webElement = $this->_driver->switchTo()->getFrameByIndex(1)->findElement(By::id("txt1"));
-		$webElement->sendKeys("test iframe1");
-		
-		$this->assertEquals("test iframe1", $webElement->getAttribute("value"));
-	}
-
-	public function testSwitchToFrameByNameShouldGetFrameWebElement()
-	{
-		$webElement = $this->_driver->switchTo()->getFrameByName("iframe1")->findElement(By::id("txt1"));
-		$webElement->sendKeys("test iframe");
-
-		$this->assertEquals("test iframe", $webElement->getAttribute("value"));
-	}
-	
-	public function testSwitchToFrameByNameShouldGetFrameWebElementGetBackToParentWindow()
-	{
-		$webElement = $this->_driver->switchTo()->getFrameByName("iframe1")->findElement(By::id("txt1"));
-		$webElement->sendKeys("test iframe");
-
-		$this->assertEquals("test iframe", $webElement->getAttribute("value"));
-
-		$webElement = $this->_driver->switchTo()->getDefaultFrame()->findElement(By::id("txt1"));
-		$webElement->sendKeys("test iframe default");
-
-		$this->assertEquals("test iframe default", $webElement->getAttribute("value"));
-
-		$webElement = $this->_driver->switchTo()->getFrameByName("iframe2")->findElement(By::id("txt1"));
-		$webElement->sendKeys("test iframe2");
-
-		$this->assertEquals("test iframe2", $webElement->getAttribute("value"));
-	}
-	
-	public function testSwitchToFrameByWebElementShouldGetFrameWebElement()
-	{
-		$webElement = $this->_driver->findElement(By::id("iframe1"));
-		$webElement = $this->_driver->switchTo()->getFrameByWebElement($webElement)->findElement(By::id("txt1"));
-		$webElement->sendKeys("test iframe");
-
-		$this->assertEquals("test iframe", $webElement->getAttribute("value"));
-	}
-
-	public function testSwitchToFrameByWebElementShouldGetFrameWebElementGetBackToParentWindow()
-	{
-		$webElement = $this->_driver->findElement(By::id("iframe1"));
-		$webElement = $this->_driver->switchTo()->getFrameByWebElement($webElement)->findElement(By::id("txt1"));
-		$webElement->sendKeys("test iframe");
-
-		$this->assertEquals("test iframe", $webElement->getAttribute("value"));
-
-		$webElement = $this->_driver->switchTo()->getDefaultFrame()->findElement(By::id("txt1"));
-		$webElement->sendKeys("test iframe default");
-
-		$this->assertEquals("test iframe default", $webElement->getAttribute("value"));
-
-		$webElement = $this->_driver->findElement(By::id("iframe2"));
-		$webElement = $this->_driver->switchTo()->getFrameByWebElement($webElement)->findElement(By::id("txt1"));
-		$webElement->sendKeys("test iframe2");
-
-		$this->assertEquals("test iframe2", $webElement->getAttribute("value"));
-	}
-
-	public function testSwitchToGetWindowShouldGetWindowWebElement()
-	{
-		$this->_driver->findElement(By::id("btnPopUp1"))->click();
-
-		$webElement = $this->_driver->switchTo()->getWindow("popup1")->waitForElementUntilIsPresent(By::id("txt1"));
-		$webElement->sendKeys("test window");
-
-		$this->assertEquals("test window", $webElement->getAttribute("value"));
-	}
-	
-	public function testSwitchToGetWindowShouldGetWindowWebElementGetBackToParentWindow()
-	{
-		$window1Handle = $this->_driver->getCurrentWindowHandle();
-
-		$this->_driver->findElement(By::id("btnPopUp1"))->click();
-		$this->_driver->switchTo()->getWindow($window1Handle);
-		$this->_driver->findElement(By::id("btnPopUp2"))->click();
-
-		$webElement = $this->_driver->switchTo()->getWindow("popup1")->waitForElementUntilIsPresent(By::id("txt1"));
-		$webElement->sendKeys("test window 1");
-		
-		$this->assertEquals("test window 1", $webElement->getAttribute("value"));
-
-		$webElement = $this->_driver->switchTo()->getWindow("popup2")->waitForElementUntilIsPresent(By::id("txt1"));
-		$webElement->sendKeys("test window 2");
-		
-		$this->assertEquals("test window 2", $webElement->getAttribute("value"));
-
-		$webElement = $this->_driver->switchTo()->getWindow($window1Handle)->waitForElementUntilIsPresent(By::id("txt1"));
-		$webElement->sendKeys("test window default");
-
-		$this->assertEquals("test window default", $webElement->getAttribute("value"));
-
-		$this->_driver->switchTo()->getWindow("popup1")->closeCurrentWindow();
-		$this->_driver->switchTo()->getWindow("popup2")->closeCurrentWindow();
-		$this->_driver->switchTo()->getWindow($window1Handle)->closeCurrentWindow();
-	}
-
-	public function testSwitchToGetActiveElementShouldGetActiveElement()
-	{
-		$this->_driver->findElement(By::id("txt1"))->sendKeys("test");
-		
-		$webElement = $this->_driver->switchTo()->getActiveElement();
-
-		$this->assertEquals("test", $webElement->getAttribute("value"));
-	}
+	}	
 
 	public function testSwitchToGetAlertShouldGetAlertInstance()
 	{
 		$this->_driver->findElement(By::id("btnAlert"))->click();
 
-		$alert = $this->_driver->switchTo()->getAlert();
+		$alert = $this->_driver->switchTo()->alert();
 		
 		$this->assertTrue($alert instanceof Alert);
 	}
@@ -202,7 +66,7 @@ class WebDriverTest extends AbstractTest
 	{
 		$this->_driver->findElement(By::id("btnAlert"))->click();
 
-		$alertText = $this->_driver->switchTo()->getAlert()->getText();
+		$alertText = $this->_driver->switchTo()->alert()->getText();
 
 		$this->assertEquals("Here is the alert", $alertText);
 	}
@@ -211,9 +75,9 @@ class WebDriverTest extends AbstractTest
 	{
 		$this->_driver->findElement(By::id("btnConfirm"))->click();
 
-		$this->_driver->switchTo()->getAlert()->dismiss();
+		$this->_driver->switchTo()->alert()->dismiss();
 
-		$alertText = $this->_driver->switchTo()->getAlert()->getText();
+		$alertText = $this->_driver->switchTo()->alert()->getText();
 
 		$this->assertEquals("false", $alertText);
 	}
@@ -222,9 +86,9 @@ class WebDriverTest extends AbstractTest
 	{
 		$this->_driver->findElement(By::id("btnConfirm"))->click();
 
-		$this->_driver->switchTo()->getAlert()->accept();
+		$this->_driver->switchTo()->alert()->accept();
 
-		$alertText = $this->_driver->switchTo()->getAlert()->getText();
+		$alertText = $this->_driver->switchTo()->alert()->getText();
 
 		$this->assertEquals("true", $alertText);
 	}
@@ -233,11 +97,11 @@ class WebDriverTest extends AbstractTest
 	{
 		$this->_driver->findElement(By::id("btnPrompt"))->click();
 
-		$alert = $this->_driver->switchTo()->getAlert();
+		$alert = $this->_driver->switchTo()->alert();
 		$alert->sendKeys("alert text");
 		$alert->accept();
 
-		$alertText = $this->_driver->switchTo()->getAlert()->getText();
+		$alertText = $this->_driver->switchTo()->alert()->getText();
 
 		$this->assertEquals("alert text", $alertText);
 	}
@@ -296,135 +160,20 @@ class WebDriverTest extends AbstractTest
 		{
 			$this->assertTrue(file_exists($this->_driver->getScreenShotsDirectory() . "/". $this->_driver->getSessionId() . "/".  $generatedFileName));
 		}
-	}
+	}	
 	
-	public function testGetCurrentWindowPositionShouldGetArray()
+	public function testGetWindowHandlesholdGetHandle()
 	{
-		$position = $this->_driver->getCurrentWindowPosition();
-		
-		$this->assertTrue(is_numeric($position["x"]));
-		$this->assertTrue(is_numeric($position["y"]));
+		$this->assertTrue(is_string($this->_driver->getWindowHandle()));
 	}
 	
-	public function testSetCurrentWindowPositionShouldGetArray()
-	{
-		$this->_driver->setCurrentWindowSize(200,200);
-		
-		$this->_driver->setCurrentWindowPosition(50, 60);
-		
-		$position = $this->_driver->getCurrentWindowPosition();
-		
-		$this->assertEquals(50, $position["x"]);
-		$this->assertEquals(60, $position["y"]);
-	}
-	
-	public function testGetCurrentWindowSizeShouldGetArray()
-	{
-		$dimensions = $this->_driver->getCurrentWindowSize();
-		
-		$this->assertTrue(is_numeric($dimensions["width"]));
-		$this->assertTrue(is_numeric($dimensions["height"]));
-	}
-	
-	public function testSetCurrentWindowSizeShouldGetArray()
-	{
-		$this->_driver->setCurrentWindowSize(432, 520);
-		$dimensions = $this->_driver->getCurrentWindowSize();
-		
-		$this->assertEquals(432, $dimensions["width"]);
-		$this->assertEquals(520, $dimensions["height"]);
-	}
-	
-	public function testGetWindowShouldNavigateAcrossWindows()
-	{
-		$this->_driver->setImplicitWait(5000);
-		
-		$window1Handle = $this->_driver->getCurrentWindowHandle();
-		$this->_driver->findElement(By::id("btnPopUp1"))->click();
-		$this->_driver->switchTo()->getWindow("popup1");
-		
-		$webElementOnPopUp1 = $this->_driver->findElement(By::id("txt1"));
-		$webElementOnPopUp1->sendKeys("test popup window 1");
-		
-		$this->assertEquals("test popup window 1", $webElementOnPopUp1->getAttribute("value"));
-		
-		$this->_driver->closeCurrentWindow();
-		$this->_driver->switchTo()->getWindow($window1Handle);
-		
-		$webElementParentWindow = $this->_driver->findElement(By::id("txt1"));
-		$webElementParentWindow->sendKeys("test parent window 1");
-
-		$this->assertEquals("test parent window 1", $webElementParentWindow->getAttribute("value"));
-	}
-	
-	public function testGetCurrentWindowHandleSholdGetHandle()
-	{
-		$this->assertTrue(is_string($this->_driver->getCurrentWindowHandle()));
-	}
-	
-	public function testGetCurrentWindowHandlesSholdGet3Handles()
+	public function testGetWindowHandlesSholdGet3Handles()
 	{
 		$this->_driver->findElement(By::id("btnPopUp1"))->click();
 		$this->_driver->findElement(By::id("btnPopUp2"))->click();
 
-		$this->assertEquals(3, count($this->_driver->getCurrentWindowHandles()));
-	}
-
-    public function testMaximizeCurrentWindowShouldMaximizeCurrentWindow()
-    {
-		$dimensionsBefore = $this->_driver->getCurrentWindowSize();
-		$this->_driver->maximizeCurrentWindow();
-		$dimensionsAfter = $this->_driver->getCurrentWindowSize();
-		$this->assertTrue($dimensionsAfter['height'] > $dimensionsBefore['height']);
-		$this->assertTrue($dimensionsAfter['width'] > $dimensionsBefore['width']);
-    }
-
-	public function testCloseCurrentWindowShouldClose()
-	{
-		$this->_driver->findElement(By::id("btnPopUp1"))->click();
-		$this->_driver->switchTo()->getWindow("popup1");
-		$this->_driver->closeCurrentWindow();
-		$this->setExpectedException('SeleniumClient\Http\SeleniumNoSuchWindowException');	
-		$this->_driver->getCurrentPageUrl();		
-	}
-
-	public function testGetWindowShouldAccessContent()
-	{
-		$this->_driver->findElement(By::id("btnPopUp1"))->click();
-		$this->_driver->switchTo()->getWindow("popup1");
-		
-		$webElement = $this->_driver->waitForElementUntilIsPresent(By::id("txt1"));
-		$webElement->sendKeys("test window");
-		
-		$this->assertEquals("test window", $webElement->getAttribute("value"));
-	}
-	
-	public function testGetFrameShouldAccessContent()
-	{
-		$this->_driver->getFrame("iframe1");
-		
-		$webElement = $this->_driver->findElement(By::id("txt1"));
-		$webElement->sendKeys("test iframe");
-
-		$this->assertEquals("test iframe", $webElement->getAttribute("value"));
-	}
-	
-	public function testGetFrameShouldAccessContentGetBackParentWindow()
-	{
-		$window1Handle = $this->_driver->getCurrentWindowHandle();
-		$this->_driver->getFrame("iframe1");
-
-		$webElement = $this->_driver->findElement(By::id("txt1"));
-		$webElement->sendKeys("test iframe");
-		
-		$this->assertEquals("test iframe", $webElement->getAttribute("value"));
-		$this->_driver->switchTo()->getWindow($window1Handle);
-		
-		$webElementParentWindow = $this->_driver->findElement(By::id("txt1"));
-		$webElementParentWindow->sendKeys("test parent window 1");
-
-		$this->assertEquals("test parent window 1", $webElementParentWindow->getAttribute("value"));
-	}
+		$this->assertEquals(3, count($this->_driver->getWindowHandles()));
+	}	
 
     public function testGetCurrentSessionsShouldGetArray()
     {
@@ -432,6 +181,16 @@ class WebDriverTest extends AbstractTest
         $this->assertTrue(is_array($sessions));
         $this->assertTrue(count($sessions) > 0);
     }
+
+    public function testSwitchShouldGetTargetLocatorInstance()
+	{	
+		$this->assertInstanceOf('SeleniumClient\TargetLocator', $this->_driver->switchTo());		
+	}
+
+	 public function testManageShouldGetOptionsInstance()
+	{	
+		$this->assertInstanceOf('SeleniumClient\Options', $this->_driver->manage());		
+	}
 
 	public function testExecuteScriptShouldSetInputText()
 	{
@@ -484,12 +243,12 @@ class WebDriverTest extends AbstractTest
 	{
 		$url = $this->_url."/formReceptor.php";
 		$this->_driver->get($url);
-		$this->assertEquals($url, $this->_driver->getCurrentPageUrl());
+		$this->assertEquals($url, $this->_driver->getCurrentUrl());
 	}
 
-	public function testGetCurrentPageUrl()
+	public function testGetCurrentUrl()
 	{
-		$this->assertEquals($this->_url, $this->_driver->getCurrentPageUrl());
+		$this->assertEquals($this->_url, $this->_driver->getCurrentUrl());
 	}
 	
 	public function testSetImplicitWait()

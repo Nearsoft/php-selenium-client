@@ -25,62 +25,39 @@ class TargetLocator
 	{
 		$this->_driver = $driver;
 	}
-	
-	/**
-	 * Move to a different frame using its index
-	 * @param Integer $frameIndex
-	 * @return \SeleniumClient\WebDriver The current webdriver
-	 */
-	public function getFrameByIndex($frameIndex)
-	{
-		
-		$this->_driver->getFrame($frameIndex);
-
-		return $this->_driver;
-	}
-
-	/**
-	 * Move to different frame using its name
-	 * @param String $frameName
-	 * @return \SeleniumClient\WebDriver The current webdriver
-	 */
-	public function getFrameByName($frameName)
-	{
-		$this->_driver->getFrame($frameName);
-		return $this->_driver;
-	}
-
-	/**
-	 * Move to a frame element.
-	 * @param WebElement $frameElement
-	 * @return \SeleniumClient\WebDriver The current webdriver
-	 */
-	public function getFrameByWebElement(WebElement $frameElement)
-	{
-		$frameId = $frameElement->getElementId();
-		$target = array('ELEMENT' => $frameId);
-		$this->_driver->getFrame($target);
-		return $this->_driver;
-	}
 
 	/**
 	 * Change to the Window by passing in the name
-	 * @param String $windowName
+	 * @param String $identifier either window name or window handle
 	 * @return \SeleniumClient\WebDriver The current webdriver
 	 */
-	public function getWindow($windowName)
+	public function window($identifier)
 	{
-		$this->_driver->getWindow($windowName);		
+		$params = array ('name' => $identifier);
+		$command = new Commands\Window($this->_driver, $params);		
+		$command->execute();
 		return $this->_driver;
 	}
 
 	/**
-	 * Change the active frame to the default
+	 * Focus on specified frame
+	 * @param Mixed $identifier. Null will get default frame. String will get by frame name. Integer will get frame by index. WebElement will get by web element relation.
 	 * @return \SeleniumClient\WebDriver The current webdriver
 	 */
-	public function getDefaultFrame()
+	public function frame($identifier)
 	{
-		$this->_driver->getFrame(null);
+		$idParam = null;
+		$type = gettype($identifier); 
+		if($type == 'string' || $type == 'integer'){
+			$idParam = $identifier;
+		}
+		elseif($type == 'object' && $identifier instanceof WebElement){
+			$idParam = array('ELEMENT' => $identifier->getElementId());
+		}
+
+		$params = array ('id' => $idParam);
+		$command = new Commands\Frame($this->_driver, $params);		
+		$command->execute();
 		return $this->_driver;
 	}
 
@@ -88,22 +65,20 @@ class TargetLocator
 	 * Finds the active element on the page and returns it
 	 * @return WebElement
 	 */
-	public function getActiveElement()
+	public function activeElement()
 	{
-		$webElement = $this->_driver->getActiveElement();
-		return $webElement;
+		$command = new Commands\ActiveElement($this->_driver);	
+		$results = $command->execute();	
+		return new WebElement($this->_driver, $results['value']['ELEMENT']);
 	}
 
 	/**
 	 *  Switches to the currently active modal dialog for this particular driver instance.
 	 * @return \SeleniumClient\Alert
 	 */
-	public function getAlert()
+	public function alert()
 	{
-		// N.B. We only execute the GetAlertText command to be able to throw
-		// a NoAlertPresentException if there is no alert found.
-		//$this->_driver->getAlertText();
-		return new Alert($this->_driver); //validate that the Alert object can be created, if not throw an exception, try to use a factory singleton o depency of injection to only use 1 instance
+		return new Alert($this->_driver);
 	}
 
     /**
@@ -122,16 +97,16 @@ class TargetLocator
             throw new SeleniumJavaScriptErrorException( 'Unable to open tab' );
         }
 
-        $existingHandles = $this->_driver->getCurrentWindowHandles();
+        $existingHandles = $this->_driver->getWindowHandles();
         $anchor = new WebElement( $this->_driver, $element['ELEMENT'] );
         $anchor->click();
 
         $this->_driver->executeScript( 'var d=document,a=arguments[0];a.parentNode.removeChild(a);', array( $element ) );
-        $newHandles = array_values( array_diff( $this->_driver->getCurrentWindowHandles(), $existingHandles ) );
+        $newHandles = array_values( array_diff( $this->_driver->getWindowHandles(), $existingHandles ) );
         $newHandle = $newHandles[0];
-        $oldHandle = $this->_driver->getCurrentWindowHandle();
+        $oldHandle = $this->_driver->getWindowHandle();
 
-        $this->getWindow( $newHandle );
+        $this->window( $newHandle );
 
         return $oldHandle;
     }

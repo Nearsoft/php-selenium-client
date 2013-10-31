@@ -23,4 +23,67 @@ class Window
 	{
 		$this->_driver = $driver;
 	}	
+
+    /**
+     * Maximizes current Window
+     */
+    public function maximize() {
+     	$commannd = new Commands\WindowMaximize($this->_driver, null, array('window_handle' => 'current'));
+        $commannd->execute();
+    }
+
+	/**
+	 * Closes current window
+	 */
+	public function close()
+	{
+		$command = new Commands\CloseWindow($this->_driver);		
+		$command->execute();
+	}
+	
+	/**
+	 * Sets current window size
+	 * @param Integer $width
+	 * @param Integer $height
+	 */
+	public function setSize($width, $height)
+	{
+		$params = array ('width' => $width, 'height' => $height);
+		$command = new Commands\SetWindowSize($this->_driver, $params, array('window_handle' => 'current'));			
+		$command->execute();
+	}
+	
+	/**
+	 * Gets current window's size
+	 * @return Array
+	 */
+	public function getSize()
+	{
+		$command = new Commands\GetWindowSize($this->_driver, null,  array('window_handle' => 'current'));			
+		$results = $command->execute();
+		return $results['value'];
+	}
+	
+	/**
+	 * Sets current window's position
+	 * @param Integer $x
+	 * @param Integer $y
+	 */
+	public function setPosition($x, $y)
+	{
+		$params = array ('x' => $x, 'y' => $y);
+		$command = new Commands\SetWindowPosition($this->_driver, $params,  array('window_handle' => 'current'));			
+		$command->execute();
+	}
+	
+	/**
+	 * Gets current window's position
+	 * @return Array
+	 */
+	public function getPosition()
+	{
+		$command = new Commands\GetWindowPosition($this->_driver, null, array('window_handle' => 'current'));
+		$results = $command->execute(); 
+		return $results['value'];	
+	}
 }

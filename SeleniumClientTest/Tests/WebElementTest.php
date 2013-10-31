@@ -223,7 +223,7 @@ class WebElementTest extends AbstractTest
 		
 		$button->click();
 		
-		$this->assertTrue(strstr($this->_driver->getCurrentPageUrl(), "formReceptor") >= 0);
+		$this->assertTrue(strstr($this->_driver->getCurrentUrl(), "formReceptor") >= 0);
 	}
 
 	public function testClickShouldGetAlert()
@@ -237,7 +237,7 @@ class WebElementTest extends AbstractTest
 	{
 		$form = $this->_driver->findElement(By::xPath("/html/body/table/tbody/tr/td[1]/fieldset/form"));	
 		$form->submit();	
-		$this->assertTrue(strstr($this->_driver->getCurrentPageUrl(), "formReceptor") >= 0);
+		$this->assertTrue(strstr($this->_driver->getCurrentUrl(), "formReceptor") >= 0);
 	}
 
 	public function testSubmitShouldSubmitFormFromButton()
@@ -246,7 +246,7 @@ class WebElementTest extends AbstractTest
 	
 		$button->submit();
 	
-		$this->assertTrue(strstr($this->_driver->getCurrentPageUrl(), "formReceptor") >= 0);
+		$this->assertTrue(strstr($this->_driver->getCurrentUrl(), "formReceptor") >= 0);
 	}
 	
 	public function testGetTextShouldGetText()

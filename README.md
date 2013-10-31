@@ -49,7 +49,7 @@ One of the goals is to provide a client usage as close as possible to the Seleni
 		
 * Switch between windows
 
-		$driver->switchTo()->getWindow("windowName");
+		$driver->switchTo()->window("windowName");
 	
 * Manage alerts
 

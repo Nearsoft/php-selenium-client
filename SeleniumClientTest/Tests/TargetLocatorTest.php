@@ -16,204 +16,144 @@ class TargetLocatorTest extends AbstractTest
         parent::setUp();
 		$this->_targetLocator = new TargetLocator($this->_driver);
 	}
-	
-	public function testGetDefaultFrameShouldGetFrameWebElement()
-	{
-		$webElement = $this->_targetLocator->getDefaultFrame()->findElement(By::id("txt1"));
-		$webElement->sendKeys("test iframe");
 
-		$this->assertEquals("test iframe", $webElement->getAttribute("value"));
+	public function testWindowShouldGetWindowWebElement()
+	{
+		$this->_driver->findElement(By::id("btnPopUp1"))->click();
+		$webElement = $this->_targetLocator->window("popup1")->waitForElementUntilIsPresent(By::id("txt1"));
+		$webElement->sendKeys("test window");
+		$this->assertEquals("test window", $webElement->getAttribute("value"));
 	}
 	
-	public function testGetFrameByIndexShouldGetFrameWebElement()
+	public function testWindowShouldGetWindowWebElementGetBackToParentWindow()
 	{
-		$webElement = $this->_targetLocator->getFrameByIndex(0)->findElement(By::id("txt1"));
-		$webElement->sendKeys("test iframe");
+		$window1Handle = $this->_driver->getWindowHandle();
 
+		$this->_driver->findElement(By::id("btnPopUp1"))->click();
+		$this->_targetLocator->window($window1Handle);
+		$this->_driver->findElement(By::id("btnPopUp2"))->click();
+
+		$webElement = $this->_targetLocator->window("popup1")->waitForElementUntilIsPresent(By::id("txt1"));
+		$webElement->sendKeys("test window 1");
+		
+		$this->assertEquals("test window 1", $webElement->getAttribute("value"));
+
+		$webElement = $this->_targetLocator->window("popup2")->waitForElementUntilIsPresent(By::id("txt1"));
+		$webElement->sendKeys("test window 2");
+		
+		$this->assertEquals("test window 2", $webElement->getAttribute("value"));
+
+		$webElement = $this->_targetLocator->window($window1Handle)->waitForElementUntilIsPresent(By::id("txt1"));
+		$webElement->sendKeys("test window default");
+
+		$this->assertEquals("test window default", $webElement->getAttribute("value"));
+
+		$this->_targetLocator->window("popup1")->manage()->window()->close();
+		$this->_targetLocator->window("popup2")->manage()->window()->close();
+		$this->_targetLocator->window($window1Handle)->manage()->window()->close();
+	}
+
+	public function testFrameShouldGetDefaultframe()
+	{
+		$webElement = $this->_targetLocator->frame(null)->findElement(By::id("txt1"));
+		$webElement->sendKeys("test iframe");
 		$this->assertEquals("test iframe", $webElement->getAttribute("value"));
 	}
 
-	public function testGetFrameByIndexShouldGetFrameWebElementGetBackToParentWindow()
+	public function testFrameShouldGetFrameByIndex()
 	{
-		$webElement = $this->_targetLocator->getFrameByIndex(0)->findElement(By::id("txt1"));
+		$webElement = $this->_targetLocator->frame(0)->findElement(By::id("txt1"));
 		$webElement->sendKeys("test iframe");
 
 		$this->assertEquals("test iframe", $webElement->getAttribute("value"));
 
-		$webElement = $this->_targetLocator->getDefaultFrame()->findElement(By::id("txt1"));
+		$webElement = $this->_targetLocator->frame(null)->findElement(By::id("txt1"));
 		$webElement->sendKeys("test iframe default");
 
 		$this->assertEquals("test iframe default", $webElement->getAttribute("value"));
 
-		$webElement = $this->_targetLocator->getFrameByIndex(1)->findElement(By::id("txt1"));
+		$webElement = $this->_targetLocator->frame(1)->findElement(By::id("txt1"));
 		$webElement->sendKeys("test iframe1");
 		
 		$this->assertEquals("test iframe1", $webElement->getAttribute("value"));
 	}
 
-	public function testGetFrameByNameShouldGetFrameWebElement()
+	public function testFrameShouldGetFrameByName()
 	{
-		$webElement = $this->_targetLocator->getFrameByName("iframe1")->findElement(By::id("txt1"));
+		$webElement = $this->_targetLocator->frame("iframe1")->findElement(By::id("txt1"));
 		$webElement->sendKeys("test iframe");
-
 		$this->assertEquals("test iframe", $webElement->getAttribute("value"));
 	}
 	
-	public function testGetFrameByNameShouldGetFrameWebElementGetBackToParentWindow()
+	public function testFrameShouldGetFrameByNameShouldGetFrameWebElementGetBackToParentWindow()
 	{
-		$webElement = $this->_targetLocator->getFrameByName("iframe1")->findElement(By::id("txt1"));
+		$webElement = $this->_targetLocator->frame("iframe1")->findElement(By::id("txt1"));
 		$webElement->sendKeys("test iframe");
 
 		$this->assertEquals("test iframe", $webElement->getAttribute("value"));
 
-		$webElement = $this->_targetLocator->getDefaultFrame()->findElement(By::id("txt1"));
+		$webElement = $this->_targetLocator->frame(null)->findElement(By::id("txt1"));
 		$webElement->sendKeys("test iframe default");
 
 		$this->assertEquals("test iframe default", $webElement->getAttribute("value"));
 
-		$webElement = $this->_targetLocator->getFrameByName("iframe2")->findElement(By::id("txt1"));
+		$webElement = $this->_targetLocator->frame("iframe2")->findElement(By::id("txt1"));
 		$webElement->sendKeys("test iframe2");
 
 		$this->assertEquals("test iframe2", $webElement->getAttribute("value"));
 	}
 	
-	public function testGetFrameByWebElementShouldGetFrameWebElement()
+	public function testFrameShouldGetFrameByWebElementShouldGetFrameWebElement()
 	{
 		$webElement = $this->_driver->findElement(By::id("iframe1"));
-		$webElement = $this->_targetLocator->getFrameByWebElement($webElement)->findElement(By::id("txt1"));
+		$webElement = $this->_targetLocator->frame($webElement)->findElement(By::id("txt1"));
 		$webElement->sendKeys("test iframe");
-
 		$this->assertEquals("test iframe", $webElement->getAttribute("value"));
 	}
 
-	public function testGetFrameByWebElementShouldGetFrameWebElementGetBackToParentWindow()
+	public function testFrameShouldGetFrameByWebElementShouldGetFrameWebElementGetBackToParentWindow()
 	{
 		$webElement = $this->_driver->findElement(By::id("iframe1"));
-		$webElement = $this->_targetLocator->getFrameByWebElement($webElement)->findElement(By::id("txt1"));
+		$webElement = $this->_targetLocator->frame($webElement)->findElement(By::id("txt1"));
 		$webElement->sendKeys("test iframe");
 
 		$this->assertEquals("test iframe", $webElement->getAttribute("value"));
 
-		$webElement = $this->_targetLocator->getDefaultFrame()->findElement(By::id("txt1"));
+		$webElement = $this->_targetLocator->frame(null)->findElement(By::id("txt1"));
 		$webElement->sendKeys("test iframe default");
 
 		$this->assertEquals("test iframe default", $webElement->getAttribute("value"));
 
 		$webElement = $this->_driver->findElement(By::id("iframe2"));
-		$webElement = $this->_targetLocator->getFrameByWebElement($webElement)->findElement(By::id("txt1"));
+		$webElement = $this->_targetLocator->frame($webElement)->findElement(By::id("txt1"));
 		$webElement->sendKeys("test iframe2");
 
 		$this->assertEquals("test iframe2", $webElement->getAttribute("value"));
 	}
 
-	public function testGetWindowShouldGetWindowWebElement()
+	public function testActiveElementShouldGetActiveElement()
 	{
-		$this->_driver->findElement(By::id("btnPopUp1"))->click();
-
-		$webElement = $this->_targetLocator->getWindow("popup1")->waitForElementUntilIsPresent(By::id("txt1"));
-		$webElement->sendKeys("test window");
-
-		$this->assertEquals("test window", $webElement->getAttribute("value"));
-	}
-	
-	public function testGetWindowShouldGetWindowWebElementGetBackToParentWindow()
-	{
-		$window1Handle = $this->_driver->getCurrentWindowHandle();
-
-		$this->_driver->findElement(By::id("btnPopUp1"))->click();
-		$this->_targetLocator->getWindow($window1Handle);
-		$this->_driver->findElement(By::id("btnPopUp2"))->click();
-
-		$webElement = $this->_targetLocator->getWindow("popup1")->waitForElementUntilIsPresent(By::id("txt1"));
-		$webElement->sendKeys("test window 1");
-		
-		$this->assertEquals("test window 1", $webElement->getAttribute("value"));
-
-		$webElement = $this->_targetLocator->getWindow("popup2")->waitForElementUntilIsPresent(By::id("txt1"));
-		$webElement->sendKeys("test window 2");
-		
-		$this->assertEquals("test window 2", $webElement->getAttribute("value"));
-
-		$webElement = $this->_targetLocator->getWindow($window1Handle)->waitForElementUntilIsPresent(By::id("txt1"));
-		$webElement->sendKeys("test window default");
-
-		$this->assertEquals("test window default", $webElement->getAttribute("value"));
-
-		$this->_targetLocator->getWindow("popup1")->closeCurrentWindow();
-		$this->_targetLocator->getWindow("popup2")->closeCurrentWindow();
-		$this->_targetLocator->getWindow($window1Handle)->closeCurrentWindow();
-	}
-
-	public function testGetActiveElementShouldGetActiveElement()
-	{
-		$this->_driver->findElement(By::id("txt1"))->sendKeys("test");
-		
-		$webElement = $this->_targetLocator->getActiveElement();
-
+		$this->_driver->findElement(By::id("txt1"))->sendKeys("test");		
+		$webElement = $this->_targetLocator->activeElement();
+		$this->assertInstanceOf('SeleniumClient\WebElement', $webElement);
 		$this->assertEquals("test", $webElement->getAttribute("value"));
 	}
 
-	public function testGetAlertShouldGetAlertInstance()
+	public function testAlertShouldGetAlertInstance()
 	{
 		$this->_driver->findElement(By::id("btnAlert"))->click();
-
-		$alert = $this->_targetLocator->getAlert();
-		
+		$alert = $this->_targetLocator->alert();		
 		$this->assertTrue($alert instanceof Alert);
-	}
-
-	public function testGetAlertShouldGetAlertText()
-	{
-		$this->_driver->findElement(By::id("btnAlert"))->click();
-
-		$alertText = $this->_targetLocator->getAlert()->getText();
-
-		$this->assertEquals("Here is the alert", $alertText);
-	}
-
-	public function testGetAlertShouldDismissAlert()
-	{
-		$this->_driver->findElement(By::id("btnConfirm"))->click();
-
-		$this->_targetLocator->getAlert()->dismiss();
-
-		$alertText = $this->_targetLocator->getAlert()->getText();
-
-		$this->assertEquals("false", $alertText);
-	}
-
-	public function testGetAlertShouldAcceptAlert()
-	{
-		$this->_driver->findElement(By::id("btnConfirm"))->click();
-
-		$this->_targetLocator->getAlert()->accept();
-
-		$alertText = $this->_targetLocator->getAlert()->getText();
-
-		$this->assertEquals("true", $alertText);
-	}
-
-	public function testGetAlertShouldSendKeysToAlert()
-	{
-		$this->_driver->findElement(By::id("btnPrompt"))->click();
-
-		$alert = $this->_targetLocator->getAlert();
-		$alert->sendKeys("alert text");
-		$alert->accept();
-
-		$alertText = $this->_targetLocator->getAlert()->getText();
-
-		$this->assertEquals("alert text", $alertText);
-	}
+	}	
 
     public function testNewTabShouldGetNewWindow()
     {
-        $oldHandle1 = $this->_driver->getCurrentWindowHandle();
-        $numHandles = count($this->_driver->getCurrentWindowHandles());
+        $oldHandle1 = $this->_driver->getWindowHandle();
+        $numHandles = count($this->_driver->getWindowHandles());
         $oldHandle2 = $this->_targetLocator->newTab($this->_url);
         $this->assertEquals($oldHandle1, $oldHandle2);
-        $newHandle = $this->_driver->getCurrentWindowHandle();
+        $newHandle = $this->_driver->getWindowHandle();
         $this->assertNotEquals($oldHandle1, $newHandle);
-        $this->assertEquals($numHandles + 1, count($this->_driver->getCurrentWindowHandles()));
-    }
+        $this->assertEquals($numHandles + 1, count($this->_driver->getWindowHandles()));
+    }	
 }
