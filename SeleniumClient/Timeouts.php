@@ -22,5 +22,38 @@ class Timeouts
 	public function __construct(WebDriver $driver)
 	{
 		$this->_driver = $driver;
-	}	
+	}
+
+    /**
+     * Sets default time for selenium to wait for an element to be present
+     * @param Integer $milliseconds
+     */
+    public function implicitWait($milliseconds)
+    {
+        $params = array ('ms' => $milliseconds );
+        $command = new Commands\ImplicitWait($this->_driver, $params);
+        $command->execute();
+    }
+
+    /**
+     * Sets page_load timeout
+     * @param int $milliseconds
+     */
+    public function pageLoadTimeout($milliseconds)
+    {
+        $params = array ('type' => 'page load','ms' => $milliseconds );
+        $command = new Commands\LoadTimeout($this->_driver, $params);
+        $command->execute();
+    }
+
+    /**
+     * Set's Async Script timeout
+     * @param Integer $milliseconds
+     */
+    public function setScriptTimeout($milliseconds)
+    {
+        $params = array('ms' => $milliseconds);
+        $command = new Commands\AsyncScriptTimeout($this->_driver, $params);
+        $command->execute();
+    }
 }

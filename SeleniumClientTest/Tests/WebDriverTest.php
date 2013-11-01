@@ -161,15 +161,7 @@ class WebDriverTest extends AbstractTest
 	{
 		$this->assertEquals($this->_url, $this->_driver->getCurrentUrl());
 	}
-	
-	public function testSetImplicitWait()
-	{
-		$this->_driver->findElement(By::id("btnAppendDiv"))->click();
-		$this->_driver->setImplicitWait(5000);
-		$webElement = $this->_driver->findElement(By::id("dDiv1-0")); // This takes 5 seconds to be present
-		$this->assertInstanceOf('SeleniumClient\WebElement', $webElement);
-	}
-	
+
 	public function testStatus()
 	{ 
 		$status = $this->_driver->status();

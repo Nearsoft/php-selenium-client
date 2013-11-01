@@ -114,10 +114,10 @@ class AbstractTest extends PHPUnit_Framework_TestCase {
                 return;
             }
             $this->_driver->manage()->deleteAllCookies();
-            $this->_driver->setImplicitWait(0);
+            $this->_driver->manage()->timeouts()->implicitWait(0);
             $this->_driver->manage()->window()->setPosition($this->_position['x'], $this->_position['y'] );
             $this->_driver->manage()->window()->setSize($this->_size['width'], $this->_size['height'] );
-            $this->_driver->setPageLoadTimeout(10000);
+            $this->_driver->manage()->timeouts()->pageLoadTimeout(10000);
         } else {
             try{
                 $this->_driver->quit();
