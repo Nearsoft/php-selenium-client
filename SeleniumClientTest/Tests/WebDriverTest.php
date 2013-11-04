@@ -132,13 +132,6 @@ class WebDriverTest extends AbstractTest
 		$this->assertEquals('finished',$this->_driver->findElement(By::id("txt1"))->getValue());   	
 	}
 
-	public function testSetAsyncScriptTimeout()
-	{
-		$this->_driver->setAsyncScriptTimeout(1);
-		$this->setExpectedException('SeleniumClient\Http\SeleniumScriptTimeoutException');	
-		$this->_driver->executeAsyncScript("setTimeout('arguments[0]()',5000);");
-	}
-	
 	public function testGetCapabilitiesShouldGetInfo() {
         $this->assertTrue(is_array($this->_driver->getCapabilities()));
     }
@@ -161,15 +154,7 @@ class WebDriverTest extends AbstractTest
 	{
 		$this->assertEquals($this->_url, $this->_driver->getCurrentUrl());
 	}
-	
-	public function testSetImplicitWait()
-	{
-		$this->_driver->findElement(By::id("btnAppendDiv"))->click();
-		$this->_driver->setImplicitWait(5000);
-		$webElement = $this->_driver->findElement(By::id("dDiv1-0")); // This takes 5 seconds to be present
-		$this->assertInstanceOf('SeleniumClient\WebElement', $webElement);
-	}
-	
+
 	public function testStatus()
 	{ 
 		$status = $this->_driver->status();
@@ -260,13 +245,6 @@ class WebDriverTest extends AbstractTest
 		$this->_driver->waitForElementUntilIsNotPresent(By::id("btnHideThis"),10);
 		
 		$this->assertFalse($webElement->isDisplayed());		
-	}
-
-	public function testSetPageLoadTimeout()
-	{
-		$this->_driver->setPageLoadTimeout(1);
-		$this->setExpectedException('SeleniumClient\Http\SeleniumScriptTimeoutException');
-		$this->_driver->get($this->_url."/formReceptor.php");
 	}
 
 	public function testQuit()

@@ -98,17 +98,13 @@ class WebDriver
 	 * Get current Selenium environment
 	 * @return String
 	 */
-	public function getEnvironment() {
-		return $this->_environment;
-	}
+	public function getEnvironment() { return $this->_environment; }
 
 	/**
 	 * Get HttpClient Object
 	 * @return String
 	 */
-	public function getHttpClient() {
-		return $this->_httpClient;
-	}
+	public function getHttpClient()  { return $this->_httpClient; }
 
 	/**
 	 * Get current Selenium Hub url
@@ -236,18 +232,7 @@ class WebDriver
 		$results = $command->execute();	
 		return $results['value'];
 	}	
-	
-	/**
-	 * Sets default time for selenium to wait for an element to be present
-	 * @param Integer $miliseconds
-	 */
-	public function setImplicitWait($miliseconds)
-	{
-		$params = array ('ms' => $miliseconds );
-		$command = new Commands\ImplicitWait($this,$params);	
-		$command->execute();
-	}
-	
+
 	/**
 	 * Get current server's status
 	 * @return Array
@@ -442,28 +427,6 @@ class WebDriver
         return false;
 	}
 
-	/**
-	 * Sets page_load timeout
-	 * @param int $miliseconds
-	 */
-	public function setPageLoadTimeout($miliseconds)
-	{
-		$params = array ('type' => 'page load','ms' => $miliseconds );
-		$command = new Commands\LoadTimeout($this, $params);		
-		$command->execute();
-	}
-
-	/**
-	 * Set's Async Script timeout
-	 * @param Integer $miliseconds
-	 */
-	public function setAsyncScriptTimeout($miliseconds)
-	{
-		$params = array('ms' => $miliseconds);
-		$command = new Commands\AsyncScriptTimeout($this, $params);		
-		$command->execute();
-	}
-	
 	/**
 	 * Executes javascript on page
 	 * @param String $script
