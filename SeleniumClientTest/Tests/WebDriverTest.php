@@ -10,13 +10,6 @@ use SeleniumClient\WebElement;
 class WebDriverTest extends AbstractTest
 {	
 	
-	
-	public function testSwitchToShouldGetTargetLocatorInstance()
-	{
-		$result = $this->_driver->switchTo();
-		$this->assertTrue($result instanceof TargetLocator);
-	}	
-	
 	public function testScreenshotsShouldCreateFile()
 	{
 		$screenShotsDirectory = "/tmp/selenium screenshots";
@@ -93,7 +86,12 @@ class WebDriverTest extends AbstractTest
         $this->assertTrue(count($sessions) > 0);
     }
 
-    public function testSwitchShouldGetTargetLocatorInstance()
+    public function testNavigateShouldGetNavigationInstance()
+	{	
+		$this->assertInstanceOf('SeleniumClient\Navigation', $this->_driver->navigate());		
+	}
+
+    public function testSwitchToShouldGetTargetLocatorInstance()
 	{	
 		$this->assertInstanceOf('SeleniumClient\TargetLocator', $this->_driver->switchTo());		
 	}
@@ -124,7 +122,7 @@ class WebDriverTest extends AbstractTest
 		$this->assertEquals("TEST2!", $webElement->getAttribute("value"));
 	}
 	
-	public function testExecuteAsyncScriptShouldShowAlertKeepDriverInstance()
+	public function testExecuteAsyncScriptShouldManipulateDom()
 	{
 		//https://code.google.com/p/selenium/wiki/JsonWireProtocol#POST_/session/:sessionId/execute_async
 		//There is an implicit last argument being sent which MUST be invoked as callback by the end of the function
@@ -162,15 +160,15 @@ class WebDriverTest extends AbstractTest
 		$this->assertEquals(asort(array_keys($status)),asort($expectedKeys));
 	}
 
-	public function testPageSource()
+	public function testGetPageSource()
 	{
-		$this->assertTrue((bool)strpos($this->_driver->pageSource(), '<legend>Form elements</legend>'));		
+		$this->assertTrue((bool)strpos($this->_driver->getPageSource(), '<legend>Form elements</legend>'));		
 	}
 	
-	public function testTitle()
+	public function testGetTitle()
 	{
-		$this->assertTrue(is_string($this->_driver->title()));
-		$this->assertTrue(count($this->_driver->title())>0);
+		$this->assertTrue(is_string($this->_driver->getTitle()));
+		$this->assertTrue(count($this->_driver->getTitle())>0);
 	}
 	
 	public function testFindElement()
@@ -262,4 +260,14 @@ class WebDriverTest extends AbstractTest
 		$matchedSessions = array_filter($sessions,$containsSession);
 		$this->assertEquals(0, count($matchedSessions));		
 	}
+
+	public function testCloseWindowShouldClose()
+	{
+		$this->_driver->findElement(By::id("btnPopUp1"))->click();
+		$this->_driver->switchTo()->window("popup1");
+		$this->_driver->close();
+		$this->setExpectedException('SeleniumClient\Http\SeleniumNoSuchWindowException');	
+		$this->_driver->getCurrentUrl();		
+	}
+
 }

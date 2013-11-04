@@ -52,7 +52,7 @@ class Demo2Test extends PHPUnit_Framework_TestCase
 		
 		$this->assertEquals("test window", $webElement->getAttribute("value"));
 		
-		$this->_driver->manage()->window()->close();
+		$this->_driver->close();
 		
 		$this->_driver->switchTo()->window($mainWindowHandle);
 		

@@ -17,16 +17,7 @@ class WindowTest extends AbstractTest
 		$this->assertTrue($dimensionsAfter['height'] > $dimensionsBefore['height']);
 		$this->assertTrue($dimensionsAfter['width'] > $dimensionsBefore['width']);
     }
-
-    public function testCloseWindowShouldClose()
-	{
-		$this->_driver->findElement(By::id("btnPopUp1"))->click();
-		$this->_driver->switchTo()->window("popup1");
-		$this->_driver->manage()->window()->close();
-		$this->setExpectedException('SeleniumClient\Http\SeleniumNoSuchWindowException');	
-		$this->_driver->getCurrentUrl();		
-	}
-
+    
 	public function testSizeShouldSetGet()
 	{
 		$width = 235; $height = 318;

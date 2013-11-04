@@ -29,14 +29,15 @@ require_once __DIR__ . '/Navigation.php';
 
 class WebDriver
 {
-	private $_hubUrl = null;
-	private $_sessionId = null;
+	private $_hubUrl               = null;
+	private $_sessionId            = null;
 	private $_screenshotsDirectory = null;
-	private $_environment = HttpFactory::PRODUCTIONMODE;
-	private $_capabilities = null;
-	private $_httpClient = null;
-	private $_options = null;
-    private $_navigate = null;
+	private $_environment          = HttpFactory::PRODUCTIONMODE;
+	private $_capabilities         = null;
+	private $_httpClient           = null;
+	private $_options              = null;
+    private $_navigate             = null;
+    private $_targetLocator        = null;
 	
 	/**
 	 * @param DesiredCapabilities $desiredCapabilities
@@ -45,8 +46,8 @@ class WebDriver
 	 */
 	public function __construct(DesiredCapabilities $desiredCapabilities = null, $host = "http://localhost", $port = 4444)
 	{
-		$this->_hubUrl = $host . ":" . strval($port) . "/wd/hub";		
-		if(!isset($desiredCapabilities)) { $desiredCapabilities = new DesiredCapabilities("firefox"); }
+		$this->_hubUrl = "{$host}:{$port}/wd/hub";
+		isset($desiredCapabilities) ? : $desiredCapabilities = new DesiredCapabilities("firefox");
 		$this->_httpClient = HttpFactory::getClient($this->_environment);		
 		$this->startSession($desiredCapabilities);
 	}
@@ -112,19 +113,6 @@ class WebDriver
 	 */
 	public function getHubUrl() { return $this->_hubUrl; }
 
-    /**
-     * Get Navigation object
-     * @return Selenium\Navigation
-     */
-    public function navigate()
-    {
-        if(!$this->_navigate)
-        {
-            $this->_navigate = new Navigation($this);
-        }
-        return $this->_navigate;
-    }
-
 	/**
 	 * Get assigned session id
 	 * @return Integer
@@ -132,27 +120,34 @@ class WebDriver
 	public function getSessionId() { return $this->_sessionId; }
 	
 	/**
+	 * Sets default screenshots directory for files to be stored in
+	 * @param String $value
+	 */
+	public function setScreenShotsDirectory($value) { $this->_screenshotsDirectory = $value; }
+
+	/**
 	 * Get default screenshots directory
 	 * @return String
 	 */
 	public function getScreenShotsDirectory() { return $this->_screenshotsDirectory; }
 	
-	/**
-	 * Sets default screenshots directory for files to be stored in
-	 * @param String $value
-	 */
-	public function setScreenShotsDirectory($value) { $this->_screenshotsDirectory = $value; }
-	
+    /**
+     * Get Navigation object
+     * @return Selenium\Navigation
+     */
+    public function navigate()
+    {
+        isset($this->_navigate) ? : $this->_navigate = new Navigation($this);
+        return $this->_navigate;
+    }
+
 	/**
 	 * Gets Options object
 	 * @return SeleniumClient\Options
 	 */
 	public function manage()
 	{
-		if(!$this->_options)
-		{
-			$this->_options = new Options($this);
-		}
+		isset($this->_options) ? : $this->_options = new Options($this);
 		return $this->_options;
 	}
 
@@ -160,7 +155,11 @@ class WebDriver
 	 * Creates new target locator to be handled
 	 * @return \SeleniumClient\TargetLocator
 	 */
-	public function switchTo() { return new TargetLocator($this); }
+	public function switchTo()
+	{
+		isset($this->_targetLocator) ? : $this->_targetLocator = new TargetLocator($this);
+		return $this->_targetLocator;
+	}
 
 	/**
 	 * Starts new Selenium session
@@ -211,7 +210,16 @@ class WebDriver
 		$command = new Commands\Quit($this);
 		$command->execute();
 	}
-	
+
+	/**
+	 * Closes current window
+	 */
+	public function close()
+	{
+		$command = new Commands\CloseWindow($this);		
+		$command->execute();
+	}
+		
 	/**
 	 * Navigates to specified url
 	 * @param String $url
@@ -248,7 +256,7 @@ class WebDriver
 	 * Gets current page source
 	 * @return String
 	 */
-	public function pageSource()
+	public function getPageSource()
 	{
 		$command = new Commands\Source($this);		
 		$results = $command->execute();		
@@ -259,7 +267,7 @@ class WebDriver
 	 * Gets current page title
 	 * @return String
 	 */
-	public function title()
+	public function getTitle()
 	{
 		$command = new Commands\Title($this);	
 		$results = $command->execute();	
