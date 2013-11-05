@@ -177,7 +177,8 @@ class WebDriver
 		$command = new Commands\StartSession($this, $params);
 		$results = $command->execute();	
 		$this->_sessionId = $results['sessionId'];
-		$this->_capabilities = $this->getCapabilities();
+		$this->_capabilities = $results['value'];
+		return $this->_capabilities;
 	}
 	
 	/**

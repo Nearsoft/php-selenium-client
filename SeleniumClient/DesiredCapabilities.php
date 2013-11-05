@@ -17,6 +17,8 @@ namespace SeleniumClient;
 
 use SeleniumClient\CapabilityType;
 
+require_once __DIR__ . '/Exceptions.php';
+
 class DesiredCapabilities {	
 	
 	private $_capabilities = null;
@@ -31,17 +33,17 @@ class DesiredCapabilities {
 	{
 		if(isset($browser))
 		{
-			$this->setCapability(CapabilityType::browserName, $browser);
+			$this->setCapability(CapabilityType::BROWSER_NAME, $browser);
 		}
 	
 		if(isset($version))
 		{
-			$this->setCapability(CapabilityType::version, $version);
+			$this->setCapability(CapabilityType::VERSION, $version);
 		}
 	
 		if(isset($platform))
 		{
-			$this->setCapability(CapabilityType::platform, $platform);
+			$this->setCapability(CapabilityType::PLATFORM, $platform);
 		}
 	}
 	
@@ -82,7 +84,7 @@ class DesiredCapabilities {
 	 */
 	public function getBrowserName()
 	{
-		return $this->getCapability(CapabilityType::browserName);
+		return $this->getCapability(CapabilityType::BROWSER_NAME);
 	}
 	
 	/**
@@ -91,7 +93,7 @@ class DesiredCapabilities {
 	 */
 	public function getPlatform()
 	{
-		return $this->getCapability(CapabilityType::platform);
+		return $this->getCapability(CapabilityType::PLATFORM);
 	}
 	
 	/**
@@ -100,7 +102,7 @@ class DesiredCapabilities {
 	 */
 	public function  getVersion()
 	{
-		return $this->getCapability(CapabilityType::version);
+		return $this->getCapability(CapabilityType::VERSION);
 	}
 	
 	/**
@@ -109,7 +111,7 @@ class DesiredCapabilities {
 	 */
 	public function getIsJavaScriptEnabled()
 	{
-		return $this->getCapability(CapabilityType::javascriptEnabled);
+		return $this->getCapability(CapabilityType::JAVASCRIPT_ENABLED);
 	}	
 	
 	/**
@@ -120,14 +122,32 @@ class DesiredCapabilities {
 	 */
 	public function setCapability($capabilityType,$value)
 	{	
-		if(CapabilityType::isValidCapabilityType($capabilityType))
+		if($this->isValidCapabilityAndValue($capabilityType,$value))
 		{
 			$this->_capabilities[$capabilityType] = $value;
 		}
+	}
+
+	private function isValidCapabilityAndValue($capabilityType,$value)
+	{
+		if(CapabilityType::isValidCapabilityType($capabilityType))
+		{
+			switch($capabilityType)
+			{
+				case CapabilityType::BROWSER_NAME:
+					if(!BrowserType::isValidBrowserType($value)) { throw new InvalidBrowserTypeException("'{$value}' is not a valid browser type"); }
+					break;
+				case CapabilityType::PLATFORM:
+					if(!PlatformType::isValidPlatformType($value)) { throw new InvalidPlatformTypeException("'{$value}' is not a valid platform type"); }
+					break;
+			}
+		}
 		else
 		{
-			throw new \Exception("'".$capabilityType ."' is not an valid capability type");
+			throw new InvalidCapabilityTypeException("'{$capabilityType}' is not a valid capability type");
 		}
+
+		return true;
 	}
 	
 	public function __toString()
