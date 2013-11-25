@@ -8,9 +8,19 @@ use SeleniumClient\WebElement;
 
 
 class WebDriverTest extends AbstractTest
-{	
-	
-	public function testScreenshotsShouldCreateFile()
+{
+    private $_navigationMock = null;
+    private $_originalNavigate = null;
+
+    public function setUp()
+    {
+        parent::setUp();
+        $this->_navigationMock = $this->getMock('Navigation', array('refresh','to','back','forward'));
+        $this->_originalNavigate = $this->_driver->navigate();
+    }
+
+
+    public function testScreenshotsShouldCreateFile()
 	{
 		$screenShotsDirectory = "/tmp/selenium screenshots";
 		
@@ -270,4 +280,52 @@ class WebDriverTest extends AbstractTest
 		$this->_driver->getCurrentUrl();		
 	}
 
+    public function testMagicNavigationBackShouldCallMethodBack()
+    {
+        $this->_navigationMock->expects($this->exactly(1))
+            ->method('back');
+
+        $this->_driver->setNavigate($this->_navigationMock);
+
+        $this->_driver->navigationBack();
+
+        $this->_driver->setNavigate($this->_originalNavigate);
+    }
+
+    public function testMagicNavigationForwardShouldCallMethodForward()
+    {
+        $this->_navigationMock->expects($this->exactly(1))
+            ->method('forward');
+
+        $this->_driver->setNavigate($this->_navigationMock);
+
+        $this->_driver->navigationForward();
+
+        $this->_driver->setNavigate($this->_originalNavigate);
+    }
+
+    public function testMagicNavigationRefreshShouldCallMethodRefresh()
+    {
+        $this->_navigationMock->expects($this->exactly(1))
+            ->method('refresh');
+
+        $this->_driver->setNavigate($this->_navigationMock);
+
+        $this->_driver->navigationRefresh();
+
+        $this->_driver->setNavigate($this->_originalNavigate);
+    }
+
+    public function testMagicNavigationToShouldCallMethodTo()
+    {
+        $this->_navigationMock->expects($this->exactly(1))
+            ->method('to')
+            ->with($this->equalTo('google.com'));
+
+        $this->_driver->setNavigate($this->_navigationMock);
+
+        $this->_driver->navigationTo('google.com');
+
+        $this->_driver->setNavigate($this->_originalNavigate);
+    }
 }

@@ -240,7 +240,7 @@ class WebDriver
     public function navigate()
     {
         if(!$this->_navigate) {
-            $this->_navigate = new Navigation($this);
+            $this->setNavigate(new Navigation($this));
         }
         return $this->_navigate;
     }
@@ -268,15 +268,6 @@ class WebDriver
 	 */
 	public function getScreenShotsDirectory() { return $this->_screenshotsDirectory; }
 	
-    /**
-     * Get Navigation object
-     * @return Selenium\Navigation
-     */
-    public function navigate()
-    {
-        isset($this->_navigate) ? : $this->_navigate = new Navigation($this);
-        return $this->_navigate;
-    }
 
 	/**
 	 * Gets Options object
