@@ -5,7 +5,6 @@ use SeleniumClient\By;
 
 class NavigationTest extends AbstractTest
 {
-
     public function testToShouldNavigateToUrl()
     {
         $url = $this->_url."/formReceptor.php";

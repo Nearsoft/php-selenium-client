@@ -123,7 +123,6 @@ class WebDriver
         $method = lcfirst(substr($name, 6));
         switch ($method) {
             case 'maximize':
-            case 'close':
             case 'getPosition':
             case 'getSize':
                 $values = call_user_func( array($this->manage()->window(), $method));
@@ -245,6 +244,9 @@ class WebDriver
         return $this->_navigate;
     }
 
+    /**Set Navigation
+     * @param $navigate
+     */
     public function setNavigate($navigate)
     {
         $this->_navigate = $navigate;

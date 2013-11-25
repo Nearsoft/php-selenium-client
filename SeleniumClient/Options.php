@@ -47,10 +47,18 @@ class Options
 	{
 		if(!$this->_window)
 		{
-			$this->_window = new Window($this->_driver);
+			$this->setWindow(new Window($this->_driver));
 		}
 		return $this->_window;
-	}
+   	}
+
+    /** Sets Window
+     * @param $window
+     */
+    public function setWindow($window)
+    {
+        $this->_window = $window;
+    }
 
 	/**
 	 * Sets cookie

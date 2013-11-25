@@ -10,13 +10,18 @@ use SeleniumClient\WebElement;
 class WebDriverTest extends AbstractTest
 {
     private $_navigationMock = null;
+    private $_windowMock = null;
     private $_originalNavigate = null;
+    private $_originalWindow = null;
 
     public function setUp()
     {
         parent::setUp();
         $this->_navigationMock = $this->getMock('Navigation', array('refresh','to','back','forward'));
+        $this->_windowMock = $this->getMock('Window', array('maximize','close' ,'setSize', 'getSize', 'setPosition', 'getPosition'));
         $this->_originalNavigate = $this->_driver->navigate();
+        $this->_originalWindow = $this->_driver->manage()->window();
+
     }
 
 
@@ -327,5 +332,70 @@ class WebDriverTest extends AbstractTest
         $this->_driver->navigationTo('google.com');
 
         $this->_driver->setNavigate($this->_originalNavigate);
+    }
+
+    public function testMagicWindowMaximizeShouldCallMethodMaximize()
+    {
+        $this->_windowMock->expects($this->exactly(1))
+             ->method('maximize');
+
+        $this->_driver->manage()->setWindow($this->_windowMock);
+
+        $this->_driver->windowMaximize();
+
+        $this->_driver->manage()->setWindow($this->_originalWindow);
+    }
+
+    public function testMagicWindowGetPositionShouldCallMethodGetPosition()
+    {
+        $this->_windowMock->expects($this->exactly(1))
+            ->method('getPosition');
+
+        $this->_driver->manage()->setWindow($this->_windowMock);
+
+        $this->_driver->windowGetPosition();
+
+        $this->_driver->manage()->setWindow($this->_originalWindow);
+    }
+
+    public function testMagicWindowGetSizeShouldCallMethodGetSize()
+    {
+        $this->_windowMock->expects($this->exactly(1))
+            ->method('getSize');
+
+        $this->_driver->manage()->setWindow($this->_windowMock);
+
+        $this->_driver->windowGetSize();
+
+        $this->_driver->manage()->setWindow($this->_originalWindow);
+
+    }
+
+    public function testMagicWindowSetSizeShouldCallMethodSetSize()
+    {
+        $this->_windowMock->expects($this->exactly(1))
+            ->method('setSize')
+            ->with($this->equalTo(100), $this->equalTo(100));
+
+        $this->_driver->manage()->setWindow($this->_windowMock);
+
+        $this->_driver->windowSetSize(100,100);
+
+        $this->_driver->manage()->setWindow($this->_originalWindow);
+
+    }
+
+    public function testMagicWindowSetPositionShouldCallMethodSetPosition()
+    {
+        $this->_windowMock->expects($this->exactly(1))
+            ->method('setPosition')
+            ->with($this->equalTo(200), $this->equalTo(300));
+
+        $this->_driver->manage()->setWindow($this->_windowMock);
+
+        $this->_driver->windowSetPosition(200,300);
+
+        $this->_driver->manage()->setWindow($this->_originalWindow);
+
     }
 }
