@@ -17,22 +17,22 @@ namespace SeleniumClient;
 
 abstract class CapabilityType {	
 	
-	const browserName              = "browserName";
-	const version                  = "version";
-	const platform                 = "platform";	
-	const javascriptEnabled        = "javascriptEnabled";
-	const takesScreenshot          = "takesScreenshot";
-	const handlesAlerts            = "handlesAlerts";
-	const databaseEnabled          = "databaseEnabled";
-	const locationContextEnabled   = "locationContextEnabled";
-	const applicationCacheEnabled  = "applicationCacheEnabled";
-	const browserConnectionEnabled = "browserConnectionEnabled";
-	const cssSelectorsEnabled      = "cssSelectorsEnabled";
-	const webStorageEnabled        = "webStorageEnabled";
-	const rotatable                = "rotatable";
-	const acceptSslCerts           = "acceptSslCerts";
-	const nativeEvents             = "nativeEvents";
-	const proxy                    = "proxy";	
+	const BROWSER_NAME               = "browserName";
+	const VERSION                    = "version";
+	const PLATFORM                   = "platform";	
+	const JAVASCRIPT_ENABLED         = "javascriptEnabled";
+	const TAKES_SCREENSHOT           = "takesScreenshot";
+	const HANDLES_ALERT              = "handlesAlerts";
+	const DATABASE_ENABLED           = "databaseEnabled";
+	const LOCATION_CONTEXT_ENABLED   = "locationContextEnabled";
+	const APPLICATION_CACHE_ENABLED  = "applicationCacheEnabled";
+	const BROWSER_CONNECTION_ENABLED = "browserConnectionEnabled";
+	const CSS_SELECTORS_ENABLED      = "cssSelectorsEnabled";
+	const WEB_STORAGE_ENABLED        = "webStorageEnabled";
+	const ROTATABLE                  = "rotatable";
+	const ACCEPT_SSL_CERTS           = "acceptSslCerts";
+	const NATIVE_EVENTS              = "nativeEvents";
+	const PROXY                      = "proxy";	
 	
 	public static function isValidCapabilityType($capabilityType)
 	{

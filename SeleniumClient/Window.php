@@ -31,16 +31,7 @@ class Window
      	$commannd = new Commands\WindowMaximize($this->_driver, null, array('window_handle' => 'current'));
         $commannd->execute();
     }
-
-	/**
-	 * Closes current window
-	 */
-	public function close()
-	{
-		$command = new Commands\CloseWindow($this->_driver);		
-		$command->execute();
-	}
-	
+    
 	/**
 	 * Sets current window size
 	 * @param Integer $width

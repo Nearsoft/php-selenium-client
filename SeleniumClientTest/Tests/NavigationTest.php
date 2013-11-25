@@ -26,7 +26,7 @@ class NavigationTest extends AbstractTest
 
     public function testBackShouldBackBrowserHistory()
     {
-        $expectedTitle = $this->_driver->title();
+        $expectedTitle = $this->_driver->getTitle();
 
         $navigation =$this->_driver->navigate();
 
@@ -34,7 +34,7 @@ class NavigationTest extends AbstractTest
 
         $navigation->back();
 
-        $this->assertEquals($expectedTitle, $this->_driver->title());
+        $this->assertEquals($expectedTitle, $this->_driver->getTitle());
     }
 
     public function testRefreshShouldRefreshPageAndEmptyElement()
@@ -58,13 +58,13 @@ class NavigationTest extends AbstractTest
 
         $navigation->to($this->_url."/formReceptor.php");
 
-        $expectedTitle = $this->_driver->title();
+        $expectedTitle = $this->_driver->getTitle();
 
         $navigation->back();
 
         $navigation->forward();
 
-        $this->assertEquals($expectedTitle, $this->_driver->title());
+        $this->assertEquals($expectedTitle, $this->_driver->getTitle());
     }
 
     public function testMagicNavigationBackShouldCallMethodBack()

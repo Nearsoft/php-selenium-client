@@ -102,7 +102,7 @@ class AbstractTest extends PHPUnit_Framework_TestCase {
                     // try to close any other windows that were opened
                     try {
                         $this->_driver->switchTo()->window($handle);
-                        $this->_driver->manage()->window()->close();
+                        $this->_driver->close();
                     } catch ( Exception $e ) {
                     }
                 }

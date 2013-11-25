@@ -48,9 +48,12 @@ class TargetLocatorTest extends AbstractTest
 
 		$this->assertEquals("test window default", $webElement->getAttribute("value"));
 
-		$this->_targetLocator->window("popup1")->manage()->window()->close();
-		$this->_targetLocator->window("popup2")->manage()->window()->close();
-		$this->_targetLocator->window($window1Handle)->manage()->window()->close();
+		$this->_targetLocator->window("popup1");
+		$this->_driver->close();
+		$this->_targetLocator->window("popup2");
+		$this->_driver->close();
+		$this->_targetLocator->window($window1Handle);
+		$this->_driver->close();
 	}
 
 	public function testFrameShouldGetDefaultframe()

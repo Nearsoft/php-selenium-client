@@ -19,6 +19,12 @@ class WebDriverWaitTimeoutException extends \Exception {}
 
 class EmptyValueException extends \Exception { }
 
+class InvalidCapabilityTypeException extends \Exception { }
+
+class InvalidBrowserTypeException extends \Exception { }
+
+class InvalidPlatformTypeException extends \Exception { }
+
 class NotStringException extends \Exception
 {
 	public function __construct($functionName, $paramName) { parent::__construct("function {$functionName}: {$paramName} is not String."); }

@@ -6,6 +6,9 @@ use SeleniumClient\By;
 use SeleniumClient\WebDriver;
 use SeleniumClient\WebDriverWait;
 use SeleniumClient\DesiredCapabilities;
+use SeleniumClient\CapabilityType;
+use SeleniumClient\BrowserType;
+use SeleniumClient\PlatformType;
 
 class Demo2Test extends PHPUnit_Framework_TestCase
 {
@@ -19,9 +22,13 @@ class Demo2Test extends PHPUnit_Framework_TestCase
 	{
 		$this->_testUrl = "http://nearsoft-php-seleniumclient.herokuapp.com/SeleniumClientTest/SandBox/";
 		
-		$desiredCapabilities = new DesiredCapabilities("firefox");
+		$desiredCapabilities = new DesiredCapabilities();
+		$desiredCapabilities->setCapability(CapabilityType::BROWSER_NAME, BrowserType::FIREFOX);
+		$desiredCapabilities->setCapability(CapabilityType::VERSION, "24.0");
+		$desiredCapabilities->setCapability(CapabilityType::PLATFORM, PlatformType::WINDOWS);		
 		
 		$this->_driver = new WebDriver($desiredCapabilities);
+		//note that the actual capabilities supported may be different to the desired capabilities specified
 	}
 	
 	public function tearDown()
@@ -52,7 +59,7 @@ class Demo2Test extends PHPUnit_Framework_TestCase
 		
 		$this->assertEquals("test window", $webElement->getAttribute("value"));
 		
-		$this->_driver->manage()->window()->close();
+		$this->_driver->close();
 		
 		$this->_driver->switchTo()->window($mainWindowHandle);
 		
