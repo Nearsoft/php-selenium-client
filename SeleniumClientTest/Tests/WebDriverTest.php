@@ -12,7 +12,6 @@ class WebDriverTest extends AbstractTest
     private $_navigationMock = null;
     private $_windowMock = null;
     private $_targetLocatorMock = null;
-
     private $_originalNavigate = null;
     private $_originalWindow = null;
     private $_originalTargetLocator = null;
@@ -26,7 +25,6 @@ class WebDriverTest extends AbstractTest
         $this->_originalNavigate = $this->_driver->navigate();
         $this->_originalWindow = $this->_driver->manage()->window();
         $this->_originalTargetLocator = $this->_driver->switchTo();
-
     }
 
 
@@ -415,7 +413,6 @@ class WebDriverTest extends AbstractTest
 
         $this->_driver->setSwitchTo($this->_originalTargetLocator);
 
-
     }
 
     public function testMagicSwitchToFrameShouldCallMethodFrame()
@@ -428,7 +425,6 @@ class WebDriverTest extends AbstractTest
         $this->_driver->switchToFrame(null);
 
         $this->_driver->setSwitchTo($this->_originalTargetLocator);
-
     }
 
 }
