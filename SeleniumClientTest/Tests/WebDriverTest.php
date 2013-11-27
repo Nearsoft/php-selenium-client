@@ -11,16 +11,21 @@ class WebDriverTest extends AbstractTest
 {
     private $_navigationMock = null;
     private $_windowMock = null;
+    private $_targetLocatorMock = null;
+
     private $_originalNavigate = null;
     private $_originalWindow = null;
+    private $_originalTargetLocator = null;
 
     public function setUp()
     {
         parent::setUp();
         $this->_navigationMock = $this->getMock('Navigation', array('refresh','to','back','forward'));
         $this->_windowMock = $this->getMock('Window', array('maximize','close' ,'setSize', 'getSize', 'setPosition', 'getPosition'));
+        $this->_targetLocatorMock = $this->getMock('TargetLocator', array('window','frame'));
         $this->_originalNavigate = $this->_driver->navigate();
         $this->_originalWindow = $this->_driver->manage()->window();
+        $this->_originalTargetLocator = $this->_driver->switchTo();
 
     }
 
@@ -398,4 +403,32 @@ class WebDriverTest extends AbstractTest
         $this->_driver->manage()->setWindow($this->_originalWindow);
 
     }
+
+    public function testMagicSwitchToWindowShouldCallMethodWindow()
+    {
+        $this->_targetLocatorMock->expects($this->exactly(1))
+            ->method('window');
+
+        $this->_driver->setSwitchTo($this->_targetLocatorMock);
+
+        $this->_driver->switchToWindow('popup1');
+
+        $this->_driver->setSwitchTo($this->_originalTargetLocator);
+
+
+    }
+
+    public function testMagicSwitchToFrameShouldCallMethodFrame()
+    {
+        $this->_targetLocatorMock->expects($this->exactly(1))
+            ->method('frame');
+
+        $this->_driver->setSwitchTo($this->_targetLocatorMock);
+
+        $this->_driver->switchToFrame(null);
+
+        $this->_driver->setSwitchTo($this->_originalTargetLocator);
+
+    }
+
 }

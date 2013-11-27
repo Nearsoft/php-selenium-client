@@ -57,6 +57,8 @@ class WebDriver
      * Example: navigationRefresh, navigationBack.
      * Enables window's methods be invoked
      * Example: windowMaximize, windowGetPosition.
+     * Enables TargetLocator's methods
+     * Examples: switchToWindow, switchToFrame
      * Enables findElement and findElements methods be invoked through method missing.
      * The methods should be invoked with the format 'findElementBy<strategy>'.
      * Arguments should match those required by findElement and findElements methods.
@@ -76,6 +78,11 @@ class WebDriver
         else if( strpos($name, "window") === 0 ) {
           $values = $this->callWindowMethods($name, $args);
           return $values;
+        }
+
+        else if ( strpos($name, "switchTo") === 0 ) {
+            $values = $this->callSwitchTo($name, $args);
+            return $values;
         }
 
         else if( strpos($name, 'findElement') === 0 ){
@@ -132,6 +139,26 @@ class WebDriver
                 $values = call_user_func( array($this->manage()->window(),$method),$args[0],$args[1]);
                 break;
             default: throw new \Exception ( 'Invalid magic call: '.$name);
+        }
+        return $values;
+    }
+
+    /**
+     * Call Target Locator Methods
+     * @param $name
+     * @param array $args
+     * @return mixed
+     * @throws \Exception
+     */
+    private function callSwitchTo($name, array $args)
+    {
+        $method = lcfirst(substr($name, 8));
+        switch($method){
+            case 'window':
+            case 'frame':
+                $values = call_user_func( array($this->switchTo(), $method),$args[0]);
+                break;
+            default: throw new \Exception ('Invalid magic call:'. $name);
         }
         return $values;
     }
@@ -238,19 +265,14 @@ class WebDriver
      */
     public function navigate()
     {
-        if(!$this->_navigate) {
-            $this->setNavigate(new Navigation($this));
-        }
+        isset($this->_navigate) ? : $this->setNavigate(new Navigation($this));
         return $this->_navigate;
     }
 
     /**Set Navigation
      * @param $navigate
      */
-    public function setNavigate($navigate)
-    {
-        $this->_navigate = $navigate;
-    }
+    public function setNavigate($navigate) { $this->_navigate = $navigate; }
 
 	/**
 	 * Get assigned session id
@@ -277,10 +299,6 @@ class WebDriver
 	 */
 	public function manage()
 	{
-
-		if(!$this->_options) {
-			$this->_options = new Options($this);
-		}
 		isset($this->_options) ? : $this->_options = new Options($this);
 		return $this->_options;
 	}
@@ -291,9 +309,17 @@ class WebDriver
 	 */
 	public function switchTo()
 	{
-		isset($this->_targetLocator) ? : $this->_targetLocator = new TargetLocator($this);
+		isset($this->_targetLocator) ? : $this->setSwitchTo(new TargetLocator($this));
 		return $this->_targetLocator;
 	}
+
+    /**
+     * Set Target Locator
+     * @param $targetLocator
+     */
+    public function setSwitchTo($targetLocator) { $this->_targetLocator = $targetLocator; }
+
+
 
 	/**
 	 * Starts new Selenium session

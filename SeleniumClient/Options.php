@@ -45,20 +45,14 @@ class Options
 	 */
 	public function window()
 	{
-		if(!$this->_window)
-		{
-			$this->setWindow(new Window($this->_driver));
-		}
+        isset($this->_window) ? : $this->setWindow(new Window($this->_driver));
 		return $this->_window;
    	}
 
     /** Sets Window
      * @param $window
      */
-    public function setWindow($window)
-    {
-        $this->_window = $window;
-    }
+    public function setWindow($window) { $this->_window = $window; }
 
 	/**
 	 * Sets cookie
