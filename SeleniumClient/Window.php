@@ -28,7 +28,7 @@ class Window
      * Maximizes current Window
      */
     public function maximize() {
-     	$commannd = new Commands\WindowMaximize($this->_driver, null, array('window_handle' => 'current'));
+     	$commannd = new Commands\Command($this->_driver, 'window_maximize', null, array('window_handle' => 'current'));
         $commannd->execute();
     }
     
@@ -40,7 +40,7 @@ class Window
 	public function setSize($width, $height)
 	{
 		$params = array ('width' => $width, 'height' => $height);
-		$command = new Commands\SetWindowSize($this->_driver, $params, array('window_handle' => 'current'));			
+		$command = new Commands\Command($this->_driver,'set_window_size', $params, array('window_handle' => 'current'));
 		$command->execute();
 	}
 	
@@ -50,7 +50,7 @@ class Window
 	 */
 	public function getSize()
 	{
-		$command = new Commands\GetWindowSize($this->_driver, null,  array('window_handle' => 'current'));			
+		$command = new Commands\Command($this->_driver, 'get_window_size', null,  array('window_handle' => 'current'));
 		$results = $command->execute();
 		return $results['value'];
 	}
@@ -63,7 +63,7 @@ class Window
 	public function setPosition($x, $y)
 	{
 		$params = array ('x' => $x, 'y' => $y);
-		$command = new Commands\SetWindowPosition($this->_driver, $params,  array('window_handle' => 'current'));			
+		$command = new Commands\Command($this->_driver, 'get_window_size', $params,  array('window_handle' => 'current'));
 		$command->execute();
 	}
 	
@@ -73,7 +73,7 @@ class Window
 	 */
 	public function getPosition()
 	{
-		$command = new Commands\GetWindowPosition($this->_driver, null, array('window_handle' => 'current'));
+		$command = new Commands\Command($this->_driver, 'get_window_position',null, array('window_handle' => 'current'));
 		$results = $command->execute(); 
 		return $results['value'];	
 	}

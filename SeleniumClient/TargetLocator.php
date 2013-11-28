@@ -34,7 +34,7 @@ class TargetLocator
 	public function window($identifier)
 	{
 		$params = array ('name' => $identifier);
-		$command = new Commands\Window($this->_driver, $params);		
+		$command = new Commands\Command($this->_driver, 'window', $params);
 		$command->execute();
 		return $this->_driver;
 	}
@@ -56,7 +56,7 @@ class TargetLocator
 		}
 
 		$params = array ('id' => $idParam);
-		$command = new Commands\Frame($this->_driver, $params);		
+		$command = new Commands\Command($this->_driver, 'frame',$params);
 		$command->execute();
 		return $this->_driver;
 	}
@@ -67,7 +67,7 @@ class TargetLocator
 	 */
 	public function activeElement()
 	{
-		$command = new Commands\ActiveElement($this->_driver);	
+		$command = new Commands\Command($this->_driver, 'active_element');
 		$results = $command->execute();	
 		return new WebElement($this->_driver, $results['value']['ELEMENT']);
 	}
