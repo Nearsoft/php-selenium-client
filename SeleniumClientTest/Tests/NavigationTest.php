@@ -1,7 +1,6 @@
 <?php
 
 require_once __DIR__ . '/AbstractTest.php';
-
 use SeleniumClient\By;
 
 class NavigationTest extends AbstractTest

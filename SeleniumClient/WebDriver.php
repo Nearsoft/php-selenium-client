@@ -52,6 +52,12 @@ class WebDriver
 	}
 
     /**
+     * Enables Navigation's methods be invoked as navigationNameMethod
+     * Example: navigationRefresh, navigationBack.
+     * Enables window's methods be invoked
+     * Example: windowMaximize, windowGetPosition.
+     * Enables TargetLocator's methods
+     * Examples: switchToWindow, switchToFrame
      * Enables findElement and findElements methods be invoked through method missing.
      * The methods should be invoked with the format 'findElementBy<strategy>'.
      * Arguments should match those required by findElement and findElements methods.
@@ -63,10 +69,110 @@ class WebDriver
      */
     public function __call( $name, array $args )
     {
+        if( strpos($name, "navigation") === 0 ) {
+            $this->callNavigationMethods($name, $args);
+            return;
+        }
+
+        else if( strpos($name, "window") === 0 ) {
+          $values = $this->callWindowMethods($name, $args);
+          return $values;
+        }
+
+        else if ( strpos($name, "switchTo") === 0 ) {
+            $values = $this->callSwitchTo($name, $args);
+            return $values;
+        }
+
+        else if( strpos($name, 'findElement') === 0 ){
+            return $this->callFindElement($name, $args);
+        }
+
+        else {
+            throw new \Exception( 'Invalid magic call: '.$name );
+        }
+
+    }
+
+    /**
+     * Call Navigation Methods
+     * @param $name
+     * @param $args
+     * @throws \Exception
+     */
+    private function callNavigationMethods($name, $args)
+    {
+        $method = lcfirst(substr($name, 10));
+        switch ( $method ) {
+            case 'back':
+            case 'forward':
+            case 'refresh':
+                call_user_func( array ($this->_navigate, $method) );
+                break;
+            case 'to':
+                call_user_func( array ($this->_navigate, $method),$args[0]);
+                break;
+            default: throw new \Exception( 'Invalid magic call: '.$name );
+        }
+        return;
+    }
+
+    /**
+     * Call Navigation Methods
+     * @param $name
+     * @param $args
+     * @return array
+     * @throws \Exception
+     */
+    private function callWindowMethods($name, $args)
+    {
+        $method = lcfirst(substr($name, 6));
+        switch ($method) {
+            case 'maximize':
+            case 'getPosition':
+            case 'getSize':
+                $values = call_user_func( array($this->manage()->window(), $method));
+                break;
+            case 'setPosition':
+            case 'setSize':
+                $values = call_user_func( array($this->manage()->window(),$method),$args[0],$args[1]);
+                break;
+            default: throw new \Exception ( 'Invalid magic call: '.$name);
+        }
+        return $values;
+    }
+
+    /**
+     * Call Target Locator Methods
+     * @param $name
+     * @param array $args
+     * @return mixed
+     * @throws \Exception
+     */
+    private function callSwitchTo($name, array $args)
+    {
+        $method = lcfirst(substr($name, 8));
+        switch($method){
+            case 'window':
+            case 'frame':
+                $values = call_user_func( array($this->switchTo(), $method),$args[0]);
+                break;
+            default: throw new \Exception ('Invalid magic call:'. $name);
+        }
+        return $values;
+    }
+
+    /**Call findElement and findElement methods
+     * @param $name
+     * @param array $args
+     * @return mixed
+     * @throws \Exception
+     */
+    private function callFindElement($name, array $args)
+    {
         $arr = explode( 'By', $name );
         $call = $arr[0];
         $by = count( $arr ) > 1 ? lcfirst( $arr[1] ) : '';
-
         $valid = false;
 
         switch ( $call ) {
@@ -78,16 +184,55 @@ class WebDriver
         }
 
         if ( !$valid ) {
-            throw new \Exception( 'Invalid magic call' );
+            throw new \Exception( 'Invalid magic call: '.$name );
         }
 
         $method = new \ReflectionMethod( '\\SeleniumClient\\By', $by );
         $byArgs = array_splice( $args, 0, $method->getNumberOfParameters() );
         array_unshift( $args, $method->invokeArgs( null, $byArgs ) );
-
-        return call_user_func_array( array( $this, $call ), $args );
+        $element = call_user_func_array( array( $this, $call ), $args );
+        return  $element;
     }
-	
+
+    /**
+     * Delegated addCookies to Class Options
+     * @param $name
+     * @param $value
+     * @param null $path
+     * @param null $domain
+     * @param null $secure
+     * @param null $expiry
+     */
+    public function addCookie($name, $value, $path = null, $domain = null, $secure = null, $expiry = null)
+    {
+        $this->manage()->addCookie($name, $value, $path, $domain, $secure, $expiry);
+    }
+
+    /**
+     * Delegated getCookies to Class Options
+     * @return Array
+     */
+    public function getCookies() { return $this->manage()->getCookies();}
+
+    /**Delegated method getCookieNamed to Class Options
+     * @param $cookieName
+     * @return mixed
+     */
+    public function getCookieNamed($cookieName) { return $this->manage()->getCookieNamed($cookieName); }
+
+    /**
+     * Delegated method deleteCookieName to Class Options
+     * @param $cookieName
+     */
+    public function deleteCookieNamed($cookieName) { $this->manage()->deleteCookieNamed($cookieName); }
+
+
+    /**
+     * Delegated method deleteAllCookies to Class Options
+     */
+    public function deleteAllCookies() { $this->manage()->deleteAllCookies(); }
+
+
 	/**
 	 * Set whether production or testing mode for library
 	 * @param String $value
@@ -112,6 +257,22 @@ class WebDriver
 	 */
 	public function getHubUrl() { return $this->_hubUrl; }
 
+
+    /**
+     * Get Navigation object
+     * @return Selenium\Navigation
+     */
+    public function navigate()
+    {
+        isset($this->_navigate) ? : $this->setNavigate(new Navigation($this));
+        return $this->_navigate;
+    }
+
+    /**Set Navigation
+     * @param $navigate
+     */
+    public function setNavigate($navigate) { $this->_navigate = $navigate; }
+
 	/**
 	 * Get assigned session id
 	 * @return Integer
@@ -130,15 +291,6 @@ class WebDriver
 	 */
 	public function getScreenShotsDirectory() { return $this->_screenshotsDirectory; }
 	
-    /**
-     * Get Navigation object
-     * @return Selenium\Navigation
-     */
-    public function navigate()
-    {
-        isset($this->_navigate) ? : $this->_navigate = new Navigation($this);
-        return $this->_navigate;
-    }
 
 	/**
 	 * Gets Options object
@@ -156,9 +308,17 @@ class WebDriver
 	 */
 	public function switchTo()
 	{
-		isset($this->_targetLocator) ? : $this->_targetLocator = new TargetLocator($this);
+		isset($this->_targetLocator) ? : $this->setSwitchTo(new TargetLocator($this));
 		return $this->_targetLocator;
 	}
+
+    /**
+     * Set Target Locator
+     * @param $targetLocator
+     */
+    public function setSwitchTo($targetLocator) { $this->_targetLocator = $targetLocator; }
+
+
 
 	/**
 	 * Starts new Selenium session
@@ -167,8 +327,7 @@ class WebDriver
 	 */
 	private function startSession(DesiredCapabilities $desiredCapabilities)
 	{
-		if($desiredCapabilities->getBrowserName() == null || trim($desiredCapabilities->getBrowserName()) == '')
-		{
+		if($desiredCapabilities->getBrowserName() == null || trim($desiredCapabilities->getBrowserName()) == '') {
 			throw new \Exception("Can not start session if browser name is not specified");
 		}
 
@@ -291,8 +450,7 @@ class WebDriver
 
 		$results = $command->execute();
 		
-		if (isset($results['value']) && trim($results['value']) != "")
-		{
+		if (isset($results['value']) && trim($results['value']) != "") {
 			if (!file_exists($screenshotsDirectory . "/" . $this->_sessionId)) { mkdir($screenshotsDirectory . "/" . $this->_sessionId, 0777, true); }
 			
 			$fileName = date ("YmdHmsu") . "-" . (count(glob($screenshotsDirectory . "/" . $this->_sessionId . "/*.png")) + 1) .".png";
