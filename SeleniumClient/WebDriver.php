@@ -24,7 +24,6 @@ use SeleniumClient\Http\SeleniumNoSuchElementException;
 
 require_once __DIR__ . '/Exceptions.php';
 require_once __DIR__ . '/Http/Exceptions.php';
-require_once __DIR__ . '/Commands/Commands.php';
 require_once __DIR__ . '/Navigation.php';
 
 class WebDriver
@@ -174,7 +173,7 @@ class WebDriver
 		}
 
 		$params = array ('desiredCapabilities' => $desiredCapabilities->getCapabilities());	
-		$command = new Commands\StartSession($this, $params);
+		$command = new Commands\Command($this, 'start_session', $params);
 		$results = $command->execute();	
 		$this->_sessionId = $results['sessionId'];
 		$this->_capabilities = $results['value'];
@@ -208,7 +207,7 @@ class WebDriver
 	 */
 	public function quit()
 	{
-		$command = new Commands\Quit($this);
+		$command = new Commands\Command($this, 'quit');
 		$command->execute();
 	}
 

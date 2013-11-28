@@ -58,7 +58,7 @@ class Navigation
     public function to($url)
     {
         $params  = array ('url' => $url);
-        $command = new Commands\GetUrl($this->_driver, $params);
+        $command = new Commands\Command($this->_driver, 'get_url', $params);
         $command->execute();
     }
 

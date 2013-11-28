@@ -15,38 +15,55 @@
 
 namespace SeleniumClient\Commands;
 
-use SeleniumClient\Http\HttpClient;
+use SeleniumClient\Commands\Dictionary;
 
-abstract class Command
+class Command
 {	
-	protected $_driver;	
-	protected $_path;
-	protected $_httpMethod;	
-	protected $_params;	
-	protected $_urlParams;	
-	protected $_polling;
-	protected $_response;	
+	private $_driver;		
+	private $_name;
+	private $_params;	
+	private $_urlParams;	
 
-	public function __construct($driver, $params = null, $urlParams = null)
+	private $_url;
+	private $_httpMethod;		
+	private $_polling;
+	private $_response;
+
+
+	public function __construct($driver, $name, $params = null, $urlParams = null)
 	{
 		$this->_driver    = $driver;
+		$this->_name      = $name;
 		$this->_params    = $params;
 		$this->_urlParams = $urlParams;
-		$this->setUp();	
+
 		return $this;
 	}	
 
-	abstract protected function setUp();
-
-	protected function setPost()    {$this->_httpMethod = HttpClient::POST; }
-	protected function setGet()     {$this->_httpMethod = HttpClient::GET; }
-	protected function setDelete()  {$this->_httpMethod = HttpClient::DELETE; }
-
-	public function getUrl()        { return "{$this->_driver->getHubUrl()}/{$this->_path}"; }
+	public function getUrl()        { return $this->_url; }	
 	public function getParams()     { return $this->_params; }
 	public function getHttpMethod() { return $this->_httpMethod; }
 	public function getPolling()    { return $this->_polling; }
 	public function getResponse()   { return $this->_response; }
+
+	private function setUrl()
+	{
+		$path = Dictionary::$commands[$this->_name]['path']; 
+		$path = str_replace(':session_id', $this->_driver->getSessionId(), $path);
+		
+		if($this->_urlParams){
+			foreach($this->_urlParams as $param_name => $value) {
+				$path = str_replace(":{$param_name}", $value, $path);	
+			}
+		}
+
+		$this->_url = "{$this->_driver->getHubUrl()}/{$path}";
+	} 
+
+	private function setHttpMethod()
+	{		
+		$this->_httpMethod = Dictionary::$commands[$this->_name]['http_method']; 
+	} 
 
 	public function setPolling($value)
 	{
@@ -55,8 +72,13 @@ abstract class Command
 
 	public function execute($trace = false) 
 	{
+	  $this->setUrl();
+	  $this->setHttpMethod();
+
 	  $httpClient = $this->_driver->getHttpClient();
+
 	  $this->_response = $httpClient->execute($this, $trace);
+	  
 	  return $this->_response['body'];
 	}	
 }
