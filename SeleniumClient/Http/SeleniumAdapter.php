@@ -14,7 +14,9 @@
 // limitations under the License.
 
 namespace SeleniumClient\Http;
+
 use SeleniumClient\Commands;
+use SeleniumClient\Exceptions;
 
 class SeleniumAdapter extends HttpClient
 {
@@ -32,20 +34,20 @@ class SeleniumAdapter extends HttpClient
 		switch (intval(trim($response['headers']['http_code'])))
 		{
 			case 400:
-				throw new SeleniumMissingCommandParametersException((string) $response['headers']['http_code'], $response['headers']['url']);
+				throw new MissingCommandParameters((string) $response['headers']['http_code'], $response['headers']['url']);
 				break;
 			case 405:
-				throw new SeleniumInvalidCommandMethodException((string) $response['headers']['http_code'], $response['headers']['url']);
+				throw new InvalidCommandMethod((string) $response['headers']['http_code'], $response['headers']['url']);
 				break;
 			case 500:
-				if (!$polling) { throw new SeleniumFailedCommandException((string) $response['headers']['http_code'], $response['headers']['url']); }
+				if (!$polling) { throw new FailedCommand((string) $response['headers']['http_code'], $response['headers']['url']); }
 				break;
 			case 501:
-				throw new SeleniumUnimplementedCommandException((string) $response['headers']['http_code'], $response['headers']['url']);
+				throw new UnimplementedCommand((string) $response['headers']['http_code'], $response['headers']['url']);
 				break;
 			default:
 				// Looks for 4xx http codes
-				if (preg_match("/^4[0-9][0-9]$/", $response['headers']['http_code'])) { throw new SeleniumInvalidRequestException((string) $response['headers']['http_code'], $response['headers']['url']); }
+				if (preg_match("/^4[0-9][0-9]$/", $response['headers']['http_code'])) { throw new InvalidRequest((string) $response['headers']['http_code'], $response['headers']['url']); }
 				break;
 		}
 	}
@@ -66,67 +68,67 @@ class SeleniumAdapter extends HttpClient
 			switch (intval($response['body']["status"]))
 			{
 				case 7:
-					if (!$polling) {throw new SeleniumNoSuchElementException($message);}
+					if (!$polling) {throw new NoSuchElement($message);}
 					break;
 				case 8:
-					throw new SeleniumNoSuchFrameException($message);
+					throw new NoSuchFrame($message);
 					break;
 				case 9:
-					throw new SeleniumUnknownCommandException($message);
+					throw new UnknownCommand($message);
 					break;
 				case 10:
-					throw new SeleniumStaleElementReferenceException($message);
+					throw new StaleElementReference($message);
 					break;
 				case 11:
-					throw new SeleniumElementNotVisibleException($message);
+					throw new ElementNotVisible($message);
 					break;
 				case 12:
-					throw new SeleniumInvalidElementStateException($message);
+					throw new InvalidElementState($message);
 					break;
 				case 13:
-					throw new SeleniumUnknownErrorException($message);
+					throw new UnknownError($message);
 					break;
 				case 15:
-					throw new SeleniumElementIsNotSelectableException($message);
+					throw new ElementIsNotSelectable($message);
 					break;
 				case 17:
-					throw new SeleniumJavaScriptErrorException($message);
+					throw new JavaScriptError($message);
 					break;
 				case 19:
-					throw new SeleniumXPathLookupErrorException($message);
+					throw new XPathLookupError($message);
 					break;
 				case 21:
-					throw new SeleniumTimeoutException($message);
+					throw new Timeout($message);
 					break;
 				case 23:
-					throw new SeleniumNoSuchWindowException($message);
+					throw new NoSuchWindow($message);
 					break;
 				case 24:
-					throw new SeleniumInvalidCookieDomainException($message);
+					throw new InvalidCookieDomain($message);
 					break;
 				case 25:
-					throw new SeleniumUnableToSetCookieException($message);
+					throw new UnableToSetCookie($message);
 					break;
 				case 26:
-					throw new SeleniumUnexpectedAlertOpenException($message);
+					throw new UnexpectedAlertOpen($message);
 					break;
 				case 27:
-					throw new SeleniumNoAlertOpenErrorException($message);
+					throw new NoAlertOpenError($message);
 					break;
 				case 28:
-					throw new SeleniumScriptTimeoutException($message);
+					throw new ScriptTimeout($message);
 					break;
 				case 29:
-					throw new SeleniumInvalidElementCoordinatesException($message);
+					throw new InvalidElementCoordinates($message);
 					break;
 				case 30:
-					throw new SeleniumIMENotAvailableException($message);
+					throw new IMENotAvailable($message);
 					break;
 				case 31:
-					throw new SeleniumIMEEngineActivationFailedException($message);
+					throw new IMEEngineActivationFailed($message);
 					break;
 				case 32:
-					throw new SeleniumInvalidSelectorException($message);
+					throw new InvalidSelector($message);
 					break;
 			}
 		}

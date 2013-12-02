@@ -37,7 +37,7 @@ class WebDriverWait
 	 * @param String $method
 	 * @param Array $args
 	 * @throws \Exception
-	 * @throws WebDriverWaitTimeoutException
+	 * @throws SeleniumClient\Exceptions\WebDriverWaitTimeout
 	 * @return mixed
 	 */
 	public function until($seleniumObject, $method, array $args)
@@ -86,6 +86,6 @@ class WebDriverWait
             $exMessage .= " Arguments: <" . implode(">,<", $stringArgs) . ">";
         }
 
-        throw new WebDriverWaitTimeoutException ($exMessage);
+        throw new SeleniumClient\Exceptions\WebDriverWaitTimeout($exMessage);
 	}
 }

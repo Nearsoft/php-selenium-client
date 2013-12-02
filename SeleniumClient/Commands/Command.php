@@ -29,13 +29,15 @@ class Command
 	private $_polling;
 	private $_response;
 
-
 	public function __construct($driver, $name, $params = null, $urlParams = null)
 	{
 		$this->_driver    = $driver;
 		$this->_name      = $name;
 		$this->_params    = $params;
 		$this->_urlParams = $urlParams;
+
+		$this->setUrl();
+	  	$this->setHttpMethod();
 
 		return $this;
 	}	
@@ -72,9 +74,6 @@ class Command
 
 	public function execute($trace = false) 
 	{
-	  $this->setUrl();
-	  $this->setHttpMethod();
-
 	  $httpClient = $this->_driver->getHttpClient();
 
 	  $this->_response = $httpClient->execute($this, $trace);

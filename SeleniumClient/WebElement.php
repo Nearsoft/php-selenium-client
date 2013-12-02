@@ -368,7 +368,7 @@ class WebElement
 	 * Wait until current element's text has changed
 	 * @param String $targetText
 	 * @param Integer $timeOutSeconds
-	 * @throws WebDriverWaitTimeoutException
+	 * @throws SeleniumClient\Exceptions\WebDriverWaitTimeout
 	 * @return \SeleniumClient\WebElement
 	 */
 	public function waitForElementUntilTextIsChanged($targetText, $timeOutSeconds = 5)
@@ -380,7 +380,7 @@ class WebElement
 			$currentText = $this->getText();
 
 			if ($currentText == $targetText) { $wait = false; }
-			else if ($timeOutSeconds <= 0) { throw new WebDriverWaitTimeoutException ("Timeout for waitForElementUntilTextIsChange." ); }
+			else if ($timeOutSeconds <= 0) { throw new SeleniumClient\Exceptions\WebDriverWaitTimeout("Timeout for waitForElementUntilTextIsChange." ); }
 			
 			sleep(1);
 			
@@ -395,7 +395,7 @@ class WebElement
 	 * @param By $locator
 	 * @param String $targetText
 	 * @param Integer $timeOutSeconds
-	 * @throws WebDriverWaitTimeoutException
+	 * @throws SeleniumClient\Exceptions\WebDriverWaitTimeout
 	 * @return \SeleniumClient\WebElement
 	 */
 	public function waitForElementUntilIsPresentWithSpecificText(By $locator, $targetText, $timeOutSeconds = 5)
@@ -421,7 +421,7 @@ class WebElement
 			}
 
 			if ($currentText == $targetText) { $wait = false; }
-			else if ($attempts <= 0) { throw new WebDriverWaitTimeoutException ("Timeout for waitForElementUntilIsPresentAndTextIsChange." ); }
+			else if ($attempts <= 0) { throw new SeleniumClient\Exceptions\WebDriverWaitTimeout("Timeout for waitForElementUntilIsPresentAndTextIsChange." ); }
 			
 			sleep(1);
 			

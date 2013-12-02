@@ -16,10 +16,6 @@
     <filter>
         <whitelist>
             <directory suffix=".php">../SeleniumClient</directory>
-            <exclude>
-                <file>../SeleniumClient/Exceptions.php</file>
-                <file>../SeleniumClient/Http/Exceptions.php</file>
-            </exclude>
         </whitelist>
     </filter>
     <logging>

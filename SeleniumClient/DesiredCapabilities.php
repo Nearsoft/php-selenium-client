@@ -17,8 +17,6 @@ namespace SeleniumClient;
 
 use SeleniumClient\CapabilityType;
 
-require_once __DIR__ . '/Exceptions.php';
-
 class DesiredCapabilities {	
 	
 	private $_capabilities = null;
@@ -135,16 +133,16 @@ class DesiredCapabilities {
 			switch($capabilityType)
 			{
 				case CapabilityType::BROWSER_NAME:
-					if(!BrowserType::isValidBrowserType($value)) { throw new InvalidBrowserTypeException("'{$value}' is not a valid browser type"); }
+					if(!BrowserType::isValidBrowserType($value)) { throw new Exception("'{$value}' is not a valid browser type"); }
 					break;
 				case CapabilityType::PLATFORM:
-					if(!PlatformType::isValidPlatformType($value)) { throw new InvalidPlatformTypeException("'{$value}' is not a valid platform type"); }
+					if(!PlatformType::isValidPlatformType($value)) { throw new Exception("'{$value}' is not a valid platform type"); }
 					break;
 			}
 		}
 		else
 		{
-			throw new InvalidCapabilityTypeException("'{$capabilityType}' is not a valid capability type");
+			throw new Exception("'{$capabilityType}' is not a valid capability type");
 		}
 
 		return true;

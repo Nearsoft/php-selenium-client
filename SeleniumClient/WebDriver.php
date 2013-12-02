@@ -22,8 +22,6 @@ use SeleniumClient\Http\HttpFactory;
 use SeleniumClient\Http\SeleniumInvalidSelectorException;
 use SeleniumClient\Http\SeleniumNoSuchElementException;
 
-require_once __DIR__ . '/Exceptions.php';
-require_once __DIR__ . '/Http/Exceptions.php';
 require_once __DIR__ . '/Navigation.php';
 
 class WebDriver
