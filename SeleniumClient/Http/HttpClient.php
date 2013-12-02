@@ -68,7 +68,7 @@ class HttpClient
 		$responseBody = json_decode($rawResponse, true);
 		
 		$responseHeaders=curl_getinfo($curl);
-		
+
 		if ($this->_traceAll || $trace)
 		{
 			echo "\n***********************************************************************\n";

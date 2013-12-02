@@ -31,7 +31,7 @@ class Alert
 	 */
 	public function getText() 
 	{ 
-		$command = new Commands\GetAlertText($this->_driver);
+		$command = new Commands\Command($this->_driver, 'get_alert_text');
 		$results = $command->execute(); 	
 		return $results['value'];
 	}
@@ -41,7 +41,7 @@ class Alert
 	 */
 	public function dismiss() 
 	{ 
-		$command = new Commands\DismissAlert($this->_driver);
+		$command = new Commands\Command($this->_driver, 'dismiss_alert');
 		$command->execute(); 	
 	}
 
@@ -50,7 +50,7 @@ class Alert
 	 */
 	public function accept() 
 	{ 
-		$command = new Commands\AcceptAlert($this->_driver);
+		$command = new Commands\Command($this->_driver, 'accept_alert');
 		$command->execute(); 	
 	}
 
@@ -62,7 +62,7 @@ class Alert
 	{
 		if(is_string($string)){
 			$params = array ('text' => $string);
-			$command = new Commands\SetAlertText($this->_driver, $params);
+			$command = new Commands\Command($this->_driver, 'set_alert_text', $params);
 			$command->execute();
 		}
 		else{

@@ -51,11 +51,11 @@ class Command
 	private function setUrl()
 	{
 		$path = Dictionary::$commands[$this->_name]['path']; 
-		$path = str_replace(':session_id', $this->_driver->getSessionId(), $path);
+		$path = str_replace('{session_id}', $this->_driver->getSessionId(), $path);
 		
 		if($this->_urlParams){
 			foreach($this->_urlParams as $param_name => $value) {
-				$path = str_replace(":{$param_name}", $value, $path);	
+				$path = str_replace("{{$param_name}}", $value, $path);
 			}
 		}
 

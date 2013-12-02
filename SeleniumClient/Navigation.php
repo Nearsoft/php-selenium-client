@@ -29,7 +29,7 @@ class Navigation
     */
     public function back()
     {
-        $command = new Commands\Back($this->_driver);
+        $command = new Commands\Command($this->_driver, 'back');
         $command->execute();
     }
 
@@ -38,7 +38,7 @@ class Navigation
      */
     public function forward()
     {
-        $command = new Commands\Forward($this->_driver);
+        $command = new Commands\Command($this->_driver, 'forward');
         $command->execute();
     }
 
@@ -47,7 +47,7 @@ class Navigation
      */
     public function refresh()
     {
-        $command = new Commands\Refresh($this->_driver);
+        $command = new Commands\Command($this->_driver, 'refresh');
         $command->execute();
     }
 

@@ -343,7 +343,7 @@ class WebDriver
 	 */
 	public function getCapabilities()
 	{
-		$command = new Commands\GetCapabilities($this);		
+		$command = new Commands\Command($this, 'get_capabilities');
 		$results = $command->execute();
 		return $results['value'];
 	}
@@ -354,7 +354,7 @@ class WebDriver
 	 */
 	public function getCurrentSessions()
 	{
-		$command = new Commands\GetSessions($this);			
+		$command = new Commands\Command($this, 'get_sessions');
 		$results = $command->execute();		
 		return $results['value'];
 	}
@@ -373,7 +373,7 @@ class WebDriver
 	 */
 	public function close()
 	{
-		$command = new Commands\CloseWindow($this);		
+		$command = new Commands\Command($this, 'close_window');
 		$command->execute();
 	}
 		
@@ -393,7 +393,7 @@ class WebDriver
 	 */
 	public function getCurrentUrl()
 	{
-		$command = new Commands\GetCurrentUrl($this);			
+		$command = new Commands\Command($this, 'get_current_url');
 		$results = $command->execute();	
 		return $results['value'];
 	}	
@@ -404,7 +404,7 @@ class WebDriver
 	 */
 	public function status()
 	{
-		$command = new Commands\Status($this);			
+		$command = new Commands\Command($this, 'status');
 		$results = $command->execute();		
 		return $results;
 	}	
@@ -415,7 +415,7 @@ class WebDriver
 	 */
 	public function getPageSource()
 	{
-		$command = new Commands\Source($this);		
+		$command = new Commands\Command($this, 'source');
 		$results = $command->execute();		
 		return $results['value'];
 	}
@@ -426,7 +426,7 @@ class WebDriver
 	 */
 	public function getTitle()
 	{
-		$command = new Commands\Title($this);	
+		$command = new Commands\Command($this, 'title');
 		$results = $command->execute();	
 		return $results['value'];	
 	}
@@ -444,7 +444,7 @@ class WebDriver
 		else if (isset($this->_screenshotsDirectory)) { $screenshotsDirectory = $this->_screenshotsDirectory; }
 		else { throw new \Exception("Must Specify Screenshot Directory"); }
 		
-		$command = new Commands\Screenshot($this);	
+		$command = new Commands\Command($this, 'screenshot');
 
 		$results = $command->execute();
 		
@@ -480,11 +480,11 @@ class WebDriver
         } else {
 			$params = array ('using' => $locator->getStrategy(), 'value' => $locator->getSelectorValue());
             if ($elementId < 0) {
-                 $command = new Commands\Element($this,$params);	
+                 $command = new Commands\Command($this, 'element', $params);
             }
             else
             {
-            	 $command = new Commands\ElementInElement($this, $params, array('element_id' => $elementId));	
+            	 $command = new Commands\Command($this, 'element_in_element', $params, array('element_id' => $elementId));
             }
             $command->setPolling($polling);
             $results = $command->execute();       
@@ -529,18 +529,18 @@ class WebDriver
             }
 
             $params = array('script' => $script, 'args' => $args);
-            $command = new Commands\ExecuteScript($this, $params);
+            $command = new Commands\Command($this, 'execute_script', $params);
             $results = $command->execute();
         } else {
             $params = array('using' => $locator->getStrategy(), 'value' => $locator->getSelectorValue());
 
             if($elementId >= 0)
             {
-				$command = new Commands\ElementsInElement($this, $params, array('element_id' => $elementId));
+				$command = new Commands\Command($this, 'elements_in_element', $params, array('element_id' => $elementId));
             }
             else
             {
-            	$command = new Commands\Elements($this, $params);
+            	$command = new Commands\Command($this, 'elements', $params);
             }
             
             $results = $command->execute();
@@ -614,11 +614,11 @@ class WebDriver
 		
 		if($async === true)
 		{
-			$command = new Commands\ExecuteAsyncScript($this, $params);
+			$command = new Commands\Command($this, 'execute_async_script', $params);
 		}
 		else
 		{
-			$command = new Commands\ExecuteScript($this, $params);
+			$command = new Commands\Command($this, 'execute_script',  $params);
 		}
 
 		$results = $command->execute();
@@ -647,7 +647,7 @@ class WebDriver
 	 */
 	public function getWindowHandle()
 	{
-		$command = new Commands\WindowHandle($this);			
+		$command = new Commands\Command($this, 'window_handle');
 		$results = $command->execute();
 		return $results['value'];		
 	}
@@ -658,7 +658,7 @@ class WebDriver
 	 */
 	public function getWindowHandles()
 	{
-		$command = new Commands\WindowHandles($this);			
+		$command = new Commands\Command($this, 'window_handles');
 		$results = $command->execute();
 		return $results['value'];				
 	}	

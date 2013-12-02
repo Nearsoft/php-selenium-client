@@ -67,7 +67,7 @@ class Options
 	{
 		$cookie = new Cookie($name, $value, $path, $domain, $secure, $expiry);
 		$params = array ('cookie' => $cookie->getArray());
-		$command = new Commands\AddCookie($this->_driver, $params);
+		$command = new Commands\Command($this->_driver, 'add_cookie', $params);
 		$command->execute(); 		
 	}
 	
@@ -77,7 +77,7 @@ class Options
 	 */
 	public function getCookies()
 	{
-		$command = new Commands\GetCookies($this->_driver);
+		$command = new Commands\Command($this->_driver, 'get_cookies');
 		$results = $command->execute(); 	
 		return Cookie::buildFromArray($results['value']);		
 	}
@@ -110,7 +110,7 @@ class Options
 	 */
 	public function deleteCookieNamed($cookieName)
 	{
-		$command = new Commands\ClearCookie($this->_driver, null, array('cookie_name' => $cookieName));
+		$command = new Commands\Command($this->_driver, 'clear_cookie', null, array('cookie_name' => $cookieName));
 		$command->execute(); 			
 	}
 	
@@ -119,7 +119,7 @@ class Options
 	 */
 	public function deleteAllCookies()
 	{
-		$command = new Commands\ClearCookies($this->_driver);
+		$command = new Commands\Command($this->_driver, 'clear_cookies');
 		$command->execute(); 	
 	}
 }

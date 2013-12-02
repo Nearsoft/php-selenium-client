@@ -69,7 +69,7 @@ class WebElement
 	public function sendKeys($text) 
 	{ 
 		$params = array('value' => $this->getCharArray($text));
-		$command = new Commands\ElementValue($this->_driver, $params , array('element_id' => $this->_elementId));	
+		$command = new Commands\Command($this->_driver, 'element_value', $params , array('element_id' => $this->_elementId));
 		$command->execute();	
 	}
 
@@ -97,7 +97,7 @@ class WebElement
 	 */
 	public function getText()
 	{
-		$command = new Commands\ElementText($this->_driver, null , array('element_id' => $this->_elementId));		
+		$command = new Commands\Command($this->_driver, 'element_text', null , array('element_id' => $this->_elementId));
 		$results = $command->execute();
 		return $results['value'];	
 	}
@@ -108,7 +108,7 @@ class WebElement
 	 */
 	public function getTagName() 
 	{
-		$command = new Commands\ElementTagName($this->_driver, null , array('element_id' => $this->_elementId));		
+		$command = new Commands\Command($this->_driver, 'element_tag_name', null , array('element_id' => $this->_elementId));
 		$results = $command->execute();		
 		return $results['value'];
 	}
@@ -122,7 +122,7 @@ class WebElement
     public function compareToOther(WebElement $webElementCompare)
     {
         $params = array('element_id' => $this->getElementId(), 'element_id_compare' => $webElementCompare->getElementId());
-        $command = new Commands\CompareToOther($this->_driver, null , $params);
+        $command = new Commands\Command($this->_driver, 'compare_to_other', null , $params);
         $results = $command->execute();
         return (trim($results['value']) == "1");
     }
@@ -151,7 +151,7 @@ class WebElement
 	 */
 	public function getAttribute($attributeName)
 	{
-		$command = new Commands\ElementAttribute($this->_driver, null , array('element_id' => $this->_elementId, 'attribute_name' => $attributeName));		
+		$command = new Commands\Command($this->_driver, 'element_attribute', null , array('element_id' => $this->_elementId, 'attribute_name' => $attributeName));
 		$results = $command->execute();
 		return $results['value'];		
 	}
@@ -162,8 +162,8 @@ class WebElement
      * @return String
      */
     public function getCSSProperty ($propertyName) {
-        $params  = array('element_id' => $this->getElementId(), 'propertyName' => $propertyName);
-        $command = new Commands\ElementPropertyName($this->_driver, null , $params);
+        $params  = array('element_id' => $this->getElementId(), 'property_name' => $propertyName);
+        $command = new Commands\Command($this->_driver, 'element_property_name', null , $params);
         $results  = $command->execute();
         return $results['value'];
     }
@@ -174,7 +174,7 @@ class WebElement
 	 */
 	public function isSelected() 
 	{
-		$command = new Commands\ElementIsSelected($this->_driver, null , array('element_id' => $this->_elementId));
+		$command = new Commands\Command($this->_driver, 'element_is_selected', null , array('element_id' => $this->_elementId));
 		$results = $command->execute();
 		return (trim($results['value']) == "1");		 
 	}
@@ -185,7 +185,7 @@ class WebElement
 	 */
 	public function isDisplayed() 
 	{
-		$command = new Commands\ElementIsDisplayed($this->_driver, null , array('element_id' => $this->_elementId));	
+		$command = new Commands\Command($this->_driver, 'element_is_displayed', null , array('element_id' => $this->_elementId));
 		$results = $command->execute();
 		return (trim($results['value']) == "1");		
 	}
@@ -196,7 +196,7 @@ class WebElement
 	 */
 	public function isEnabled() 
 	{
-		$command = new Commands\ElementIsEnabled($this->_driver, null , array('element_id' => $this->_elementId));	
+		$command = new Commands\Command($this->_driver, 'element_is_enabled', null , array('element_id' => $this->_elementId));
 		$results = $command->execute();
 		return (trim($results['value']) == "1");		 
 	}
@@ -207,7 +207,7 @@ class WebElement
      */
     public function getElementSize()
     {
-        $command = new Commands\ElementSize($this->_driver, null , array('element_id' => $this->_elementId));
+        $command = new Commands\Command($this->_driver, 'element_size', null , array('element_id' => $this->_elementId));
         $results = $command->execute();
         return $results['value'];
     }
@@ -217,7 +217,7 @@ class WebElement
 	 */
 	public function clear() 
 	{
-		$command = new Commands\ClearElement($this->_driver, null , array('element_id' => $this->_elementId));		
+		$command = new Commands\Command($this->_driver, 'clear_element', null , array('element_id' => $this->_elementId));
 		$command->execute();
 	}
 	
@@ -226,7 +226,7 @@ class WebElement
 	 */
 	public function click() 
 	{
-		$command = new Commands\ClickElement($this->_driver, null , array('element_id' => $this->_elementId));		
+		$command = new Commands\Command($this->_driver, 'click_element', null , array('element_id' => $this->_elementId));
 		$command->execute(); 
 	}
 	
@@ -235,7 +235,7 @@ class WebElement
 	 */
 	public function submit() 
 	{
-		$command = new Commands\ElementSubmit($this->_driver, null , array('element_id' => $this->_elementId));		
+		$command = new Commands\Command($this->_driver, 'element_submit', null , array('element_id' => $this->_elementId));
 		$command->execute(); 
 	}
 	
@@ -245,7 +245,7 @@ class WebElement
 	 */
 	public function describe() 
 	{
-		$command = new Commands\DescribeElement($this->_driver, null , array('element_id' => $this->_elementId));		
+		$command = new Commands\Command($this->_driver, 'describe_element', null , array('element_id' => $this->_elementId));
 		$results = $command->execute();
 		return $results['value']; 
 	}
@@ -289,7 +289,7 @@ class WebElement
 	 */
 	public function getCoordinates() 
 	{
-		$command = new Commands\ElementLocation($this->_driver, null , array('element_id' => $this->_elementId));		
+		$command = new Commands\Command($this->_driver, 'element_location', null , array('element_id' => $this->_elementId));
 		$results = $command->execute();		
 		return $results['value'];		
 	}
@@ -300,7 +300,7 @@ class WebElement
 	 */
 	public function getLocationOnScreenOnceScrolledIntoView()
 	{
-		$command = new Commands\ElementLocationView($this->_driver, null , array('element_id' => $this->_elementId));		
+		$command = new Commands\Command($this->_driver, 'element_location_view', null , array('element_id' => $this->_elementId));
 		$results = $command->execute();
 		return $results['value'];		
 	}

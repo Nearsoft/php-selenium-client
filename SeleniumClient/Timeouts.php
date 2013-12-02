@@ -31,7 +31,7 @@ class Timeouts
     public function implicitWait($milliseconds)
     {
         $params = array ('ms' => $milliseconds );
-        $command = new Commands\ImplicitWait($this->_driver, $params);
+        $command = new Commands\Command($this->_driver, 'implicit_wait', $params);
         $command->execute();
     }
 
@@ -42,7 +42,7 @@ class Timeouts
     public function pageLoadTimeout($milliseconds)
     {
         $params = array ('type' => 'page load','ms' => $milliseconds );
-        $command = new Commands\LoadTimeout($this->_driver, $params);
+        $command = new Commands\Command($this->_driver, 'load_timeout', $params);
         $command->execute();
     }
 
@@ -53,7 +53,7 @@ class Timeouts
     public function setScriptTimeout($milliseconds)
     {
         $params = array('ms' => $milliseconds);
-        $command = new Commands\AsyncScriptTimeout($this->_driver, $params);
+        $command = new Commands\Command($this->_driver, 'async_script_timeout', $params);
         $command->execute();
     }
 }

@@ -20,9 +20,9 @@ use SeleniumClient\Exceptions;
 
 class SeleniumAdapter extends HttpClient
 {
-	public function execute(\SeleniumClient\Commands\Command $command)
+	public function execute(\SeleniumClient\Commands\Command $command, $trace = null)
 	{
-		$response = parent::execute($command);
+		$response = parent::execute($command, $trace);
 		$this->validateSeleniumResponseCode($response,$command->getPolling());
 		$this->validateHttpCode($response,$command->getPolling());	
 		return $response;
