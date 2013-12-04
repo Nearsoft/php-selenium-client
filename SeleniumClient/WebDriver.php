@@ -20,8 +20,6 @@ use SeleniumClient\Commands\Command;
 use SeleniumClient\Http\HttpClient;
 use SeleniumClient\Http\HttpFactory;
 
-require_once __DIR__ . '/Navigation.php';
-
 class WebDriver
 {
 	private $_hubUrl               = null;
