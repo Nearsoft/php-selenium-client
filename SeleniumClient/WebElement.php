@@ -15,8 +15,6 @@
 
 namespace SeleniumClient;
 
-use SeleniumClient\Http\SeleniumStaleElementReferenceException;
-
 class WebElement
 {
 	private $_driver = null;
@@ -380,7 +378,7 @@ class WebElement
 			$currentText = $this->getText();
 
 			if ($currentText == $targetText) { $wait = false; }
-			else if ($timeOutSeconds <= 0) { throw new SeleniumClient\Exceptions\WebDriverWaitTimeout("Timeout for waitForElementUntilTextIsChange." ); }
+			else if ($timeOutSeconds <= 0) { throw new Exceptions\WebDriverWaitTimeout("Timeout for waitForElementUntilTextIsChange." ); }
 			
 			sleep(1);
 			
@@ -421,7 +419,7 @@ class WebElement
 			}
 
 			if ($currentText == $targetText) { $wait = false; }
-			else if ($attempts <= 0) { throw new SeleniumClient\Exceptions\WebDriverWaitTimeout("Timeout for waitForElementUntilIsPresentAndTextIsChange." ); }
+			else if ($attempts <= 0) { throw new Exceptions\WebDriverWaitTimeout("Timeout for waitForElementUntilIsPresentAndTextIsChange." ); }
 			
 			sleep(1);
 			

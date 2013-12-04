@@ -19,8 +19,6 @@ use SeleniumClient\DesiredCapabilities;
 use SeleniumClient\Commands\Command;
 use SeleniumClient\Http\HttpClient;
 use SeleniumClient\Http\HttpFactory;
-use SeleniumClient\Http\SeleniumInvalidSelectorException;
-use SeleniumClient\Http\SeleniumNoSuchElementException;
 
 require_once __DIR__ . '/Navigation.php';
 
@@ -474,7 +472,7 @@ class WebDriver
         if (strpos($locator->getStrategy(), 'js selector ') === 0) {
             $result = $this->findElements($locator, $polling, $elementId);
             if (!$result) {
-                throw new SeleniumNoSuchElementException();
+                throw new Exceptions\NoSuchElement();
             }
             return $result[0];
         } else {
@@ -497,7 +495,7 @@ class WebDriver
      * @param By   $locator
      * @param bool $polling
      * @param int  $elementId
-     * @throws SeleniumInvalidSelectorException
+     * @throws Exceptions\InvalidSelector
      * @return \SeleniumClient\WebElement[]
      */
     public function findElements(By $locator, $polling = false, $elementId = -1)
@@ -509,7 +507,7 @@ class WebDriver
             $selector = addslashes($locator->getSelectorValue());
 
             if (!$valid) {
-                throw new SeleniumInvalidSelectorException('The selectorElement is not defined');
+                throw new Exceptions\InvalidSelector('The selectorElement is not defined');
             }
 
             if ($elementId >= 0) {

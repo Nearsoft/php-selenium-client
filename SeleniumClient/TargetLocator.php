@@ -15,8 +15,6 @@
 
 namespace SeleniumClient;
 
-use SeleniumClient\Http\SeleniumJavaScriptErrorException;
-
 class TargetLocator
 {
 	private $_driver;
@@ -94,7 +92,7 @@ class TargetLocator
         $element = $this->_driver->executeScript( sprintf( $script, $url ) );
 
         if ( empty( $element ) ) {
-            throw new SeleniumJavaScriptErrorException( 'Unable to open tab' );
+            throw new Exceptions\JavaScriptError( 'Unable to open tab' );
         }
 
         $existingHandles = $this->_driver->getWindowHandles();

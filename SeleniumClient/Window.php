@@ -63,7 +63,7 @@ class Window
 	public function setPosition($x, $y)
 	{
 		$params = array ('x' => $x, 'y' => $y);
-		$command = new Commands\Command($this->_driver, 'get_window_size', $params,  array('window_handle' => 'current'));
+		$command = new Commands\Command($this->_driver, 'set_window_position', $params,  array('window_handle' => 'current'));
 		$command->execute();
 	}
 	

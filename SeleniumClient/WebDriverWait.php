@@ -86,6 +86,6 @@ class WebDriverWait
             $exMessage .= " Arguments: <" . implode(">,<", $stringArgs) . ">";
         }
 
-        throw new SeleniumClient\Exceptions\WebDriverWaitTimeout($exMessage);
+        throw new Exceptions\WebDriverWaitTimeout($exMessage);
 	}
 }
