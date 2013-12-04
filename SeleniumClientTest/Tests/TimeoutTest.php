@@ -25,7 +25,7 @@ class TimeoutsTest extends AbstractTest
 
         $timeOuts->pageLoadTimeout(1);
 
-        $this->setExpectedException('SeleniumClient\Http\SeleniumScriptTimeoutException');
+        $this->setExpectedException('SeleniumClient\Exceptions\ScriptTimeout');
 
         $this->_driver->get($this->_url."/formReceptor.php");
     }
@@ -36,7 +36,7 @@ class TimeoutsTest extends AbstractTest
 
         $timeouts->setScriptTimeout(1);
 
-        $this->setExpectedException('SeleniumClient\Http\SeleniumScriptTimeoutException');
+        $this->setExpectedException('SeleniumClient\Exceptions\ScriptTimeout');
 
         $this->_driver->executeAsyncScript("setTimeout('arguments[0]()',5000);");
     }

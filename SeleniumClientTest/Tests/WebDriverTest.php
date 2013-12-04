@@ -194,7 +194,7 @@ class WebDriverTest extends AbstractTest
 		$webElement = $this->_driver->findElement(By::id("txt1"));	
 		$this->assertInstanceOf('SeleniumClient\WebElement',$webElement);		
 
-		$this->setExpectedException('SeleniumClient\Http\SeleniumNoSuchElementException');	
+		$this->setExpectedException('SeleniumClient\Exceptions\NoSuchElement');	
 		$webElement = $this->_driver->findElement(By::id("NOTEXISTING"));	
 	}
 
@@ -209,7 +209,7 @@ class WebDriverTest extends AbstractTest
     {
         $input = $this->_driver->findElement(By::jsSelector('input','document.querySelectorAll'));
         $this->assertInstanceOf('SeleniumClient\WebElement',$input);	
-        $this->setExpectedException('SeleniumClient\Http\SeleniumInvalidSelectorException');
+        $this->setExpectedException('SeleniumClient\Exceptions\InvalidSelector');
         $this->_driver->findElement(By::jsSelector('input'));
     }
 	
@@ -239,7 +239,7 @@ class WebDriverTest extends AbstractTest
             $self->assertTrue($input instanceof WebElement);
         });
         $this->assertGreaterThan(0, count($inputs));
-        $this->setExpectedException('SeleniumClient\Http\SeleniumInvalidSelectorException');
+        $this->setExpectedException('SeleniumClient\Exceptions\InvalidSelector');
         $this->_driver->findElements(By::jsSelector('input'));
     }
 
@@ -284,7 +284,7 @@ class WebDriverTest extends AbstractTest
 		$this->_driver->findElement(By::id("btnPopUp1"))->click();
 		$this->_driver->switchTo()->window("popup1");
 		$this->_driver->close();
-		$this->setExpectedException('SeleniumClient\Http\SeleniumNoSuchWindowException');	
+		$this->setExpectedException('SeleniumClient\Exceptions\NoSuchWindow');	
 		$this->_driver->getCurrentUrl();		
 	}
 

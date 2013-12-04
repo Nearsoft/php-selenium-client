@@ -34,7 +34,7 @@ class AlertTest extends AbstractTest
 	{
 		$this->_driver->findElement(By::id("btnAlert"))->click();
 		$this->_alert->dismiss();
-		$this->setExpectedException('SeleniumClient\Http\SeleniumNoAlertOpenErrorException');	
+		$this->setExpectedException('SeleniumClient\Exceptions\NoAlertOpenError');	
 		$this->_alert->getText();
 	}
 

@@ -2,7 +2,7 @@
 
 use SeleniumClient\Alert;
 use SeleniumClient\DesiredCapabilities;
-use SeleniumClient\Http\SeleniumUnknownErrorException;
+use SeleniumClient\Exceptions;
 use SeleniumClient\WebDriver;
 
 class AbstractTest extends PHPUnit_Framework_TestCase {

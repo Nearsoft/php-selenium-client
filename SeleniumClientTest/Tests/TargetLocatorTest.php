@@ -50,10 +50,11 @@ class TargetLocatorTest extends AbstractTest
 
 		$this->_targetLocator->window("popup1");
 		$this->_driver->close();
+
 		$this->_targetLocator->window("popup2");
 		$this->_driver->close();
+		
 		$this->_targetLocator->window($window1Handle);
-		$this->_driver->close();
 	}
 
 	public function testFrameShouldGetDefaultframe()
