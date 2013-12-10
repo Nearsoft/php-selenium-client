@@ -129,7 +129,7 @@ class WebDriverTest extends AbstractTest
 	
 	public function testExecuteScriptShouldGetPageTitle()
 	{
-		$this->assertEquals("Nearsoft SeleniumClient SandBox", $this->_driver->executeScript("return document.title"));
+        $this->assertEquals("Nearsoft SeleniumClient SandBox", $this->_driver->executeScript("return document.title"));
 	}
 	
 	public function testExecuteScriptShouldSetInputTextUsingArguments()

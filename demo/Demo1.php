@@ -1,6 +1,6 @@
 <?php
 
-require_once __DIR__ . '/../bootstrap.php';
+require_once __DIR__ . '/../test/bootstrap.php';
 
 use SeleniumClient\By;
 use SeleniumClient\SelectElement;
@@ -18,7 +18,7 @@ class Demo1Test extends PHPUnit_Framework_TestCase
 	public function setUp()
 	{
 		$this->_testUrl = "http://nearsoft-php-seleniumclient.herokuapp.com/SeleniumClientTest/SandBox/";
-		
+
 		$desiredCapabilities = new DesiredCapabilities("firefox");
 		
 		$this->_driver = new WebDriver($desiredCapabilities);
@@ -33,7 +33,7 @@ class Demo1Test extends PHPUnit_Framework_TestCase
 	{
 		//get url
 		$this->_driver->get($this->_testUrl);
-		
+		sleep(4);
 		//access text input
 		$webElement = $this->_driver->findElement(By::id("txt1"));		
 		$webElement->clear();		

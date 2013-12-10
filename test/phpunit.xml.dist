@@ -9,8 +9,8 @@
     </php>
     <testsuites>
         <testsuite name="Test Suite">
-            <directory suffix=".php">Tests</directory>
-            <exclude>Tests/AbstractTest.php</exclude>
+            <directory suffix=".php">Nearsoft/SeleniumClient</directory>
+            <exclude>Nearsoft/SeleniumClient/AbstractTest.php</exclude>
         </testsuite>
     </testsuites>
     <filter>

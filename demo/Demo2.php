@@ -20,7 +20,7 @@ class Demo2Test extends PHPUnit_Framework_TestCase
 	
 	public function setUp()
 	{
-		$this->_testUrl = "http://nearsoft-php-seleniumclient.herokuapp.com/SeleniumClientTest/SandBox/";
+		$this->_testUrl = "http://nearsoft-php-seleniumclient.herokuapp.com/SeleniumClient/sandbox/";
 		
 		$desiredCapabilities = new DesiredCapabilities();
 		$desiredCapabilities->setCapability(CapabilityType::BROWSER_NAME, BrowserType::FIREFOX);
