@@ -13,9 +13,9 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-namespace SeleniumClient\Commands;
+namespace Nearsoft\SeleniumClient\Commands;
 
-use SeleniumClient\Http\HttpClient;
+use Nearsoft\SeleniumClient\Http\HttpClient;
 
 class Dictionary{
 	public static $commands = array(

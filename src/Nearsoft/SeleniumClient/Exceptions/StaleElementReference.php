@@ -1,5 +1,5 @@
 <?php
-namespace SeleniumClient\Exceptions;
+namespace Nearsoft\SeleniumClient\Exceptions;
 
 class StaleElementReference extends \Exception {
 	public function __construct($message = "") {

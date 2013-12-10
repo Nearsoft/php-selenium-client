@@ -2,9 +2,9 @@
 
 require_once __DIR__ . '/AbstractTest.php';
 
-use SeleniumClient\Alert;
-use SeleniumClient\By;
-use SeleniumClient\TargetLocator;
+use Nearsoft\SeleniumClient\Alert;
+use Nearsoft\SeleniumClient\By;
+use Nearsoft\SeleniumClient\TargetLocator;
 
 
 class WindowTest extends AbstractTest

@@ -13,9 +13,9 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-namespace SeleniumClient\Http;
+namespace Nearsoft\SeleniumClient\Http;
 
-use SeleniumClient\Commands;
+use Nearsoft\SeleniumClient\Commands as Commands;
 
 class HttpClient
 {
@@ -37,7 +37,7 @@ class HttpClient
      * @return string The response body
      * @throws \Exception
      */
-    public function execute(\SeleniumClient\Commands\Command $command, $trace = false)
+    public function execute(Commands\Command $command, $trace = false)
 	{
 		if ($command->getUrl() == "" || $command->getHttpMethod() == "") { throw new \Exception("Must specify URL and HTTP METHOD"); }
 		

@@ -2,13 +2,13 @@
 
 require_once __DIR__ . '/../bootstrap.php';
 
-use SeleniumClient\By;
-use SeleniumClient\WebDriver;
-use SeleniumClient\WebDriverWait;
-use SeleniumClient\DesiredCapabilities;
-use SeleniumClient\CapabilityType;
-use SeleniumClient\BrowserType;
-use SeleniumClient\PlatformType;
+use Nearsoft\SeleniumClient\By;
+use Nearsoft\SeleniumClient\WebDriver;
+use Nearsoft\SeleniumClient\WebDriverWait;
+use Nearsoft\SeleniumClient\DesiredCapabilities;
+use Nearsoft\SeleniumClient\CapabilityType;
+use Nearsoft\SeleniumClient\BrowserType;
+use Nearsoft\SeleniumClient\PlatformType;
 
 class Demo2Test extends PHPUnit_Framework_TestCase
 {

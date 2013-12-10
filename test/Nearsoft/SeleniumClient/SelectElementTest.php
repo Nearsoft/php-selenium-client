@@ -2,8 +2,8 @@
 
 require_once __DIR__ . '/AbstractTest.php';
 
-use SeleniumClient\SelectElement;
-use SeleniumClient\By;
+use Nearsoft\SeleniumClient\SelectElement;
+use Nearsoft\SeleniumClient\By;
 
 class SelectTest extends AbstractTest
 {

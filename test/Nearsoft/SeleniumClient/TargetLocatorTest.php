@@ -2,9 +2,9 @@
 
 require_once __DIR__ . '/AbstractTest.php';
 
-use SeleniumClient\Alert;
-use SeleniumClient\By;
-use SeleniumClient\TargetLocator;
+use Nearsoft\SeleniumClient\Alert;
+use Nearsoft\SeleniumClient\By;
+use Nearsoft\SeleniumClient\TargetLocator;
 
 
 class TargetLocatorTest extends AbstractTest
@@ -139,7 +139,7 @@ class TargetLocatorTest extends AbstractTest
 	{
 		$this->_driver->findElement(By::id("txt1"))->sendKeys("test");		
 		$webElement = $this->_targetLocator->activeElement();
-		$this->assertInstanceOf('SeleniumClient\WebElement', $webElement);
+		$this->assertInstanceOf('Nearsoft\SeleniumClient\WebElement', $webElement);
 		$this->assertEquals("test", $webElement->getAttribute("value"));
 	}
 

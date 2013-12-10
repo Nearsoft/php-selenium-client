@@ -1,5 +1,5 @@
 <?php
-namespace SeleniumClient\Exceptions;
+namespace Nearsoft\SeleniumClient\Exceptions;
 
 class IMENotAvailable extends \Exception {
 	public function __construct($message = "") {

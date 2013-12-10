@@ -2,8 +2,8 @@
 
 require_once __DIR__ . '/AbstractTest.php';
 
-use SeleniumClient\By;
-use SeleniumClient\WebElement;
+use Nearsoft\SeleniumClient\By;
+use Nearsoft\SeleniumClient\WebElement;
 
 class WebElementTest extends AbstractTest
 {

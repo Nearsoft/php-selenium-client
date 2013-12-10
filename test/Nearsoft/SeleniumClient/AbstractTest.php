@@ -1,9 +1,9 @@
 <?php
 
-use SeleniumClient\Alert;
-use SeleniumClient\DesiredCapabilities;
-use SeleniumClient\Exceptions;
-use SeleniumClient\WebDriver;
+use Nearsoft\SeleniumClient\Alert;
+use Nearsoft\SeleniumClient\DesiredCapabilities;
+use Nearsoft\SeleniumClient\Exceptions;
+use Nearsoft\SeleniumClient\WebDriver;
 
 class AbstractTest extends PHPUnit_Framework_TestCase {
     /** @var array */

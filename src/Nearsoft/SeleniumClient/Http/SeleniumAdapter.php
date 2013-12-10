@@ -13,15 +13,15 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-namespace SeleniumClient\Http;
+namespace Nearsoft\SeleniumClient\Http;
 
-use SeleniumClient\Commands;
-use SeleniumClient\Exceptions as SeleniumExceptions;
-use SeleniumClient\Http\Exceptions as HttpExceptions;
+use Nearsoft\SeleniumClient\Commands as Commands;
+use Nearsoft\SeleniumClient\Exceptions as SeleniumExceptions;
+use Nearsoft\SeleniumClient\Http\Exceptions as HttpExceptions;
 
 class SeleniumAdapter extends HttpClient
 {
-	public function execute(\SeleniumClient\Commands\Command $command, $trace = false)
+	public function execute(Commands\Command  $command, $trace = false)
 	{
 		$response = parent::execute($command, $trace);
 		$this->validateSeleniumResponseCode($response,$command->getPolling());

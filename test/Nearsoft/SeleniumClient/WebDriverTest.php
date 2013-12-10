@@ -2,9 +2,9 @@
 
 require_once __DIR__ . '/AbstractTest.php';
 
-use SeleniumClient\By;
-use SeleniumClient\TargetLocator;
-use SeleniumClient\WebElement;
+use Nearsoft\SeleniumClient\By;
+use Nearsoft\SeleniumClient\TargetLocator;
+use Nearsoft\SeleniumClient\WebElement;
 
 
 class WebDriverTest extends AbstractTest
@@ -106,17 +106,17 @@ class WebDriverTest extends AbstractTest
 
     public function testNavigateShouldGetNavigationInstance()
 	{	
-		$this->assertInstanceOf('SeleniumClient\Navigation', $this->_driver->navigate());		
+		$this->assertInstanceOf('Nearsoft\SeleniumClient\Navigation', $this->_driver->navigate());
 	}
 
     public function testSwitchToShouldGetTargetLocatorInstance()
 	{	
-		$this->assertInstanceOf('SeleniumClient\TargetLocator', $this->_driver->switchTo());		
+		$this->assertInstanceOf('Nearsoft\SeleniumClient\TargetLocator', $this->_driver->switchTo());
 	}
 
 	 public function testManageShouldGetOptionsInstance()
 	{	
-		$this->assertInstanceOf('SeleniumClient\Options', $this->_driver->manage());		
+		$this->assertInstanceOf('Nearsoft\SeleniumClient\Options', $this->_driver->manage());
 	}
 
 	public function testExecuteScriptShouldSetInputText()
@@ -192,9 +192,9 @@ class WebDriverTest extends AbstractTest
 	public function testFindElement()
 	{
 		$webElement = $this->_driver->findElement(By::id("txt1"));	
-		$this->assertInstanceOf('SeleniumClient\WebElement',$webElement);		
+		$this->assertInstanceOf('Nearsoft\SeleniumClient\WebElement',$webElement);
 
-		$this->setExpectedException('SeleniumClient\Exceptions\NoSuchElement');	
+		$this->setExpectedException('Nearsoft\SeleniumClient\Exceptions\NoSuchElement');
 		$webElement = $this->_driver->findElement(By::id("NOTEXISTING"));	
 	}
 
@@ -202,14 +202,14 @@ class WebDriverTest extends AbstractTest
 	{
 		$parentElement = $this->_driver->findElement(By::id("sel1"));
 		$childElement = $this->_driver->findElement(By::xPath(".//option[@value = '3']"), false, $parentElement->getElementId());	
-		$this->assertInstanceOf('SeleniumClient\WebElement',$childElement);	
+		$this->assertInstanceOf('Nearsoft\SeleniumClient\WebElement',$childElement);
 	}
 
     public function testFindElementByJsSelector()
     {
         $input = $this->_driver->findElement(By::jsSelector('input','document.querySelectorAll'));
-        $this->assertInstanceOf('SeleniumClient\WebElement',$input);	
-        $this->setExpectedException('SeleniumClient\Exceptions\InvalidSelector');
+        $this->assertInstanceOf('Nearsoft\SeleniumClient\WebElement',$input);
+        $this->setExpectedException('Nearsoft\SeleniumClient\Exceptions\InvalidSelector');
         $this->_driver->findElement(By::jsSelector('input'));
     }
 	
@@ -228,7 +228,7 @@ class WebDriverTest extends AbstractTest
 		$parentElement = $this->_driver->findElement(By::id("sel1"));
 		$childElements = $this->_driver->findElements(By::xPath(".//option"), false, $parentElement->getElementId());	
 		$this->assertInternalType('array',$childElements);	
-		$this->assertInstanceOf('SeleniumClient\WebElement',$childElements[1]);	
+		$this->assertInstanceOf('Nearsoft\SeleniumClient\WebElement',$childElements[1]);
 	}
 
     public function testFindElementsByJsSelector()
@@ -239,7 +239,7 @@ class WebDriverTest extends AbstractTest
             $self->assertTrue($input instanceof WebElement);
         });
         $this->assertGreaterThan(0, count($inputs));
-        $this->setExpectedException('SeleniumClient\Exceptions\InvalidSelector');
+        $this->setExpectedException('Nearsoft\SeleniumClient\Exceptions\InvalidSelector');
         $this->_driver->findElements(By::jsSelector('input'));
     }
 
@@ -265,7 +265,7 @@ class WebDriverTest extends AbstractTest
 
 	public function testQuit()
 	{	
-		$anotherDriver = new SeleniumClient\WebDriver();
+		$anotherDriver = new Nearsoft\SeleniumClient\WebDriver();
 		$sessionId = $anotherDriver->getSessionId();	
 
 		$containsSession = function($var) use ($sessionId)
@@ -284,7 +284,7 @@ class WebDriverTest extends AbstractTest
 		$this->_driver->findElement(By::id("btnPopUp1"))->click();
 		$this->_driver->switchTo()->window("popup1");
 		$this->_driver->close();
-		$this->setExpectedException('SeleniumClient\Exceptions\NoSuchWindow');	
+		$this->setExpectedException('Nearsoft\SeleniumClient\Exceptions\NoSuchWindow');
 		$this->_driver->getCurrentUrl();		
 	}
 

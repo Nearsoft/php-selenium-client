@@ -13,12 +13,12 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-namespace SeleniumClient;
+namespace Nearsoft\SeleniumClient;
 
-use SeleniumClient\DesiredCapabilities;
-use SeleniumClient\Commands\Command;
-use SeleniumClient\Http\HttpClient;
-use SeleniumClient\Http\HttpFactory;
+use Nearsoft\SeleniumClient\DesiredCapabilities;
+use Nearsoft\SeleniumClient\Commands\Command;
+use Nearsoft\SeleniumClient\Http\HttpClient;
+use Nearsoft\SeleniumClient\Http\HttpFactory;
 
 class WebDriver
 {

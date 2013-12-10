@@ -2,9 +2,9 @@
 
 require_once __DIR__ . '/AbstractTest.php';
 
-use SeleniumClient\By;
-use SeleniumClient\TargetLocator;
-use SeleniumClient\WebElement;
+use Nearsoft\SeleniumClient\By;
+use Nearsoft\SeleniumClient\TargetLocator;
+use Nearsoft\SeleniumClient\WebElement;
 
 class OptionsTest extends AbstractTest
 {	

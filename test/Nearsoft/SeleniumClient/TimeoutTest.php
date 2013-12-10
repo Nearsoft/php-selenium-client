@@ -2,7 +2,7 @@
 
 require_once __DIR__ . '/AbstractTest.php';
 
-use SeleniumClient\By;
+use Nearsoft\SeleniumClient\By;
 
 class TimeoutsTest extends AbstractTest
 {
@@ -16,7 +16,7 @@ class TimeoutsTest extends AbstractTest
 
         $webElement = $this->_driver->findElement(By::id("dDiv1-0")); // This takes 5 seconds to be present
 
-        $this->assertInstanceOf('SeleniumClient\WebElement', $webElement);
+        $this->assertInstanceOf('Nearsoft\SeleniumClient\WebElement', $webElement);
     }
 
     public function testPageLoadTimeout()
@@ -25,7 +25,7 @@ class TimeoutsTest extends AbstractTest
 
         $timeOuts->pageLoadTimeout(1);
 
-        $this->setExpectedException('SeleniumClient\Exceptions\ScriptTimeout');
+        $this->setExpectedException('Nearsoft\SeleniumClient\Exceptions\ScriptTimeout');
 
         $this->_driver->get($this->_url."/formReceptor.php");
     }
@@ -36,7 +36,7 @@ class TimeoutsTest extends AbstractTest
 
         $timeouts->setScriptTimeout(1);
 
-        $this->setExpectedException('SeleniumClient\Exceptions\ScriptTimeout');
+        $this->setExpectedException('Nearsoft\SeleniumClient\Exceptions\ScriptTimeout');
 
         $this->_driver->executeAsyncScript("setTimeout('arguments[0]()',5000);");
     }

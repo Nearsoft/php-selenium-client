@@ -1,5 +1,5 @@
 <?php
-namespace SeleniumClient\Http\Exceptions;
+namespace Nearsoft\SeleniumClient\Http\Exceptions;
 
 class MissingCommandParameters extends \Exception {
 	public function __construct($httpResponseCode, $url) {

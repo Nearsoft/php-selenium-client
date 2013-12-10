@@ -1,4 +1,4 @@
 <?php
-namespace SeleniumClient\Exceptions;
+namespace Nearsoft\SeleniumClient\Exceptions;
 
 class WebDriverWaitTimeout extends \Exception {}

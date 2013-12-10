@@ -2,10 +2,10 @@
 
 require_once __DIR__ . '/../test/bootstrap.php';
 
-use SeleniumClient\By;
-use SeleniumClient\SelectElement;
-use SeleniumClient\WebDriver;
-use SeleniumClient\DesiredCapabilities;
+use Nearsoft\SeleniumClient\By;
+use Nearsoft\SeleniumClient\SelectElement;
+use Nearsoft\SeleniumClient\WebDriver;
+use Nearsoft\SeleniumClient\DesiredCapabilities;
 
 class Demo1Test extends PHPUnit_Framework_TestCase
 {

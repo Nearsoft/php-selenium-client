@@ -2,8 +2,8 @@
 
 require_once __DIR__ . '/AbstractTest.php';
 
-use SeleniumClient\Alert;
-use SeleniumClient\By;
+use Nearsoft\SeleniumClient\Alert;
+use Nearsoft\SeleniumClient\By;
 
 class AlertTest extends AbstractTest
 {
@@ -34,7 +34,7 @@ class AlertTest extends AbstractTest
 	{
 		$this->_driver->findElement(By::id("btnAlert"))->click();
 		$this->_alert->dismiss();
-		$this->setExpectedException('SeleniumClient\Exceptions\NoAlertOpenError');	
+		$this->setExpectedException('Nearsoft\SeleniumClient\Exceptions\NoAlertOpenError');
 		$this->_alert->getText();
 	}
 

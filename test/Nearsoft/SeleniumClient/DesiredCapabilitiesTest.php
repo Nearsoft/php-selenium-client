@@ -1,9 +1,9 @@
 <?php
 
-use SeleniumClient\CapabilityType;
-use SeleniumClient\DesiredCapabilities;
-use SeleniumClient\BrowserType;
-use SeleniumClient\PlatformType;
+use Nearsoft\SeleniumClient\CapabilityType;
+use Nearsoft\SeleniumClient\DesiredCapabilities;
+use Nearsoft\SeleniumClient\BrowserType;
+use Nearsoft\SeleniumClient\PlatformType;
 
 
 class DesiredCapabilitiesTest extends PHPUnit_Framework_TestCase {	

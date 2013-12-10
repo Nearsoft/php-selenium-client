@@ -2,8 +2,8 @@
 
 require_once __DIR__ . '/AbstractTest.php';
 
-use SeleniumClient\WebDriverWait;
-use SeleniumClient\By;
+use Nearsoft\SeleniumClient\WebDriverWait;
+use Nearsoft\SeleniumClient\By;
 
 class WebDriverWaitTest extends AbstractTest
 {
@@ -18,7 +18,7 @@ class WebDriverWaitTest extends AbstractTest
 	public function testUntilShouldWaitShouldThrowException()
 	{
 		
-		$this->setExpectedException('SeleniumClient\Exceptions\WebDriverWaitTimeout');		
+		$this->setExpectedException('Nearsoft\SeleniumClient\Exceptions\WebDriverWaitTimeout');
 		$this->_driver->findElement(By::id("btnAppendDiv"))->click();
 		$wait = new WebDriverWait(3);	
 		$label = $wait->until($this->_driver,"findElement",array(By::id("dDiv1-0"),true));	
