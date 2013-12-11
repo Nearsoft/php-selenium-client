@@ -36,7 +36,7 @@ class AbstractTest extends PHPUnit_Framework_TestCase {
         }
 
         self::$_config['browser']  = getenv( 'SELENIUM_CLIENT_BROWSER' ) ?: 'firefox';
-        self::$_config['url']      = getenv( 'SELENIUM_CLIENT_URL' ) ?: 'http://nearsoft-php-seleniumclient.herokuapp.com';
+        self::$_config['url']      = getenv( 'SELENIUM_CLIENT_URL' ) ?: 'http://nearsoft-php-seleniumclient-v2.herokuapp.com/sandbox/';
         self::$_config['persist']  = (bool)getenv( 'SELENIUM_CLIENT_SINGLE_INSTANCE' ) ?: false;
 
         $drivers = &self::$_driverInstances;
