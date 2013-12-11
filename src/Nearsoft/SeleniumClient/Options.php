@@ -28,7 +28,7 @@ class Options
 
 	/**
 	 * Gets Timeouts object
-	 * @return SeleniumClient\Timeouts
+	 * @return Nearsoft\SeleniumClient\Timeouts
 	 */
 	public function timeouts()
 	{
@@ -41,7 +41,7 @@ class Options
 
 	/**
 	 * Gets Window object
-	 * @return SeleniumClient\Window
+	 * @return Nearsoft\SeleniumClient\Window
 	 */
 	public function window()
 	{
@@ -97,7 +97,7 @@ class Options
 
 	/**
 	 * Remove a cookie
-	 * @param SeleniumClient\Cookie $cookie
+	 * @param Nearsoft\SeleniumClient\Cookie $cookie
 	 */
 	public function deleteCookie(Cookie $cookie)
 	{

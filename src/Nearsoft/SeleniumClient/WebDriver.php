@@ -20,6 +20,45 @@ use Nearsoft\SeleniumClient\Commands\Command;
 use Nearsoft\SeleniumClient\Http\HttpClient;
 use Nearsoft\SeleniumClient\Http\HttpFactory;
 
+
+/**
+ * Class WebDriver
+ * @package Nearsoft\SeleniumClient
+ *
+ * @method Nearsoft\SeleniumClient\Navigation navigationBack()
+ * @method Nearsoft\SeleniumClient\Navigation navigationForward()
+ * @method Nearsoft\SeleniumClient\Navigation navigationRefresh()
+ * @method Nearsoft\SeleniumClient\Navigation navigationTo($url)
+ *
+ * @method Nearsoft\SeleniumClient\Window windowMaximize()
+ * @method Nearsoft\SeleniumClient\Window windowGetSize()
+ * @method Nearsoft\SeleniumClient\Window windowGetPosition()
+ * @method Nearsoft\SeleniumClient\Window windowSetSize($width, $height)
+ * @method Nearsoft\SeleniumClient\Window windowSetPosition($x, $y)
+ *
+ * @method Nearsoft\SeleniumClient\TargetLocator switchToWindow($identifier)
+ * @method Nearsoft\SeleniumClient\TargetLocator switchToFrame($identifier)
+ *
+ * @method Nearsoft\SeleniumClient\WebElement findElementByCssSelector($selectorValue)
+ * @method Nearsoft\SeleniumClient\WebElement findElementById($selectorValue)
+ * @method Nearsoft\SeleniumClient\WebElement findElementByJsSelector($selectorValue, $selectorDefinition='$')
+ * @method Nearsoft\SeleniumClient\WebElement findElementByLinkText($selectorValue)
+ * @method Nearsoft\SeleniumClient\WebElement findElementByName($selectorValue)
+ * @method Nearsoft\SeleniumClient\WebElement findElementByPartialLinkText($selectorValue)
+ * @method Nearsoft\SeleniumClient\WebElement findElementByTagName($selectorValue)
+ * @method Nearsoft\SeleniumClient\WebElement findElementByXPath($selectorValue)
+ *
+ * @method Nearsoft\SeleniumClient\WebElement[] findElementsByCssSelector($selectorValue)
+ * @method Nearsoft\SeleniumClient\WebElement[] findElementsById($selectorValue)
+ * @method Nearsoft\SeleniumClient\WebElement[] findElementsByJsSelector($selectorValue, $selectorDefinition='$')
+ * @method Nearsoft\SeleniumClient\WebElement[] findElementsByLinkText($selectorValue)
+ * @method Nearsoft\SeleniumClient\WebElement[] findElementsByName($selectorValue)
+ * @method Nearsoft\SeleniumClient\WebElement[] findElementsByPartialLinkText($selectorValue)
+ * @method Nearsoft\SeleniumClient\WebElement[] findElementsByTagName($selectorValue)
+ * @method Nearsoft\SeleniumClient\WebElement[] findElementsByXPath($selectorValue)
+ */
+
+
 class WebDriver
 {
 	private $_hubUrl               = null;
@@ -172,7 +211,7 @@ class WebDriver
         switch ( $call ) {
             case 'findElement':
             case 'findElements':
-                if ( method_exists( '\\SeleniumClient\\By', $by ) ) {
+                if ( method_exists( 'Nearsoft\\SeleniumClient\\By', $by ) ) {
                     $valid = true;
                 }
         }
@@ -181,7 +220,7 @@ class WebDriver
             throw new \Exception( 'Invalid magic call: '.$name );
         }
 
-        $method = new \ReflectionMethod( '\\SeleniumClient\\By', $by );
+        $method = new \ReflectionMethod( 'Nearsoft\\SeleniumClient\\By', $by );
         $byArgs = array_splice( $args, 0, $method->getNumberOfParameters() );
         array_unshift( $args, $method->invokeArgs( null, $byArgs ) );
         $element = call_user_func_array( array( $this, $call ), $args );
@@ -254,7 +293,7 @@ class WebDriver
 
     /**
      * Get Navigation object
-     * @return Selenium\Navigation
+     * @return Nearsoft\Selenium\Navigation
      */
     public function navigate()
     {
@@ -288,7 +327,7 @@ class WebDriver
 
 	/**
 	 * Gets Options object
-	 * @return SeleniumClient\Options
+	 * @return Nearsoft\SeleniumClient\Options
 	 */
 	public function manage()
 	{
@@ -298,7 +337,7 @@ class WebDriver
 
 	/**
 	 * Creates new target locator to be handled
-	 * @return \SeleniumClient\TargetLocator
+	 * @return Nearsoft\SeleniumClient\TargetLocator
 	 */
 	public function switchTo()
 	{
@@ -463,7 +502,7 @@ class WebDriver
      * @param bool $polling
      * @param int  $elementId
      * @throws Http\SeleniumNoSuchElementException
-     * @return \SeleniumClient\WebElement
+     * @return Nearsoft\SeleniumClient\WebElement
      */
 	public function findElement(By $locator, $polling = false, $elementId = -1)
 	{
@@ -494,7 +533,7 @@ class WebDriver
      * @param bool $polling
      * @param int  $elementId
      * @throws Exceptions\InvalidSelector
-     * @return \SeleniumClient\WebElement[]
+     * @return Nearsoft\SeleniumClient\WebElement[]
      */
     public function findElements(By $locator, $polling = false, $elementId = -1)
     {
@@ -557,7 +596,7 @@ class WebDriver
 	 * Stops the process until an element is found
 	 * @param By $locator
 	 * @param Integer $timeOutSeconds
-	 * @return \SeleniumClient\WebElement
+	 * @return Nearsoft\SeleniumClient\WebElement
 	 */
 	public function waitForElementUntilIsPresent(By $locator, $timeOutSeconds = 5)
 	{

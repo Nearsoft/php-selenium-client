@@ -307,7 +307,7 @@ class WebElement
 	 * Find element within current element
 	 * @param By $locator
 	 * @param Boolean $polling
-	 * @return \SeleniumClient\WebElement
+	 * @return Nearsoft\SeleniumClient\WebElement
 	 */
 	public function findElement(By $locator, $polling = false) 
 	{
@@ -318,7 +318,7 @@ class WebElement
 	 * Find elements within current element
 	 * @param By $locator
 	 * @param Boolean $polling
-	 * @return \SeleniumClient\WebElement[]
+	 * @return Nearsoft\SeleniumClient\WebElement[]
 	 */
 	public function findElements(By $locator, $polling = false) 
 	{
@@ -341,7 +341,7 @@ class WebElement
 	/**
 	 * Wait for current element to be displayed
 	 * @param Integer $timeOutSeconds
-	 * @return \SeleniumClient\WebElement
+	 * @return Nearsoft\SeleniumClient\WebElement
 	 */
 	public function waitForElementUntilIsDisplayed($timeOutSeconds = 5)
 	{
@@ -353,7 +353,7 @@ class WebElement
 	/**
 	 * Wait for current element to be enabled
 	 * @param Integer $timeOutSeconds
-	 * @return \SeleniumClient\WebElement
+	 * @return Nearsoft\SeleniumClient\WebElement
 	 */
 	public function waitForElementUntilIsEnabled($timeOutSeconds = 5)
 	{
@@ -366,8 +366,8 @@ class WebElement
 	 * Wait until current element's text has changed
 	 * @param String $targetText
 	 * @param Integer $timeOutSeconds
-	 * @throws SeleniumClient\Exceptions\WebDriverWaitTimeout
-	 * @return \SeleniumClient\WebElement
+	 * @throws Nearsoft\SeleniumClient\Exceptions\WebDriverWaitTimeout
+	 * @return Nearsoft\SeleniumClient\WebElement
 	 */
 	public function waitForElementUntilTextIsChanged($targetText, $timeOutSeconds = 5)
 	{
@@ -393,8 +393,8 @@ class WebElement
 	 * @param By $locator
 	 * @param String $targetText
 	 * @param Integer $timeOutSeconds
-	 * @throws SeleniumClient\Exceptions\WebDriverWaitTimeout
-	 * @return \SeleniumClient\WebElement
+	 * @throws Nearsoft\SeleniumClient\Exceptions\WebDriverWaitTimeout
+	 * @return Nearsoft\SeleniumClient\WebElement
 	 */
 	public function waitForElementUntilIsPresentWithSpecificText(By $locator, $targetText, $timeOutSeconds = 5)
 	{

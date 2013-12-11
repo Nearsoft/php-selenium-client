@@ -37,7 +37,7 @@ class WebDriverWait
 	 * @param String $method
 	 * @param Array $args
 	 * @throws \Exception
-	 * @throws SeleniumClient\Exceptions\WebDriverWaitTimeout
+	 * @throws Nearsoft\SeleniumClient\Exceptions\WebDriverWaitTimeout
 	 * @return mixed
 	 */
 	public function until($seleniumObject, $method, array $args)

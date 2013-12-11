@@ -27,7 +27,7 @@ class TargetLocator
 	/**
 	 * Change to the Window by passing in the name
 	 * @param String $identifier either window name or window handle
-	 * @return \SeleniumClient\WebDriver The current webdriver
+	 * @return Nearsoft\SeleniumClient\WebDriver The current webdriver
 	 */
 	public function window($identifier)
 	{
@@ -40,7 +40,7 @@ class TargetLocator
 	/**
 	 * Focus on specified frame
 	 * @param Mixed $identifier. Null will get default frame. String will get by frame name. Integer will get frame by index. WebElement will get by web element relation.
-	 * @return \SeleniumClient\WebDriver The current webdriver
+	 * @return Nearsoft\SeleniumClient\WebDriver The current webdriver
 	 */
 	public function frame($identifier)
 	{
@@ -72,7 +72,7 @@ class TargetLocator
 
 	/**
 	 *  Switches to the currently active modal dialog for this particular driver instance.
-	 * @return \SeleniumClient\Alert
+	 * @return Nearsoft\SeleniumClient\Alert
 	 */
 	public function alert()
 	{
