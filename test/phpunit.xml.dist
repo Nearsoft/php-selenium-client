@@ -4,7 +4,7 @@
          bootstrap="bootstrap.php" colors="true">
     <php>
         <env name="SELENIUM_CLIENT_BROWSER" value="firefox" />
-        <env name="SELENIUM_CLIENT_URL" value="http://nearsoft-php-seleniumclient.herokuapp.com/SeleniumClientTest/SandBox/" />
+        <env name="SELENIUM_CLIENT_URL" value="http://nearsoft-php-seleniumclient-v2.herokuapp.com/sandbox/" />
         <env name="SELENIUM_CLIENT_SINGLE_INSTANCE" value="true" />
     </php>
     <testsuites>
