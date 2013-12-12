@@ -18,5 +18,8 @@
         "psr-0": {
             "Nearsoft\\": "src/"
         }
+    },
+    "archive": {
+        "exclude": ["/demo", "/test"]
     }
 }
