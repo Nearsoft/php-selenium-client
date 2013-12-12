@@ -27,21 +27,21 @@ class By
 	/**
 	 * Locate by element's css class name
 	 * @param String $selectorValue
-	 * @return \SeleniumClient\By
+	 * @return Nearsoft\SeleniumClient\By
 	 */
 	public static function className($selectorValue) { return new By("class name", $selectorValue); }
 	
 	/**
 	 * Locate by element's css selector path
 	 * @param String $selectorValue
-	 * @return \SeleniumClient\By
+	 * @return Nearsoft\SeleniumClient\By
 	 */
 	public static function cssSelector($selectorValue) { return new By("css selector", $selectorValue); }
 	
 	/**
 	 * Locate by element's id
 	 * @param String $selectorValue
-	 * @return \SeleniumClient\By
+	 * @return Nearsoft\SeleniumClient\By
 	 */
 	public static function id($selectorValue) { return new By("id", $selectorValue); }
 
@@ -49,7 +49,7 @@ class By
 	 * Locate by JavaScript selector
 	 * @param string $selectorValue
      * @param string $selectorDefinition
-	 * @return \SeleniumClient\By
+	 * @return Nearsoft\SeleniumClient\By
 	 */
     public static function jsSelector($selectorValue, $selectorDefinition = '$')
     {
@@ -59,35 +59,35 @@ class By
 	/**
 	 * Locate by element's name
 	 * @param String $selectorValue
-	 * @return \SeleniumClient\By
+	 * @return Nearsoft\SeleniumClient\By
 	 */
 	public static function name($selectorValue) { return new By("name", $selectorValue); }
 	
 	/**
 	 * Locate by element's link text
 	 * @param String $selectorValue
-	 * @return \SeleniumClient\By
+	 * @return Nearsoft\SeleniumClient\By
 	 */
 	public static function linkText($selectorValue) { return new By("link text", $selectorValue); }
 	
 	/**
 	 * Locate by part of element's link text
 	 * @param String $selectorValue
-	 * @return \SeleniumClient\By
+	 * @return Nearsoft\SeleniumClient\By
 	 */
 	public static function partialLinkText($selectorValue) { return new By("partial link text", $selectorValue); }
 	
 	/**
 	 * Locate by element's tag name
 	 * @param String $selectorValue
-	 * @return \SeleniumClient\By
+	 * @return Nearsoft\SeleniumClient\By
 	 */
 	public static function tagName($selectorValue) { return new By("tag name", $selectorValue); }
 	
 	/**
 	 * Locate by element's xPath
 	 * @param String $selectorValue
-	 * @return \SeleniumClient\By
+	 * @return Nearsoft\SeleniumClient\By
 	 */
 	public static function xPath($selectorValue) { return new By("xpath", $selectorValue); }
 
