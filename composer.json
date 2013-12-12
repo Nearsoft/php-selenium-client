@@ -5,6 +5,12 @@
     "keywords": ["selenium","testing","automation","browser","nearsoft"],
     "license": "Apache 2",
     "minimum-stability": "stable",
+    "authors": [
+        {
+            "name": "Nearsoft, Inc",
+            "homepage": "http://www.nearsoft.com",
+        }
+    ],
     "require": {
         "php": ">=5.3.8"
     },
