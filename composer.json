@@ -5,20 +5,12 @@
     "keywords": ["selenium","testing","automation","browser","nearsoft"],
     "license": "Apache 2",
     "minimum-stability": "stable",
-    "authors": [
-        {
-            "name": "Apolonio Santiago",
-            "email": "jsantiago@nearsoft.com",
-            "homepage": "http://nearsoft.com",
-            "role": "Developer"
-        }
-    ],
     "require": {
         "php": ">=5.3.8"
     },
     "autoload": {
         "psr-0": {
-            "SeleniumClient": ""
+            "Nearsoft\\": "src/"
         }
     }
 }
