@@ -72,6 +72,15 @@ class Demo1Test extends PHPUnit_Framework_TestCase
 		//access h2
 		$webElement = $this->_driver->findElement(By::cssSelector("html body h2#h2FormReceptor"));
 		$this->assertEquals("Form receptor", $webElement->getText());
+
+		//navigation
+		$this->_driver->get('http://www.nearsoft.com');
+
+		$this->_driver->navigate()->refresh();
+
+		$this->_driver->navigate()->back();
+
+		$this->_driver->navigate()->forward();
 		
 		sleep(5);
 	}
