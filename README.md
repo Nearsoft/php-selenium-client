@@ -11,7 +11,8 @@ One of the goals is to provide a client usage as close as possible to the Seleni
 
 ##Documentation
 
-[Please refer to our wiki](https://github.com/Nearsoft/PHP-SeleniumClient/wiki)
+[Version 2](http://nearsoft-php-seleniumclient.herokuapp.com/docs/v2/)
+[Version 1](http://nearsoft-php-seleniumclient.herokuapp.com/docs/v1/)
 
 ##Quickstart
 
