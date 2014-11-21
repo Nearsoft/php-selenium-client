@@ -504,8 +504,8 @@ class WebDriver
      * @throws Http\SeleniumNoSuchElementException
      * @return Nearsoft\SeleniumClient\WebElement
      */
-	public function findElement(By $locator, $polling = false, $elementId = -1)
-	{
+    public function findElement(By $locator, $polling = false, $elementId = -1)
+    {
         if (strpos($locator->getStrategy(), 'js selector ') === 0) {
             $result = $this->findElements($locator, $polling, $elementId);
             if (!$result) {
@@ -513,7 +513,7 @@ class WebDriver
             }
             return $result[0];
         } else {
-			$params = array ('using' => $locator->getStrategy(), 'value' => $locator->getSelectorValue());
+            $params = array ('using' => $locator->getStrategy(), 'value' => $locator->getSelectorValue());
             if ($elementId < 0) {
                  $command = new Commands\Command($this, 'element', $params);
             }
@@ -522,10 +522,13 @@ class WebDriver
             	 $command = new Commands\Command($this, 'element_in_element', $params, array('element_id' => $elementId));
             }
             $command->setPolling($polling);
-            $results = $command->execute();       
+            $results = $command->execute();
+            if (!$results['value']['ELEMENT']) {
+                throw new Exceptions\NoSuchElement();
+            }
             return new WebElement($this, $results['value']['ELEMENT']);
         }
-	}
+    }
 
     /**
      * Gets elements within current page
